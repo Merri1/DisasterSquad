@@ -31,6 +31,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PopulateEmitters.cpp" />
     <ClCompile Include="Responder.cpp" />
     <ClCompile Include="ShopUpgrades.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="Disaster.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="HighscoreManager.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Main.h" />
