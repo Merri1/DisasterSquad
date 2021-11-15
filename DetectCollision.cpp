@@ -3,3 +3,9 @@
 /*
 detectCollisons(Character & character);
 */
+#include "DetectCollision.h"
+
+DetectCollision::DetectCollision()
+{
+    
+}
