@@ -3,3 +3,9 @@
 /*
 
 */
+
+#include "ShopUpgrades.h"
+ShopUpgrades::ShopUpgrades()
+{
+
+}

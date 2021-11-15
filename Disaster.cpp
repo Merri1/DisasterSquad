@@ -22,3 +22,8 @@ void Disaster::flood()
 
 }
 
+void Disaster::drought()
+{
+    
+}
+

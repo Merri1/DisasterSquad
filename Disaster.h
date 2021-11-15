@@ -8,6 +8,7 @@ public:
     Disaster();
     void fire();
     void flood();
+    void drought();
 
 protected:
     // Variables here

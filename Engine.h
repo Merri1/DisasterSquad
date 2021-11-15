@@ -5,7 +5,10 @@
 class Engine
 {
 public:
+    Engine();
+    void run();
     // Functions here
+    
 protected:
     // Variables here
 };
