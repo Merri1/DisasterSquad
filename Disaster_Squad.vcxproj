@@ -19,20 +19,38 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DetectCollison.cpp" />
     <ClCompile Include="Disaster.cpp" />
+    <ClCompile Include="Draw.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="HighscoreManager.cpp" />
+    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
+    <ClCompile Include="LoadLevel.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="PopulateEmitters.cpp" />
     <ClCompile Include="Responder.cpp" />
     <ClCompile Include="ShopUpgrades.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="TextureHolder.cpp" />
+    <ClCompile Include="Update.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DetectCollison.h" />
     <ClInclude Include="Disaster.h" />
+    <ClInclude Include="Engine.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="HighscreManager.h" />
+    <ClInclude Include="HighscoreManager.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Responder.h" />
     <ClInclude Include="ShopUpgrades.h" />
+    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="TextureHolder.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
