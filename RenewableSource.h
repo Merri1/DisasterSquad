@@ -1,28 +1,28 @@
 #pragma once
-#ifndef RESPONDER_H
-#define RESPONDER_H
+#ifndef RENEWABLESOURCE_H
+#define RENEWABLESOURCE_H
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 
-class Responder
+class RenewableSource
 {
 public:
-    Responder();
+    RenewableSource();
     sf::Vector2f getPosition();
-    void getSprite();
     void moveTo(sf::Vector2f);
     void spawn(sf::Vector2f);
-    void update();
-    void fightDisaster();
+    void turbine();
+    void solar();
+    void recycling();
+    enum renewableType{WIND, SOLAR, RECYCLING};
+    // Check renewable source can be placed on a tile (later)
 
 protected:
-    int m_health;
-    int m_attack;
+    renewableType m_type;
     bool m_ID;
     bool m_isSelected();
     sf::Vector2f m_position;
-    float m_speed;
 };
 #endif
