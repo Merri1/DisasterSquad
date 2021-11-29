@@ -11,6 +11,7 @@ class Engine
 {
 public:
     Engine();
+
     void run();
     void render();
     void update();
@@ -20,13 +21,15 @@ public:
     
 protected:
     Game game;
+    sf::Window m_Window;
+    sf::Time  m_GameTimeTotal;
     sf::Texture m_backgroundTexture;
-    Responder* m_responder1;
-    Responder* m_responder2;
-    Responder* m_responder3;
-    Responder* m_responder4;
-    RenewableSource* m_renewableSource1;
-    RenewableSource* m_renewableSource2;
-    RenewableSource* m_renewableSource3;
+    // Responder* m_responder1;
+    // Responder* m_responder2;
+    // Responder* m_responder3;
+    // Responder* m_responder4;
+    // RenewableSource* m_renewableSource1;
+    // RenewableSource* m_renewableSource2;
+    // RenewableSource* m_renewableSource3;
 };
 #endif
