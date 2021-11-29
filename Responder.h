@@ -5,24 +5,61 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Shader.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include "Textureholder.h";
+
+using namespace sf;
+
 
 class Responder
 {
 public:
+    const float START_SPEED = 200;
+    const float START_HEALTH = 100;
+
+
+
+    Sprite m_Sprite;
+
+    Texture m_Texture;
+
+    Vector2f m_Resolution;
+    
+    // What size is the current arena
+    IntRect m_Area;
+
     Responder();
-    sf::Vector2f getPosition();
-    void getSprite();
-    void moveTo(sf::Vector2f);
-    void spawn(sf::Vector2f);
-    void update();
+    int getPositionX();
+    int getPositionY();
+    //void getSprite();
+    void moveTo(int postionX, int positionY);
+    void spawn(int x, int y);
     void fightDisaster();
+    //Sprite getSprite();
+    int getHealth();
+    float getRotation();
+    Sprite getSprite();
+    bool isSelected();
+    void Select(bool Selected);
+
+    void update(Time t);
+    
+
 
 protected:
-    int m_health;
+    bool m_isMoving;
+    int m_Speed;
+    int m_Health;
+    int m_MaxHealth;
     int m_attack;
     bool m_ID;
-    bool m_isSelected();
-    sf::Vector2f m_position;
+    bool m_isSelected;
+    int m_positionX;
+    int m_positionY;
+    int m_DestinationX;
+    int m_DestinationY;
     float m_speed;
 };
 #endif

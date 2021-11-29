@@ -6,6 +6,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 #include "Game.h"
+#include "TextureHolder.h"
+#include "Responder.h"
 
 class Engine
 {

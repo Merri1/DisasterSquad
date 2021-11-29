@@ -7,10 +7,6 @@ RenewableSource::RenewableSource()
 {
 
 }
-sf::Vector2f getPosition()
-{
-    //return 0;
-}
 
 void RenewableSource::spawn(sf::Vector2f)
 {
