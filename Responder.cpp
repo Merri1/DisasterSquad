@@ -73,6 +73,7 @@ void Responder::Select(bool Selected)
 {
 	m_isSelected = Selected;
 }
+
 void Responder::update(Time t)
 {
 	if (m_isMoving)

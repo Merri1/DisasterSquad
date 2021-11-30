@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "TextureHolder.h"
 #include "Responder.h"
+#include "GridManager.h"
 
 class Engine
 {
@@ -30,5 +31,8 @@ protected:
     RenewableSource* m_renewableSource1;
     RenewableSource* m_renewableSource2;
     RenewableSource* m_renewableSource3;
+    Vector2f resolution;
+    VertexArray virtualGrid;
+    GridManager grid;
 };
 #endif

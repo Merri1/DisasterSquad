@@ -12,13 +12,12 @@ Engine::Engine()
 
 void Engine::run()
 {
-
-
 	TextureHolder holder;
-	
-	Vector2f resolution;
+	Texture test = TextureHolder::GetTexture("graphics/tile.png");
 	resolution.x = 1024;
 	resolution.y = 576;
+
+	grid.initGrid(virtualGrid, resolution.x, resolution.y);
 
 	RenderWindow window(VideoMode(resolution.x, resolution.y),
 		"Disaster Squad");
@@ -58,8 +57,6 @@ void Engine::run()
 
 	window.draw(background);
 	
-
-	
 	Clock cloc;
 	Time elapsedtime;
 	Sprite r = Responder.getSprite();
@@ -75,6 +72,7 @@ void Engine::run()
 		r.setPosition(window.mapPixelToCoords(Responder.m_position, mainView));
 		window.draw(background);
 		window.draw(r);
+		window.draw(virtualGrid, &test);
 		window.display();
 		//window.draw(spriteCrosshair);
 
@@ -99,14 +97,9 @@ void Engine::run()
 					Responder.Select(true);
 					//Undate reponder Sprite to selected sprite.IE red outline
 				}
-			}
-				
+			}	
 		}
 		Responder.update(elapsedtime);
 		window.clear();
 	}
-
-
-
-
 }
