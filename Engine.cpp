@@ -49,58 +49,61 @@ void Engine::run()
 
 	Vector2f MousePosition;
 	window.setMouseCursorVisible(true);
+	window.setFramerateLimit(60);
+	
 	Sprite spriteCrosshair;
 	Texture textureCrosshair = TextureHolder::GetTexture("graphics/crosshair.png");
 	spriteCrosshair.setTexture(textureCrosshair);
 	spriteCrosshair.setOrigin(25, 25);
 
 	window.draw(background);
-	window.draw(Responder.getSprite());
+	
 
-
-	window.display();
+	
 	Clock cloc;
 	Time elapsedtime;
+	Sprite r = Responder.getSprite();
 
 	while(window.isOpen())
 	{
-		MousePosition = window.mapPixelToCoords(Mouse::getPosition(window), mainView);
+		
 		Time dt = clock.restart();
 		elapsedtime += dt;
 		Event event;
-		spriteCrosshair.setPosition(window.mapPixelToCoords(Mouse::getPosition(), mainView));
-		window.draw(Responder.getSprite());
-		window.draw(spriteCrosshair);
+		//spriteCrosshair.setPosition(window.mapPixelToCoords(Mouse::getPosition(), mainView));
 
-		while (window.pollEvent(event))
+		r.setPosition(window.mapPixelToCoords(Responder.m_position, mainView));
+		window.draw(background);
+		window.draw(r);
+		window.display();
+		//window.draw(spriteCrosshair);
+
+		while(window.pollEvent(event))
 		{
+			MousePosition = window.mapPixelToCoords(Mouse::getPosition(window), mainView);
 
-
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{			
-				cout << MousePosition.x << "\n"<< MousePosition.y<<"\n";
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{	
+				if(Responder.isSelected()) 
+				{
+					Responder.moveTo(MousePosition.x, MousePosition.y);
+				}		
+				
+				cout << MousePosition.x << "  Mouse X\n"<< MousePosition.y<<"  Mouse Y\n";
 				//if ((sf::Mouse::getPosition().x <= Responder.getPositionX()+100 && sf::Mouse::getPosition().x >= Responder.getPositionX() -50 ) && (sf::Mouse::getPosition().y <= Responder.getPositionY() +50 && sf::Mouse::getPosition().y >= Responder.getPositionY()-50))
 				//if(Responder.getPositionX()<= Mouse::getPosition().x +50 && Responder.getPositionX()>= Mouse::getPosition().x && Responder.getPositionY()<=Mouse::getPosition().y+50 && Responder.getPositionY()>=Mouse::getPosition().y-50)
-				if (Responder.getPositionX() <= MousePosition.x + 50 && Responder.getPositionX() >= MousePosition.x && Responder.getPositionY() <= MousePosition.y + 50 && Responder.getPositionY() >= MousePosition.y - 50)
-
+				if(Responder.getPositionX() <= MousePosition.x + 10 && Responder.getPositionX() >= MousePosition.x - 10 && Responder.getPositionY() <= MousePosition.y + 10 && Responder.getPositionY() >= MousePosition.y - 10)
 				{
 					cout << "Responder has been selected \n";
 
 					Responder.Select(true);
 					//Undate reponder Sprite to selected sprite.IE red outline
-
 				}
-				if (Responder.isSelected()) {
-					Responder.moveTo(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
-					cout << "Responder is moving";
-				}
-				
 			}
-			Responder.update(elapsedtime);
-	
+				
 		}
-		
-
+		Responder.update(elapsedtime);
+		window.clear();
 	}
 
 

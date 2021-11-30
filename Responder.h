@@ -8,7 +8,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include "Textureholder.h";
+#include "TextureHolder.h"
 
 using namespace sf;
 
@@ -16,7 +16,7 @@ using namespace sf;
 class Responder
 {
 public:
-    const float START_SPEED = 200;
+    const float START_SPEED = 2;
     const float START_HEALTH = 100;
 
 
@@ -26,6 +26,7 @@ public:
     Texture m_Texture;
 
     Vector2f m_Resolution;
+    Vector2i m_position;
     
     // What size is the current arena
     IntRect m_Area;
