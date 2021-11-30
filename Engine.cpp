@@ -20,7 +20,7 @@ void Engine::run()
 	grid.initGrid(virtualGrid, resolution.x, resolution.y);
 
 	RenderWindow window(VideoMode(resolution.x, resolution.y),
-		"Disaster Squad");
+		"Disaster Squad", Style::Resize);
 
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
 

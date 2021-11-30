@@ -16,7 +16,7 @@ using namespace sf;
 class Responder
 {
 public:
-    const float START_SPEED = 2;
+    const float START_SPEED = 1;
     const float START_HEALTH = 100;
 
 

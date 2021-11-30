@@ -17,7 +17,7 @@ Responder::Responder()
 
 
 
-    m_Sprite.setOrigin(25, 25);
+    m_Sprite.setOrigin(8, 8);
 	m_Sprite.setPosition(m_positionX, m_positionY);
 	m_Sprite.setTexture(m_Texture);
 
