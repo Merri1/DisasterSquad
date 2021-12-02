@@ -1,32 +1,7 @@
-﻿  Engine.cpp
-C:\gp\DisasterSquad\Engine.cpp(20,53): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\gp\DisasterSquad\Engine.cpp(20,39): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\gp\DisasterSquad\Engine.cpp(22,56): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\gp\DisasterSquad\Engine.cpp(22,42): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\gp\DisasterSquad\Engine.cpp(87,53): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\gp\DisasterSquad\Engine.cpp(87,36): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
+﻿  Responder.cpp
+C:\gp\DisasterSquad\Responder.cpp(6,12): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\gp\DisasterSquad\Responder.cpp(7,13): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\gp\DisasterSquad\Responder.cpp(8,16): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\gp\DisasterSquad\Responder.cpp(21,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\gp\DisasterSquad\Responder.cpp(21,23): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Disaster_Squad.vcxproj -> C:\gp\DisasterSquad\Debug\Disaster_Squad.exe

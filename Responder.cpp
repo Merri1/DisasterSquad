@@ -77,10 +77,7 @@ void Responder::Select(bool Selected)
 void Responder::update(Time t)
 {
 	if (m_isMoving)
-	{
-		std::cout << "Moving...\n";
-		std::cout << m_positionX << " x  -  " << m_positionY << "\n";
-		
+	{		
 		if(m_positionX != m_DestinationX) 
 		{
 			if(m_DestinationX > m_positionX) 
@@ -124,7 +121,8 @@ void Responder::update(Time t)
 				}
 			}
 		}
-		else
+		
+		if(m_positionX == m_DestinationX && m_positionY == m_DestinationY)
 		{
 			m_isMoving = false;
 		}
