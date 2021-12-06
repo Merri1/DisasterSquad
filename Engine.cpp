@@ -74,10 +74,8 @@ void Engine::run()
 		elapsedtime += dt;
 		Event event;
 		window.setView(mainView);
-		spriteCrosshair.setPosition(window.mapPixelToCoords(Mouse::getPosition(), mainView));
-		mouseScreenPosition = Mouse::getPosition();
-		//spriteCrosshair.setPosition(mouseWorldPosition);
-
+		spriteCrosshair.setPosition(window.mapPixelToCoords(Mouse::getPosition(window), mainView));
+ 
 
 		r.setPosition(window.mapPixelToCoords(Responder.m_position, mainView));
 		window.draw(background);
