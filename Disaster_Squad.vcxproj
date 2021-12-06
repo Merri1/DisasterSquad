@@ -27,6 +27,7 @@
     <ClCompile Include="Responder.cpp" />
     <ClCompile Include="ShopUpgrades.cpp" />
     <ClCompile Include="TextureHolder.cpp" />
+    <ClCompile Include="Wildfire.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Disaster.h" />
@@ -36,6 +37,7 @@
     <ClInclude Include="Responder.h" />
     <ClInclude Include="ShopUpgrades.h" />
     <ClInclude Include="TextureHolder.h" />
+    <ClInclude Include="Wildfire.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

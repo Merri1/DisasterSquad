@@ -38,7 +38,6 @@ public:
     void moveTo(int postionX, int positionY);
     void spawn(int x, int y);
     void fightDisaster();
-    //Sprite getSprite();
     int getHealth();
     float getRotation();
     Sprite getSprite();

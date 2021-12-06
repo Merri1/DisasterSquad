@@ -8,12 +8,17 @@
 #include "Game.h"
 #include "TextureHolder.h"
 #include "Responder.h"
+#include "Disaster.h"
+#include "Wildfire.h"
 #include "GridManager.h"
+#include <random>
+#include <list>
 
 class Engine
 {
 public:
     Engine();
+    void init();
     void run();
     void render();
     void update();
@@ -31,8 +36,13 @@ protected:
     RenewableSource* m_renewableSource1;
     RenewableSource* m_renewableSource2;
     RenewableSource* m_renewableSource3;
+    Disaster* m_disaster1;
+    Disaster* m_disaster2;
+    Disaster* m_disaster3;
+    Disaster* m_disaster4;
     Vector2f resolution;
     VertexArray virtualGrid;
     GridManager grid;
+    std::list<Disaster*> lpDisasters;
 };
 #endif

@@ -8,6 +8,20 @@ Engine::Engine()
 {
     // Handles sfml functionality
     // Resolutions, memory loading etc.
+	srand(time(NULL));
+}
+
+void Engine::init()
+{
+	m_disaster1 = new Disaster();
+	m_disaster2 = new Disaster();
+	m_disaster3 = new Disaster();
+	m_disaster4 = new Disaster();
+
+	lpDisasters.push_back(m_disaster1);
+	lpDisasters.push_back(m_disaster2);
+	lpDisasters.push_back(m_disaster3);
+	lpDisasters.push_back(m_disaster4);
 }
 
 void Engine::run()
@@ -37,7 +51,7 @@ void Engine::run()
 	// Where is the mouse in relation to screen coordinates
 	Vector2i mouseScreenPosition;
 
-	// Create an instance of the Player class
+	// Create an instance of the Responder class
 	Responder Responder;
 
 	// The boundaries of the arena
@@ -48,6 +62,8 @@ void Engine::run()
 	Texture textureBackground = TextureHolder::GetTexture(
 		"graphics/Grasslandsmap.png");
 	Sprite background(textureBackground);
+	background.setOrigin(0, 0);
+	background.setPosition(0, 0);
 
 	Vector2f MousePosition;
 	window.setMouseCursorVisible(true);
@@ -95,35 +111,53 @@ void Engine::run()
 	sprite_bar2.setTexture(texture_bar2);
 	sprite_bar2.setPosition(950, 17);
 
-
-
-
-	
-
-
-
 	window.draw(background);
-	
 	
 	Clock cloc;
 	Time elapsedtime;
-	Sprite r = Responder.getSprite();
+	Sprite responder = Responder.getSprite();
 
 	while(window.isOpen())
-	{
-
-		
+	{		
 		Time dt = clock.restart();
 		elapsedtime += dt;
 		Event event;
 		window.setView(mainView);
 		spriteCrosshair.setPosition(window.mapPixelToCoords(Mouse::getPosition(window), mainView));
- 
 
-		r.setPosition(window.mapPixelToCoords(Responder.m_position, mainView));
 		window.draw(background);
-		window.draw(r);
-		window.draw(virtualGrid, &test);
+
+		// For loop to iterate through disaster
+		for (list<Disaster*>::const_iterator iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
+		{
+			// Check if disaster is not spawned yet
+			if (!(*iter)->getSpawnStatus())
+			{
+				if (rand() % 1000 == 0)
+				{
+					// Random 1 in 1000 chance for it to spawn
+					std::cout << "Disaster spawned\n";
+					(*iter)->spawn();
+
+					// Reseed random generator
+					srand(time(NULL));
+
+					// Exit for loop so only one disaster is spawned per frame update
+					break;
+				}
+			}
+			else
+			{
+				// Else if the disaster is already spawned draw it on map each frame update
+				window.draw((*iter)->getSprite());
+			}
+		}
+
+		responder.setPosition(window.mapPixelToCoords(Responder.m_position, mainView));
+
+
+		window.draw(responder);
+		//window.draw(virtualGrid, &test);
 		window.draw(spriteCrosshair);
 		window.draw(sprite_heat_bar);
 		window.draw(sprite_heat_title);
@@ -165,31 +199,6 @@ void Engine::run()
 		window.clear();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

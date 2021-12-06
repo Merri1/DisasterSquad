@@ -11,7 +11,6 @@ Responder::Responder()
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
 	
-	std::cout << m_positionX << " - " << m_positionY << "\n";
 	m_Texture = (TextureHolder::GetTexture(
 		"graphics/player.png"));
 
