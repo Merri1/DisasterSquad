@@ -1,7 +1,0 @@
-﻿  Responder.cpp
-C:\gp\DisasterSquad\Responder.cpp(6,12): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\gp\DisasterSquad\Responder.cpp(7,13): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\gp\DisasterSquad\Responder.cpp(8,16): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\gp\DisasterSquad\Responder.cpp(21,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\gp\DisasterSquad\Responder.cpp(21,23): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Disaster_Squad.vcxproj -> C:\gp\DisasterSquad\Debug\Disaster_Squad.exe
