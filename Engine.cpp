@@ -14,6 +14,9 @@ void Engine::run()
 {
 	TextureHolder holder;
 	Texture test = TextureHolder::GetTexture("graphics/tile.png");
+	//resolution.x = VideoMode::getDesktopMode().width;
+	//resolution.y = VideoMode::getDesktopMode().height;
+	
 	resolution.x = 1024;
 	resolution.y = 576;
 
@@ -49,7 +52,9 @@ void Engine::run()
 	Vector2f MousePosition;
 	window.setMouseCursorVisible(true);
 	window.setFramerateLimit(60);
-	
+	View hudView(sf::FloatRect(0, 0, resolution.x, resolution.y));
+
+	window.setMouseCursorVisible(true);
 	Sprite spriteCrosshair;
 	Texture textureCrosshair = TextureHolder::GetTexture("graphics/crosshair.png");
 	spriteCrosshair.setTexture(textureCrosshair);
@@ -63,18 +68,24 @@ void Engine::run()
 
 	while(window.isOpen())
 	{
+
 		
 		Time dt = clock.restart();
 		elapsedtime += dt;
 		Event event;
-		//spriteCrosshair.setPosition(window.mapPixelToCoords(Mouse::getPosition(), mainView));
+		window.setView(mainView);
+		spriteCrosshair.setPosition(window.mapPixelToCoords(Mouse::getPosition(), mainView));
+		mouseScreenPosition = Mouse::getPosition();
+		//spriteCrosshair.setPosition(mouseWorldPosition);
+
 
 		r.setPosition(window.mapPixelToCoords(Responder.m_position, mainView));
 		window.draw(background);
 		window.draw(r);
 		window.draw(virtualGrid, &test);
+		window.draw(spriteCrosshair);
+
 		window.display();
-		//window.draw(spriteCrosshair);
 
 		while(window.pollEvent(event))
 		{
@@ -103,3 +114,40 @@ void Engine::run()
 		window.clear();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Complain about git hub in write up!
