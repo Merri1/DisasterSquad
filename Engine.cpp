@@ -84,6 +84,18 @@ void Engine::run()
 	sprite_pollution_title.setTexture(texture_pollution_title);
 	sprite_pollution_title.setPosition(720, 30);
 
+	//BAR MEASURE THINGY
+	Sprite sprite_bar;
+	Texture texture_bar = TextureHolder::GetTexture("graphics/bar_measure.png");
+	sprite_bar.setTexture(texture_bar);
+	sprite_bar.setPosition(140, 17);
+
+	Sprite sprite_bar2;
+	Texture texture_bar2 = TextureHolder::GetTexture("graphics/bar_measure.png");
+	sprite_bar2.setTexture(texture_bar2);
+	sprite_bar2.setPosition(950, 17);
+
+
 
 
 	
@@ -117,6 +129,10 @@ void Engine::run()
 		window.draw(sprite_heat_title);
 		window.draw(sprite_pollution_bar);
 		window.draw(sprite_pollution_title);
+		window.draw(sprite_bar);
+		window.draw(sprite_bar2);
+
+
 
 		
 
