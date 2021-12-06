@@ -60,7 +60,38 @@ void Engine::run()
 	spriteCrosshair.setTexture(textureCrosshair);
 	spriteCrosshair.setOrigin(25, 25);
 
+	//Heat bar
+	Sprite sprite_heat_bar;
+	Texture texture_heat_bar = TextureHolder::GetTexture("graphics/heat_bar.png");
+	sprite_heat_bar.setTexture(texture_heat_bar);
+	sprite_heat_bar.setPosition(100,20);
+
+	//Heat Title
+	Sprite sprite_heat_title;
+	Texture texture_heat_title = TextureHolder::GetTexture("graphics/heat_title.png");
+	sprite_heat_title.setTexture(texture_heat_title);
+	sprite_heat_title.setPosition(30, 30);
+
+	//Pollution Bar
+	Sprite sprite_pollution_bar;
+	Texture texture_pollution_bar = TextureHolder::GetTexture("graphics/pollution_bar.png");
+	sprite_pollution_bar.setTexture(texture_pollution_bar);
+	sprite_pollution_bar.setPosition(870, 20);
+
+	//Pollutuion Title
+	Sprite sprite_pollution_title;
+	Texture texture_pollution_title = TextureHolder::GetTexture("graphics/pollution_title.png");
+	sprite_pollution_title.setTexture(texture_pollution_title);
+	sprite_pollution_title.setPosition(720, 30);
+
+
+
+	
+
+
+
 	window.draw(background);
+	
 	
 	Clock cloc;
 	Time elapsedtime;
@@ -82,6 +113,12 @@ void Engine::run()
 		window.draw(r);
 		window.draw(virtualGrid, &test);
 		window.draw(spriteCrosshair);
+		window.draw(sprite_heat_bar);
+		window.draw(sprite_heat_title);
+		window.draw(sprite_pollution_bar);
+		window.draw(sprite_pollution_title);
+
+		
 
 		window.display();
 
