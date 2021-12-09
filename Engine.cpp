@@ -37,7 +37,7 @@ void Engine::run()
 	grid.initGrid(virtualGrid, resolution.x, resolution.y);
 
 	RenderWindow window(VideoMode(resolution.x, resolution.y),
-		"Disaster Squad", Style::Resize);
+		"Disaster Squad");
 
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
 
@@ -193,7 +193,22 @@ void Engine::run()
 					Responder.Select(true);
 					//Undate reponder Sprite to selected sprite.IE red outline
 				}
-			}	
+			}
+
+			// Close winodw is titlebar X is clicked
+			if (event.type == sf::Event::Closed)
+			{
+				window.close();
+			}
+
+			// Close window if Escape key is pressed
+			if (event.type == sf::Keyboard::Escape)
+			{
+				if (event.key.code == sf::Keyboard::Escape)
+				{
+					window.close();
+				}
+			}
 		}
 		Responder.update(elapsedtime);
 		window.clear();
