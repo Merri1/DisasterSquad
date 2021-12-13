@@ -21,18 +21,22 @@ public:
     void init();
     void run();
     void render();
+    void draw();
     void update();
+    void eventManager(Event& e);
     void checkCollisions();
     void clean(); // Reset variables, remove objects. Level 1 = 1 responder, level 2 = 2 responders at start
     // Functions here
     
 protected:
-    Game game;
-    sf::Texture m_backgroundTexture;
+    const int FRAMERATE = 60;
+    //Game game;
+    Texture m_backgroundTexture;
     Responder* m_responder1;
     Responder* m_responder2;
     Responder* m_responder3;
     Responder* m_responder4;
+    Responder* responder;  // CHANGE THIS LATER AND USE ABOVE RESPONDERS
     RenewableSource* m_renewableSource1;
     RenewableSource* m_renewableSource2;
     RenewableSource* m_renewableSource3;
@@ -40,9 +44,26 @@ protected:
     Disaster* m_disaster2;
     Disaster* m_disaster3;
     Disaster* m_disaster4;
-    Vector2f resolution;
-    VertexArray virtualGrid;
-    GridManager grid;
+    //VertexArray virtualGrid;
+    //GridManager grid;
     std::list<Disaster*> lpDisasters;
+    std::list<Responder*> lpResponders;
+
+    const Vector2i RESOLUTION = Vector2i(1024, 576);
+    RenderWindow m_window;
+    View m_mainView;
+    Texture m_textureBackground;
+    Sprite m_background;
+    Sprite m_spriteCrosshair;
+    Vector2f m_mousePosition;
+    Sprite m_spriteHeatBar;
+    Sprite m_spriteHeatTitle;
+    Sprite m_spritePollutionBar;
+    Sprite m_spritePollutionTitle;
+    Sprite m_spritePollutionLevel;
+    Sprite m_spriteHeatLevel;
+    TextureHolder m_textureHolder;
+
+    float m_elapsedTime;
 };
 #endif

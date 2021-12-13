@@ -14,17 +14,12 @@ Responder::Responder()
 	m_Texture = (TextureHolder::GetTexture(
 		"graphics/player.png"));
 
-
-
     m_Sprite.setOrigin(8, 8);
 	m_Sprite.setPosition(m_positionX, m_positionY);
 	m_Sprite.setTexture(m_Texture);
 
 	m_isSelected = false;
 	m_isMoving = false;
-
-
-
 }
 
 int Responder::getPositionX()
@@ -58,22 +53,18 @@ void Responder::spawn(int x, int y)
 	// Place the player in the middle of the arena
 	m_positionX = x;
 	m_positionY = y;
-
-
-
 }
-//Moves responder too new clicked position and checks if player is already at that position.
 
 bool Responder::isSelected() {
 	return m_isSelected;
 
 }
-void Responder::Select(bool Selected)
+void Responder::select(bool Selected)
 {
 	m_isSelected = Selected;
 }
 
-void Responder::update(Time t)
+void Responder::update(float elapsedTime)
 {
 	if (m_isMoving)
 	{		
@@ -130,6 +121,7 @@ void Responder::update(Time t)
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
 
+	m_Sprite.setPosition(m_positionX, m_positionY);
 }
 
 float Responder::getRotation()
@@ -139,7 +131,6 @@ float Responder::getRotation()
 
 Sprite Responder::getSprite()
 {
-
 	return m_Sprite;
 }
 

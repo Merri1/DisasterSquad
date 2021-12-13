@@ -30,7 +30,6 @@ protected:
     int m_difficultyChance; // Chance of spreading depending on selected difficulty 
     int m_health;
     bool m_spawned = false;
-
     sf::Sprite m_disasterSprite;
     sf::Texture m_spriteTexture;
 };

@@ -13,214 +13,172 @@ Engine::Engine()
 
 void Engine::init()
 {
+	// Create a new window using resolution and framerate const values from Engine.h
+	m_window.create(VideoMode(RESOLUTION.x, RESOLUTION.y), "Disaster Squad");
+	m_window.setFramerateLimit(FRAMERATE);
+	m_mainView = View(sf::FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
+	
+	// Call render function to initialise sprite textures and positions
+	render();
+
+	m_window.setMouseCursorVisible(true);
+
+	// Initialise Responder and Disaster objects
+	responder = new Responder();
 	m_disaster1 = new Disaster();
 	m_disaster2 = new Disaster();
 	m_disaster3 = new Disaster();
 	m_disaster4 = new Disaster();
 
+	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
 	lpDisasters.push_back(m_disaster2);
 	lpDisasters.push_back(m_disaster3);
 	lpDisasters.push_back(m_disaster4);
 }
 
+// Seperate run() function out into smaller functions
+// Some stuff can go into init, some stuff can stay in run, drawing can be moved to draw() function etc.
 void Engine::run()
 {
-	TextureHolder holder;
-	Texture test = TextureHolder::GetTexture("graphics/tile.png");
-	//resolution.x = VideoMode::getDesktopMode().width;
-	//resolution.y = VideoMode::getDesktopMode().height;
-	
-	resolution.x = 1024;
-	resolution.y = 576;
+	Clock gameClock;
+	m_elapsedTime = 0;
 
-	grid.initGrid(virtualGrid, resolution.x, resolution.y);
-
-	RenderWindow window(VideoMode(resolution.x, resolution.y),
-		"Disaster Squad");
-
-	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
-
-	// Here is our clock for timing everything
-	Clock clock;
-	// How long has the PLAYING state been active
-	Time gameTimeTotal;
-
-	// Where is the mouse in relation to world coordinates
-	Vector2f mouseWorldPosition;
-	// Where is the mouse in relation to screen coordinates
-	Vector2i mouseScreenPosition;
-
-	// Create an instance of the Responder class
-	Responder Responder;
-
-	// The boundaries of the arena
-	IntRect area;
-
-	// Create the background
-	// Load the texture for our background vertex array
-	Texture textureBackground = TextureHolder::GetTexture(
-		"graphics/Grasslandsmap.png");
-	Sprite background(textureBackground);
-	background.setOrigin(0, 0);
-	background.setPosition(0, 0);
-
-	Vector2f MousePosition;
-	window.setMouseCursorVisible(true);
-	window.setFramerateLimit(60);
-	View hudView(sf::FloatRect(0, 0, resolution.x, resolution.y));
-
-	window.setMouseCursorVisible(true);
-	Sprite spriteCrosshair;
-	Texture textureCrosshair = TextureHolder::GetTexture("graphics/crosshair.png");
-	spriteCrosshair.setTexture(textureCrosshair);
-	spriteCrosshair.setOrigin(25, 25);
-
-	//Heat bar
-	Sprite sprite_heat_bar;
-	Texture texture_heat_bar = TextureHolder::GetTexture("graphics/heat_bar.png");
-	sprite_heat_bar.setTexture(texture_heat_bar);
-	sprite_heat_bar.setPosition(100,20);
-
-	//Heat Title
-	Sprite sprite_heat_title;
-	Texture texture_heat_title = TextureHolder::GetTexture("graphics/heat_title.png");
-	sprite_heat_title.setTexture(texture_heat_title);
-	sprite_heat_title.setPosition(30, 30);
-
-	//Pollution Bar
-	Sprite sprite_pollution_bar;
-	Texture texture_pollution_bar = TextureHolder::GetTexture("graphics/pollution_bar.png");
-	sprite_pollution_bar.setTexture(texture_pollution_bar);
-	sprite_pollution_bar.setPosition(870, 20);
-
-	//Pollutuion Title
-	Sprite sprite_pollution_title;
-	Texture texture_pollution_title = TextureHolder::GetTexture("graphics/pollution_title.png");
-	sprite_pollution_title.setTexture(texture_pollution_title);
-	sprite_pollution_title.setPosition(720, 30);
-
-	//BAR MEASURE THINGY
-	Sprite sprite_bar;
-	Texture texture_bar = TextureHolder::GetTexture("graphics/bar_measure.png");
-	sprite_bar.setTexture(texture_bar);
-	sprite_bar.setPosition(140, 17);
-
-	Sprite sprite_bar2;
-	Texture texture_bar2 = TextureHolder::GetTexture("graphics/bar_measure.png");
-	sprite_bar2.setTexture(texture_bar2);
-	sprite_bar2.setPosition(950, 17);
-
-	window.draw(background);
-	
-	Clock cloc;
-	Time elapsedtime;
-	Sprite responder = Responder.getSprite();
-
-	while(window.isOpen())
+	while(m_window.isOpen())
 	{		
-		Time dt = clock.restart();
-		elapsedtime += dt;
+		Time dt = gameClock.restart();
+		m_elapsedTime += dt.asMilliseconds();
 		Event event;
-		window.setView(mainView);
-		spriteCrosshair.setPosition(window.mapPixelToCoords(Mouse::getPosition(window), mainView));
-
-		window.draw(background);
-
-		// For loop to iterate through disaster
-		for (list<Disaster*>::const_iterator iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
-		{
-			// Check if disaster is not spawned yet
-			if (!(*iter)->getSpawnStatus())
-			{
-				if (rand() % 1000 == 0)
-				{
-					// Random 1 in 1000 chance for it to spawn
-					std::cout << "Disaster spawned\n";
-					(*iter)->spawn();
-
-					// Reseed random generator
-					srand(time(NULL));
-
-					// Exit for loop so only one disaster is spawned per frame update
-					break;
-				}
-			}
-			else
-			{
-				// Else if the disaster is already spawned draw it on map each frame update
-				window.draw((*iter)->getSprite());
-			}
-		}
-
-		responder.setPosition(window.mapPixelToCoords(Responder.m_position, mainView));
-
-
-		window.draw(responder);
-		//window.draw(virtualGrid, &test);
-		window.draw(spriteCrosshair);
-		window.draw(sprite_heat_bar);
-		window.draw(sprite_heat_title);
-		window.draw(sprite_pollution_bar);
-		window.draw(sprite_pollution_title);
-		window.draw(sprite_bar);
-		window.draw(sprite_bar2);
-
-
-
 		
+		// Draw each object to the screen
+		draw();
 
-		window.display();
-
-		while(window.pollEvent(event))
-		{
-			MousePosition = window.mapPixelToCoords(Mouse::getPosition(window), mainView);
-
-			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{	
-				if(Responder.isSelected()) 
-				{
-					Responder.moveTo(MousePosition.x, MousePosition.y);
-				}		
-				
-				cout << MousePosition.x << "  Mouse X\n"<< MousePosition.y<<"  Mouse Y\n";
-				//if ((sf::Mouse::getPosition().x <= Responder.getPositionX()+100 && sf::Mouse::getPosition().x >= Responder.getPositionX() -50 ) && (sf::Mouse::getPosition().y <= Responder.getPositionY() +50 && sf::Mouse::getPosition().y >= Responder.getPositionY()-50))
-				//if(Responder.getPositionX()<= Mouse::getPosition().x +50 && Responder.getPositionX()>= Mouse::getPosition().x && Responder.getPositionY()<=Mouse::getPosition().y+50 && Responder.getPositionY()>=Mouse::getPosition().y-50)
-				if(Responder.getPositionX() <= MousePosition.x + 10 && Responder.getPositionX() >= MousePosition.x - 10 && Responder.getPositionY() <= MousePosition.y + 10 && Responder.getPositionY() >= MousePosition.y - 10)
-				{
-					cout << "Responder has been selected \n";
-
-					Responder.Select(true);
-					//Undate reponder Sprite to selected sprite.IE red outline
-				}
-			}
-
-			// Close winodw is titlebar X is clicked
-			if (event.type == sf::Event::Closed)
-			{
-				window.close();
-			}
-
-			// Close window if Escape key is pressed
-			if (event.type == sf::Keyboard::Escape)
-			{
-				if (event.key.code == sf::Keyboard::Escape)
-				{
-					window.close();
-				}
-			}
-		}
-		Responder.update(elapsedtime);
-		window.clear();
+		// Handle events
+		eventManager(event);
+		
+		// Reset the window after evry frame update
+		m_window.clear();
 	}
 }
 
+void Engine::draw()
+{
+	m_window.setView(m_mainView);
+	m_spriteCrosshair.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_mainView));
 
+	m_window.draw(m_background);
 
+	// For loop to iterate through disaster
+	for (list<Disaster*>::const_iterator iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
+	{
+		// Check if disaster is not spawned yet
+		if (!(*iter)->getSpawnStatus())
+		{
+			if (rand() % 1000 == 0)
+			{
+				// Random 1 in 1000 chance for it to spawn
+				std::cout << "Disaster spawned\n";
+				(*iter)->spawn();
 
+				// Reseed random generator
+				srand(time(NULL));
 
+				// Exit for loop so only one disaster is spawned per frame update
+				break;
+			}
+		}
+		else
+		{
+			// Else if the disaster is already spawned draw it on map each frame update
+			m_window.draw((*iter)->getSprite());
+		}
+	}
 
+	m_window.draw(responder->getSprite());
+	m_window.draw(m_spriteCrosshair);
+	m_window.draw(m_spriteHeatBar);
+	m_window.draw(m_spriteHeatTitle);
+	m_window.draw(m_spritePollutionBar);
+	m_window.draw(m_spritePollutionTitle);
+	m_window.draw(m_spritePollutionLevel);
+	m_window.draw(m_spriteHeatLevel);
+	m_window.display();
+	responder->update(m_elapsedTime);
+}
 
+void Engine::eventManager(Event& e)
+{
+	while (m_window.pollEvent(e))
+	{
+		m_mousePosition = m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_mainView);
+
+		// 
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			// If responder is already selected move them to coords of mouse click
+			if (responder->isSelected())
+			{
+				responder->moveTo(m_mousePosition.x, m_mousePosition.y);
+			}
+
+			// Check if mouse click was within then same coords as a responder
+			//if ((sf::Mouse::getPosition().x <= Responder.getPositionX()+100 && sf::Mouse::getPosition().x >= Responder.getPositionX() -50 ) && (sf::Mouse::getPosition().y <= Responder.getPositionY() +50 && sf::Mouse::getPosition().y >= Responder.getPositionY()-50))
+			//if (Responder.getPositionX() <= Mouse::getPosition().x + 50 && Responder.getPositionX() >= Mouse::getPosition().x && Responder.getPositionY() <= Mouse::getPosition().y + 50 && Responder.getPositionY() >= Mouse::getPosition().y - 50)
+			if (responder->getPositionX() <= m_mousePosition.x + 10
+				&& responder->getPositionX() >= m_mousePosition.x - 10
+				&& responder->getPositionY() <= m_mousePosition.y + 10
+				&& responder->getPositionY() >= m_mousePosition.y - 10)
+			{
+				// Set responder selected to true when clicked
+				responder->select(true);
+			}
+		}
+
+		// Close winodw is titlebar X is clicked
+		if (e.type == sf::Event::Closed)
+		{
+			m_window.close();
+		}
+
+		// Close window if Escape key is pressed
+		if (e.type == sf::Keyboard::Escape)
+		{
+			if (e.key.code == sf::Keyboard::Escape)
+			{
+				m_window.close();
+			}
+		}
+	}
+}
+
+void Engine::render()
+{
+	// Set textures, origins and positions for various game sprites 
+	m_background.setTexture(m_textureHolder.GetTexture("graphics/Grasslandsmap.png"));
+	m_background.setOrigin(0, 0);
+	m_background.setPosition(0, 0);
+
+	m_spriteCrosshair.setTexture(m_textureHolder.GetTexture("graphics/crosshair.png"));
+	m_spriteCrosshair.setOrigin(25, 25);
+
+	m_spriteHeatBar.setTexture(m_textureHolder.GetTexture("graphics/heat_bar.png"));
+	m_spriteHeatBar.setPosition(100, 20);
+
+	m_spriteHeatTitle.setTexture(m_textureHolder.GetTexture("graphics/heat_title.png"));
+	m_spriteHeatTitle.setPosition(30, 30);
+	
+	m_spritePollutionBar.setTexture(m_textureHolder.GetTexture("graphics/pollution_bar.png"));
+	m_spritePollutionBar.setPosition(870, 20);
+	
+	m_spritePollutionTitle.setTexture(m_textureHolder.GetTexture("graphics/pollution_title.png"));
+	m_spritePollutionTitle.setPosition(720, 30);
+	
+	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
+	m_spritePollutionLevel.setPosition(950, 17);
+	
+	m_spriteHeatLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
+	m_spriteHeatLevel.setPosition(950, 17);
+}
 
 
 

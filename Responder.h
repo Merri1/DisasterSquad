@@ -42,9 +42,8 @@ public:
     float getRotation();
     Sprite getSprite();
     bool isSelected();
-    void Select(bool Selected);
-
-    void update(Time t);
+    void select(bool Selected);
+    void update(float elapsedTime);
     
 
 

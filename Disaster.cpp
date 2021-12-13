@@ -10,8 +10,6 @@
 Disaster::Disaster()
 {
     srand(time(NULL));
-
-
 }
 
 void Disaster::spawn()
