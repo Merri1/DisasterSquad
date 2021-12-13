@@ -6,6 +6,7 @@
 //natural disaster etc etc
 */
 #include "Disaster.h"
+#include <iostream>
 
 Disaster::Disaster()
 {
@@ -14,15 +15,13 @@ Disaster::Disaster()
 
 void Disaster::spawn()
 {
+
     m_health = 100;
     m_spawned = true;
     m_position.x = rand() % 1024;
     m_position.y = rand() % 576;
-    m_spriteTexture = TextureHolder::GetTexture(
-        "graphics/wildfire.png");
-    m_disasterSprite.setTexture(m_spriteTexture);
-    m_disasterSprite.setOrigin(8, 8);
-    m_disasterSprite.setPosition(m_position);
+    
+
 }
 
 bool Disaster::getSpawnStatus()

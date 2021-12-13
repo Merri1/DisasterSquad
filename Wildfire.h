@@ -7,10 +7,11 @@ class Wildfire : public Disaster
 {
 public:
 	Wildfire();
+	virtual void spawn();
+	virtual sf::Sprite getSprite();
 
 protected:
-	sf::Sprite m_wildfireSprite;
-	sf::Texture m_wildfireTexture;
+	
 };
 
 #endif

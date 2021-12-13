@@ -25,10 +25,10 @@ void Engine::init()
 
 	// Initialise Responder and Disaster objects
 	responder = new Responder();
-	m_disaster1 = new Disaster();
-	m_disaster2 = new Disaster();
-	m_disaster3 = new Disaster();
-	m_disaster4 = new Disaster();
+	m_disaster1 = new Wildfire();
+	m_disaster2 = new Wildfire();
+	m_disaster3 = new Wildfire();
+	m_disaster4 = new Wildfire();
 
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
