@@ -24,28 +24,21 @@ Responder::Responder()
 
 int Responder::getPositionX()
 {
-	std::cout << m_position.x << " Get vector X coord\n";
 	return m_position.x;
 }
 
 int Responder::getPositionY()
 {
-	std::cout << m_positionY << " Get Y coord\n";
 	return m_position.y;
 }
 
 
 void Responder::moveTo(int X, int Y)
-{
-	std::cout << "Move To responder function \n";
-	
+{	
 	m_isSelected = false;
 	m_isMoving = true;
 	m_DestinationX = X;
 	m_DestinationY = Y;
-
-	std::cout << "Dest x: " << m_DestinationX << "  Dest y: " << m_DestinationY << "\n";
-
 }
 
 void Responder::spawn(int x, int y)
