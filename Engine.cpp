@@ -141,7 +141,7 @@ void Engine::eventManager(Event& e)
 		}
 
 		// Close window if Escape key is pressed
-		if (e.type == sf::Keyboard::Escape)
+		if (e.type == sf::Event::KeyPressed)
 		{
 			if (e.key.code == sf::Keyboard::Escape)
 			{
