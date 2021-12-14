@@ -51,6 +51,9 @@
     <ClCompile Include="Pathfinding.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="FilePasser.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Disaster.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pathfinding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FilePasser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
