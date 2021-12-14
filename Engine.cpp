@@ -40,6 +40,10 @@ void Engine::init()
 	//Pollution
 	m_pollutionTotal = 1000.0;
 	m_pollutionRate = .01;
+
+	//Gold
+	m_goldTotal = 0;
+	m_goldRate = .01;
 }
 
 // Seperate run() function out into smaller functions
@@ -70,7 +74,15 @@ void Engine::run()
 
 			m_pollutionTotal = m_pollutionRate + m_pollutionTotal;
 			//cout<<"Pollution total is:" << m_pollutionTotal << endl;
+
+			m_goldTotal = m_goldRate + m_goldTotal;
+			cout << "Gold Total: " << m_goldTotal << endl;
 		 }
+
+		 
+
+		 
+			 
 		
 		
 	}

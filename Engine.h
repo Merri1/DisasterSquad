@@ -35,6 +35,9 @@ protected:
     float m_pollutionTotal;
     float m_pollutionRate;
 
+    float m_goldTotal;
+    float m_goldRate;
+
     //Game game;
     Texture m_backgroundTexture;
     Responder* m_responder1;
