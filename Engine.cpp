@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include <iostream>
+#include<list>
 using namespace std;
 using namespace sf;
 
@@ -147,15 +148,16 @@ void Engine::eventManager(Event& e)
 	while (m_window.pollEvent(e))
 	{
 		m_mousePosition = m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_mainView);
-
 		// 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
+
 			// If responder is already selected move them to coords of mouse click
 			if (responder->isSelected())
 			{
 				responder->moveTo(m_mousePosition.x, m_mousePosition.y);
 			}
+
 
 			// Check if mouse click was within then same coords as a responder
 			//if ((sf::Mouse::getPosition().x <= Responder.getPositionX()+100 && sf::Mouse::getPosition().x >= Responder.getPositionX() -50 ) && (sf::Mouse::getPosition().y <= Responder.getPositionY() +50 && sf::Mouse::getPosition().y >= Responder.getPositionY()-50))
@@ -167,6 +169,26 @@ void Engine::eventManager(Event& e)
 			{
 				// Set responder selected to true when clicked
 				responder->select(true);
+			}
+
+			// Check if mouse click was within then same coords as a shop1
+			if (m_shop1->isSelected())
+			{
+				//Can't do anything for now until UI is implemented - Not doing UI today
+				m_shop1->spawn(m_mousePosition.x, m_mousePosition.y);
+				cout << "Spawn turbine " << m_mousePosition.x << " , " << m_mousePosition.y << endl;
+				
+			}
+
+
+			if (m_shop1->getPositionX() <= m_mousePosition.x + 10
+				&& m_shop1->getPositionX() >= m_mousePosition.x - 10
+				&& m_shop1->getPositionY() <= m_mousePosition.y + 10
+				&& m_shop1->getPositionY() >= m_mousePosition.y - 10)
+			{
+				// Set shop1 selected to true when clicked
+				m_shop1->select(true);
+				cout << "Shop1 is selected";
 			}
 		}
 
@@ -198,7 +220,11 @@ void Engine::eventManager(Event& e)
 			}
 		}
 	}
+
+
+
 }
+
 
 void Engine::render()
 {

@@ -17,7 +17,7 @@ using namespace sf;
 
 Shop::Shop()
 {
-	m_positionX = 400;
+	m_positionX = 500;
 	m_positionY = 300;
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
@@ -29,6 +29,7 @@ Shop::Shop()
 	//m_Sprite.setTextureRect(sf::IntRect{ 16, 16, 16, 20 });
 
 	m_isSelected = false;
+	m_isPlaced = false;
 }
 
 int Shop::getPositionX()
@@ -46,7 +47,7 @@ int Shop::getPositionY()
 
 void Shop::spawn(int x, int y)
 {
-	// Place the player in the middle of the arena
+	
 	m_positionX = x;
 	m_positionY = y;
 }
@@ -55,10 +56,20 @@ bool Shop::isSelected() {
 	return m_isSelected;
 
 }
+
+
 void Shop::select(bool Selected)
 {
 	m_isSelected = Selected;
 }
+
+
+void Shop::Placed(int X, int Y)
+{
+	m_isSelected = false;
+
+}
+
 
 
 

@@ -27,6 +27,8 @@ public:
     int getPositionY();
     void spawn(int x, int y);
     bool isSelected();
+    void Placed(int postionX, int positionY);
+    //void Placed(bool Placed);
     void select(bool Selected);
     float getRotation();
 
@@ -35,6 +37,7 @@ public:
 protected:
     bool m_ID;
     bool m_isSelected;
+    bool m_isPlaced;
     int m_positionX;
     int m_positionY;
 
