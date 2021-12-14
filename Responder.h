@@ -19,12 +19,8 @@ public:
     const float START_SPEED = 1;
     const float START_HEALTH = 100;
 
-
-
     Sprite m_Sprite;
-
     Texture m_Texture;
-
     Vector2f m_Resolution;
     Vector2i m_position;
     
@@ -44,8 +40,6 @@ public:
     bool isSelected();
     void select(bool Selected);
     void update(float elapsedTime);
-    
-
 
 protected:
     bool m_isMoving;

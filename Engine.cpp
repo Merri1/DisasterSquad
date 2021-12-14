@@ -148,6 +148,19 @@ void Engine::eventManager(Event& e)
 				m_window.close();
 			}
 		}
+
+		// Scroll in camera if mouse wheel scrolled. Up = +, down = -.
+		if (e.type == sf::Event::MouseWheelScrolled) {
+
+			// Scroll up (zoom in).
+			if (e.mouseWheelScroll.delta > 0) {
+				m_mainView.zoom(0.9f);
+			}
+			// Scroll down (zoom out).
+			else if (e.mouseWheelScroll.delta < 0) {
+				m_mainView.zoom(1.1f);
+			}
+		}
 	}
 }
 

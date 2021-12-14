@@ -26,6 +26,7 @@
     <ClCompile Include="GraphEdge.cpp" />
     <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Responder.cpp" />
     <ClCompile Include="ShopUpgrades.cpp" />
     <ClCompile Include="TextureHolder.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="GameGraph.h" />
     <ClInclude Include="GraphEdge.h" />
     <ClInclude Include="GridManager.h" />
+    <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="Responder.h" />
     <ClInclude Include="ShopUpgrades.h" />
     <ClInclude Include="TextureHolder.h" />

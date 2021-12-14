@@ -10,13 +10,12 @@ Responder::Responder()
 	m_positionY = 300;
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
-	
-	m_Texture = (TextureHolder::GetTexture(
-		"graphics/player.png"));
 
     m_Sprite.setOrigin(8, 8);
 	m_Sprite.setPosition(m_positionX, m_positionY);
-	m_Sprite.setTexture(m_Texture);
+	m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
+	m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
+	m_Sprite.setTextureRect(sf::IntRect{ 16, 16, 16, 20 });
 
 	m_isSelected = false;
 	m_isMoving = false;
@@ -39,6 +38,35 @@ void Responder::moveTo(int X, int Y)
 	m_isMoving = true;
 	m_DestinationX = X;
 	m_DestinationY = Y;
+
+	// Moving West.
+	if (m_DestinationX > m_positionX) {
+		
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
+		m_Sprite.setTextureRect(sf::IntRect{ 16, 144, 16, 20 });
+	}
+	// Moving East.
+	else if (m_DestinationX < m_positionX) {
+
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
+		m_Sprite.setTextureRect(sf::IntRect{ 16, 80, 16, 20 });
+	}
+	// Moving South.
+	else if (m_DestinationY > m_positionY) {
+
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
+		m_Sprite.setTextureRect(sf::IntRect{ 16, 16, 16, 20 });
+	}
+	// Moving North.
+	else if (m_DestinationY < m_positionY) {
+
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
+		m_Sprite.setTextureRect(sf::IntRect{ 16, 208, 16, 20 });
+	}
 }
 
 void Responder::spawn(int x, int y)
