@@ -30,6 +30,13 @@ void Engine::init()
 	m_disaster3 = new Wildfire();
 	m_disaster4 = new Wildfire();
 
+	//Shop initialised
+	m_shop1 = new Shop();
+
+
+	//Add shop to list
+	lpShop.push_back(m_shop1);
+
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
 	lpDisasters.push_back(m_disaster2);
@@ -37,11 +44,11 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster4);
 
 
-	//Pollution
+	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
 	m_pollutionTotal = 1000.0;
 	m_pollutionRate = .01;
 
-	//Gold
+	//Gold - Passive income - 1 gold gets added to the players total every second
 	m_goldTotal = 0;
 	m_goldRate = .01;
 }
@@ -70,13 +77,14 @@ void Engine::run()
 		// Reset the window after evry frame update
 		m_window.clear();
 
+		//Every second that passes in game the pollution rate and gold amount gets increased
 		 if(m_elapsedTime > 100) {
 
 			m_pollutionTotal = m_pollutionRate + m_pollutionTotal;
 			//cout<<"Pollution total is:" << m_pollutionTotal << endl;
 
 			m_goldTotal = m_goldRate + m_goldTotal;
-			cout << "Gold Total: " << m_goldTotal << endl;
+			//cout << "Gold Total: " << m_goldTotal << endl;
 		 }
 
 		 
@@ -121,6 +129,7 @@ void Engine::draw()
 		}
 	}
 
+	m_window.draw(m_shop1->getSprite());
 	m_window.draw(responder->getSprite());
 	m_window.draw(m_spriteCrosshair);
 	m_window.draw(m_spriteHeatBar);
@@ -161,7 +170,7 @@ void Engine::eventManager(Event& e)
 			}
 		}
 
-		// Close winodw is titlebar X is clicked
+		// Close window if titlebar X is clicked
 		if (e.type == sf::Event::Closed)
 		{
 			m_window.close();
@@ -217,7 +226,7 @@ void Engine::render()
 	m_spritePollutionLevel.setPosition(950, 17);
 	
 	m_spriteHeatLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
-	m_spriteHeatLevel.setPosition(950, 17);
+	m_spriteHeatLevel.setPosition(200, 17);
 }
 
 

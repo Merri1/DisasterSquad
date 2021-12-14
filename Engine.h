@@ -11,6 +11,7 @@
 #include "Disaster.h"
 #include "Wildfire.h"
 #include "GridManager.h"
+#include "Shop.h"
 #include <random>
 #include <list>
 
@@ -32,6 +33,7 @@ public:
 
 protected:
     const int FRAMERATE = 60;
+
     float m_pollutionTotal;
     float m_pollutionRate;
 
@@ -52,10 +54,12 @@ protected:
     Disaster* m_disaster2;
     Disaster* m_disaster3;
     Disaster* m_disaster4;
+    Shop* m_shop1;
     //VertexArray virtualGrid;
     //GridManager grid;
     std::list<Disaster*> lpDisasters;
     std::list<Responder*> lpResponders;
+    std::list<Shop*> lpShop;
 
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     RenderWindow m_window;

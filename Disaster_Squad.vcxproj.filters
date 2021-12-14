@@ -27,7 +27,7 @@
     <ClCompile Include="Disaster.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="ShopUpgrades.cpp">
+    <ClCompile Include="Shop.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="TextureHolder.cpp">
@@ -65,7 +65,7 @@
     <ClInclude Include="Responder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShopUpgrades.h">
+    <ClInclude Include="Shop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextureHolder.h">
