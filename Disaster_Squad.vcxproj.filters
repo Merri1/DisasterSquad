@@ -42,13 +42,23 @@
     <ClCompile Include="Wildfire.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    <ClCompile Include="FilePasser.cpp">
+=======
+>>>>>>> Stashed changes
     <ClCompile Include="GameGraph.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="GraphEdge.cpp">
+<<<<<<< Updated upstream
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="Pathfinding.cpp">
+=======
+>>>>>>> a6e1bdba31e04d7b4a43052fa86700bb3c620b60
+>>>>>>> Stashed changes
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,13 +87,23 @@
     <ClInclude Include="Wildfire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    <ClInclude Include="FilePasser.h">
+=======
+>>>>>>> Stashed changes
     <ClInclude Include="GameGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GraphEdge.h">
+<<<<<<< Updated upstream
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pathfinding.h">
+=======
+>>>>>>> a6e1bdba31e04d7b4a43052fa86700bb3c620b60
+>>>>>>> Stashed changes
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

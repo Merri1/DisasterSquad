@@ -38,6 +38,7 @@ void Responder::moveTo(int X, int Y)
 	m_isMoving = true;
 	m_DestinationX = X;
 	m_DestinationY = Y;
+<<<<<<< Updated upstream
 
 	// Moving West.
 	if (m_DestinationX > m_positionX) {
@@ -67,6 +68,8 @@ void Responder::moveTo(int X, int Y)
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 		m_Sprite.setTextureRect(sf::IntRect{ 16, 208, 16, 20 });
 	}
+=======
+>>>>>>> Stashed changes
 }
 
 void Responder::spawn(int x, int y)

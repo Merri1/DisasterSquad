@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Disaster.cpp" />
+    <ClCompile Include="FilePasser.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameGraph.cpp" />
@@ -35,6 +36,7 @@
   <ItemGroup>
     <ClInclude Include="Disaster.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="FilePasser.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameGraph.h" />
     <ClInclude Include="GraphEdge.h" />
