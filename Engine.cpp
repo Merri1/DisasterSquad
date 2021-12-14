@@ -35,6 +35,11 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster2);
 	lpDisasters.push_back(m_disaster3);
 	lpDisasters.push_back(m_disaster4);
+
+
+	//Pollution
+	m_pollutionTotal = 1000.0;
+	m_pollutionRate = .01;
 }
 
 // Seperate run() function out into smaller functions
@@ -46,6 +51,8 @@ void Engine::run()
 
 	while(m_window.isOpen())
 	{		
+		//cout << "TIME" << m_elapsedTime << endl;
+
 		Time dt = gameClock.restart();
 		m_elapsedTime += dt.asMilliseconds();
 		Event event;
@@ -58,6 +65,14 @@ void Engine::run()
 		
 		// Reset the window after evry frame update
 		m_window.clear();
+
+		 if(m_elapsedTime > 100) {
+
+			m_pollutionTotal = m_pollutionRate + m_pollutionTotal;
+			//cout<<"Pollution total is:" << m_pollutionTotal << endl;
+		 }
+		
+		
 	}
 }
 

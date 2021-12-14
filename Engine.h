@@ -28,8 +28,13 @@ public:
     void clean(); // Reset variables, remove objects. Level 1 = 1 responder, level 2 = 2 responders at start
     // Functions here
     
+
+
 protected:
     const int FRAMERATE = 60;
+    float m_pollutionTotal;
+    float m_pollutionRate;
+
     //Game game;
     Texture m_backgroundTexture;
     Responder* m_responder1;
