@@ -4,7 +4,6 @@
 using namespace std;
 using namespace sf;
 
-
 Engine::Engine()
 {
     // Handles sfml functionality
@@ -18,6 +17,7 @@ void Engine::init()
 	m_window.create(VideoMode(RESOLUTION.x, RESOLUTION.y), "Disaster Squad");
 	m_window.setFramerateLimit(FRAMERATE);
 	m_mainView = View(sf::FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
+	m_guiView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y)); // All UI elements, HUD.
 	
 	// Call render function to initialise sprite textures and positions
 	render();
@@ -33,7 +33,6 @@ void Engine::init()
 
 	//Shop initialised
 	m_shop1 = new Shop();
-
 
 	//Add shop to list
 	lpShop.push_back(m_shop1);
@@ -133,12 +132,51 @@ void Engine::draw()
 	m_window.draw(m_shop1->getSprite());
 	m_window.draw(responder->getSprite());
 	m_window.draw(m_spriteCrosshair);
+
+	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
+	m_window.setView(m_guiView);
+
+	m_window.draw(m_spriteUIBar);
+	m_window.draw(m_spriteMenuBar);
 	m_window.draw(m_spriteHeatBar);
 	m_window.draw(m_spriteHeatTitle);
 	m_window.draw(m_spritePollutionBar);
 	m_window.draw(m_spritePollutionTitle);
 	m_window.draw(m_spritePollutionLevel);
 	m_window.draw(m_spriteHeatLevel);
+	m_window.draw(m_spriteMoney);
+
+	// Declare new Font.
+	Font ka1Font;
+	if (!ka1Font.loadFromFile("graphics/fonts/ka1.ttf")) {
+		cout << "Error finding custom font.\n";
+	}
+
+	// Define income text.
+	m_displayIncome.setFont(ka1Font);
+	m_displayIncome.setCharacterSize(20);
+	m_displayIncome.setFillColor(Color::Black);
+	m_displayIncome.setPosition(280, 12);
+	m_displayIncome.setString(to_string(m_goldTotal));
+	m_window.draw(m_displayIncome);
+
+	// Define heat text.
+	m_displayHeat.setFont(ka1Font);
+	m_displayHeat.setCharacterSize(20);
+	m_displayHeat.setFillColor(Color::Black);
+	m_displayHeat.setPosition(470, 12);
+	m_displayHeat.setString("Heat");
+
+	// Define pollution text.
+	m_displayPollution.setFont(ka1Font);
+	m_displayPollution.setCharacterSize(20);
+	m_displayPollution.setFillColor(Color::Black);
+	m_displayPollution.setPosition(710, 12);
+	m_displayPollution.setString("Pollution");
+
+	m_window.draw(m_displayIncome);
+	m_window.draw(m_displayHeat);
+	m_window.draw(m_displayPollution);
 	m_window.display();
 	responder->update(m_elapsedTime);
 }
@@ -192,6 +230,12 @@ void Engine::eventManager(Event& e)
 			}
 		}
 
+		// For handling mouse dragging across the screen to move camera.
+		if (Mouse::isButtonPressed(Mouse::Right)) {
+
+			m_mainView.setCenter((Vector2f(m_window.mapPixelToCoords(Mouse::getPosition())), Vector2f(m_window.mapPixelToCoords(Mouse::getPosition()))));
+		}
+
 		// Close window if titlebar X is clicked
 		if (e.type == sf::Event::Closed)
 		{
@@ -211,20 +255,27 @@ void Engine::eventManager(Event& e)
 		if (e.type == sf::Event::MouseWheelScrolled) {
 
 			// Scroll up (zoom in).
-			if (e.mouseWheelScroll.delta > 0) {
-				m_mainView.zoom(0.9f);
+			if (e.mouseWheelScroll.delta > 0 && camZoom < 5) {
+				m_mainView.zoom(0.8f);
+
+				// Move camera to mouse cursor position per zoom.
+				m_mainView.move(((Vector2f(m_window.mapPixelToCoords((Mouse::getPosition())) - Vector2f(m_mainView.getCenter()))).x) * 0.9f,
+					((Vector2f(m_window.mapPixelToCoords((Mouse::getPosition())) - Vector2f(m_mainView.getCenter()))).y) * 0.9f);
+				camZoom++;
 			}
 			// Scroll down (zoom out).
-			else if (e.mouseWheelScroll.delta < 0) {
-				m_mainView.zoom(1.1f);
+			else if (e.mouseWheelScroll.delta < 0 && camZoom > 0) {
+				m_mainView.zoom(1.2f);
+				camZoom--;
+			}
+			// Zoom out too far, reset screen size (this avoids issue where float value for zoom is fecked up after multiple zooms).
+			else if (e.mouseWheelScroll.delta < 0 && camZoom == 0) {
+
+				m_mainView.reset(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 			}
 		}
 	}
-
-
-
 }
-
 
 void Engine::render()
 {
@@ -236,26 +287,25 @@ void Engine::render()
 	m_spriteCrosshair.setTexture(m_textureHolder.GetTexture("graphics/crosshair.png"));
 	m_spriteCrosshair.setOrigin(25, 25);
 
+	m_spriteUIBar.setTexture(m_textureHolder.GetTexture("graphics/ui_bar.png"));
+	m_spriteUIBar.setOrigin(0, 0);
+
+	m_spriteMenuBar.setTexture(m_textureHolder.GetTexture("graphics/menu_icon.png"));
+	m_spriteMenuBar.setOrigin(-6, -6);
+
 	m_spriteHeatBar.setTexture(m_textureHolder.GetTexture("graphics/heat_bar.png"));
-	m_spriteHeatBar.setPosition(100, 20);
+	m_spriteHeatBar.setPosition(550, 8);
 
-	m_spriteHeatTitle.setTexture(m_textureHolder.GetTexture("graphics/heat_title.png"));
-	m_spriteHeatTitle.setPosition(30, 30);
-	
 	m_spritePollutionBar.setTexture(m_textureHolder.GetTexture("graphics/pollution_bar.png"));
-	m_spritePollutionBar.setPosition(870, 20);
-	
-	m_spritePollutionTitle.setTexture(m_textureHolder.GetTexture("graphics/pollution_title.png"));
-	m_spritePollutionTitle.setPosition(720, 30);
-	
+	m_spritePollutionBar.setPosition(870, 8);
+
+	m_spriteMoney.setTexture(m_textureHolder.GetTexture("graphics/money_icon.png"));
+	m_spriteMoney.setPosition(240, 8);
+
 	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
-	m_spritePollutionLevel.setPosition(950, 17);
-	
+	m_spritePollutionLevel.setPosition(950, 5);
+
 	m_spriteHeatLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
-	m_spriteHeatLevel.setPosition(200, 17);
+	m_spriteHeatLevel.setPosition(600, 5);
 }
-
-
-
-
 //Complain about git hub in write up!

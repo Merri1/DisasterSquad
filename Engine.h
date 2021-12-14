@@ -33,6 +33,7 @@ public:
 
 protected:
     const int FRAMERATE = 60;
+    int camZoom;
 
     float m_pollutionTotal;
     float m_pollutionRate;
@@ -64,6 +65,7 @@ protected:
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     RenderWindow m_window;
     View m_mainView;
+    View m_guiView;
     Texture m_textureBackground;
     Sprite m_background;
     Sprite m_spriteCrosshair;
@@ -74,7 +76,14 @@ protected:
     Sprite m_spritePollutionTitle;
     Sprite m_spritePollutionLevel;
     Sprite m_spriteHeatLevel;
+    Sprite m_spriteUIBar;
+    Sprite m_spriteMenuBar;
+    Sprite m_spriteMoney;
     TextureHolder m_textureHolder;
+    Font ka1Font;
+    Text m_displayIncome;
+    Text m_displayHeat;
+    Text m_displayPollution;
 
     float m_elapsedTime;
 };
