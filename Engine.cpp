@@ -27,12 +27,19 @@ void Engine::init()
 	m_window.setMouseCursorVisible(false);
 
 	// Initialise Responder and Disaster objects
+<<<<<<< Updated upstream
 	m_responder1 = new Responder();
+=======
+	responder = new Responder();
+	lpResponders.push_back(responder);
+
+>>>>>>> Stashed changes
 	m_disaster1 = new Wildfire();
 	m_disaster2 = new Wildfire();
 	m_disaster3 = new Wildfire();
 	m_disaster4 = new Wildfire();
 
+<<<<<<< Updated upstream
 	//Shop initialised
 	m_ResponderBuy = new Shop(100, 2);
 	m_WindTurbineBuy = new Shop(150, 2);
@@ -43,6 +50,19 @@ void Engine::init()
 	//Add shops to list
 	lpShop.push_back(m_ResponderBuy);
 	lpShop.push_back(m_WindTurbineBuy);
+=======
+	//Shop object initialised
+	//m_shop1 = new Shop();
+
+	//Initialise Renewable sources objetcs
+	m_renewableSource1 = new WindTurbine();
+
+	//Add source to list
+	lpRenew.push_back(m_renewableSource1);
+
+	//Add shop to list
+	//lpShop.push_back(m_shop1);
+>>>>>>> Stashed changes
 
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
@@ -82,8 +102,15 @@ void Engine::run()
 
 		// Handle events
 		eventManager(event);
+<<<<<<< Updated upstream
 		checkSelected();
+=======
+
+		collisonDetection();
+		//clean();
+>>>>>>> Stashed changes
 		
+
 		// Reset the window after evry frame update
 		m_window.clear();
 
@@ -132,11 +159,18 @@ void Engine::draw()
 		}
 	}
 
+<<<<<<< Updated upstream
 	m_window.draw(m_spriteMainCollisionBox);
 	m_window.draw(m_responder1->getSprite());
 	if (okayNewResponder == true) {
 		m_window.draw(m_responder2->getSprite());
 	}
+=======
+	//m_window.draw(m_shop1->getSprite());
+	m_window.draw(m_renewableSource1->getSprite());
+	m_window.draw(responder->getSprite());
+	m_window.draw(m_spriteCrosshair);
+>>>>>>> Stashed changes
 
 	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
 	m_window.setView(m_guiView);
@@ -242,16 +276,42 @@ void Engine::eventManager(Event& e)
 				}
 			}
 
+<<<<<<< Updated upstream
 			// Check if Responder buy button has been clicked.
 			if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
 				m_ResponderBuy->select(true);
 				cout << "Responder buy button has been clicked!\n";
-			}
+=======
+			// Check if mouse click was within then same coords as turbine
+			/*
+			if (m_renewableSource1->isSelected())
+			{
+				m_renewableSource1->spawn(m_mousePosition.x, m_mousePosition.y);
+				cout << "Spawn turbine " << m_mousePosition.x << " , " << m_mousePosition.y << endl;
 
+				m_renewableSource1->getSpritepos(m_mousePosition.x, m_mousePosition.y);
+				m_renewableSource1-> select(false);
+				
+>>>>>>> Stashed changes
+			}
+			*/
+
+<<<<<<< Updated upstream
 			// Check if wind turbine buy button has been clicked.
 			if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
 				m_WindTurbineBuy->select(true);
 				cout << "Wind turbine buy button is selected!\n";
+=======
+
+			if (m_renewableSource1->getPositionX() <= m_mousePosition.x + 10
+				&& m_renewableSource1->getPositionX() >= m_mousePosition.x - 10
+				&& m_renewableSource1->getPositionY() <= m_mousePosition.y + 10
+				&& m_renewableSource1->getPositionY() >= m_mousePosition.y - 10)
+			{
+				// Set m_renewableSource1 selected to true when clicked
+				m_renewableSource1->select(true);
+				cout << "m_renewableSource1 is selected";
+>>>>>>> Stashed changes
 			}
 		}
 
@@ -299,6 +359,8 @@ void Engine::eventManager(Event& e)
 				m_mainView.reset(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 			}
 		}
+
+		
 	}
 }
 
@@ -355,3 +417,71 @@ void Engine::render()
 	m_spriteHeatLevel.setPosition(600, 5);
 }
 //Complain about git hub in write up!
+
+
+
+void Engine::collisonDetection() //Check if Responder is in a certain range of Disaster object
+{
+	list<Disaster*>::iterator iter1;
+	iter1 = lpDisasters.begin();
+	
+
+	for (iter1 = lpDisasters.begin(); iter1 != lpDisasters.end();iter1++)
+	{
+		//cout << "Responder x = " << responder->getPositionX() << " and y = " << responder->getPositionY();
+
+		if (responder->getPositionX() <= (*iter1)->getPosition().x + 10
+			&& responder->getPositionX() >= (*iter1)->getPosition().x - 10
+			&& responder->getPositionY() <= (*iter1)->getPosition().y + 10
+			&& responder->getPositionY() >= (*iter1)->getPosition().y - 10)
+		{
+			
+				//cout << "Its working";
+				Battle();
+			
+		 }
+		 
+
+	}
+}
+
+
+void Engine::Battle()
+{
+	cout << "Battle Start\n";
+	list<Disaster*>::iterator iter;
+	iter = lpDisasters.begin();
+
+	cout << "Disaster Health = " << (*iter)->getHealth() << "\n";
+
+	int m_damageAmount = responder->getAttack(); 
+	(*iter)->updateHealth(m_damageAmount);
+
+	if ((*iter)->getHealth() <= 0)
+	{
+		cout << "Disaster Dead";
+		//clean();
+		
+	}
+
+	
+	
+}
+
+
+void Engine::clean()
+{
+	list<Disaster*>::iterator iter;
+	for (iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
+	{
+		if (!(*iter)->isAlive())
+		{
+			lpDisasters.erase(iter--);
+			cout << "Disaster Removed";
+
+		}
+
+	}
+
+
+}

@@ -40,6 +40,7 @@ public:
     bool isSelected();
     void select(bool Selected);
     void update(float elapsedTime);
+    int getAttack();
 
 protected:
     bool m_isMoving;

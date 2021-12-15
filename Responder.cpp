@@ -11,7 +11,11 @@ Responder::Responder()
 	m_positionY = 300;
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
+<<<<<<< Updated upstream
 	m_direction = 0;
+=======
+	m_attack = 100;
+>>>>>>> Stashed changes
 
 	m_Sprite.setOrigin(8, 8);
 	m_Sprite.setPosition(m_positionX, m_positionY);
@@ -33,6 +37,15 @@ int Responder::getPositionY()
 	return m_position.y;
 }
 
+<<<<<<< Updated upstream
+=======
+int Responder::getAttack()
+{
+	return m_attack;
+}
+
+
+>>>>>>> Stashed changes
 void Responder::moveTo(int X, int Y)
 {
 	m_isSelected = false;

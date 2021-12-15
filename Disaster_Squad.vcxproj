@@ -28,10 +28,12 @@
     <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
+    <ClCompile Include="RenewableSources.cpp" />
     <ClCompile Include="Responder.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="TextureHolder.cpp" />
     <ClCompile Include="Wildfire.cpp" />
+    <ClCompile Include="WindTurbine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Disaster.h" />
@@ -42,10 +44,12 @@
     <ClInclude Include="GraphEdge.h" />
     <ClInclude Include="GridManager.h" />
     <ClInclude Include="Pathfinding.h" />
+    <ClInclude Include="RenewableSources.h" />
     <ClInclude Include="Responder.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="TextureHolder.h" />
     <ClInclude Include="Wildfire.h" />
+    <ClInclude Include="WindTurbine.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

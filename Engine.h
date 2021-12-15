@@ -12,6 +12,9 @@
 #include "Wildfire.h"
 #include "GridManager.h"
 #include "Shop.h"
+#include "RenewableSources.h"
+#include "WindTurbine.h"
+
 #include <random>
 #include <list>
 
@@ -26,7 +29,8 @@ public:
     void update();
     void checkSelected();
     void eventManager(Event& e);
-    void checkCollisions();
+    void collisonDetection();
+    void Battle();
     void clean(); // Reset variables, remove objects. Level 1 = 1 responder, level 2 = 2 responders at start
     // Functions here
     
@@ -50,21 +54,37 @@ protected:
     Responder* m_responder2;
     Responder* m_responder3;
     Responder* m_responder4;
+<<<<<<< Updated upstream
     RenewableSource* m_renewableSource1;
     RenewableSource* m_renewableSource2;
     RenewableSource* m_renewableSource3;
+=======
+
+    Responder* responder;  // CHANGE THIS LATER AND USE ABOVE RESPONDERS
+
+    RenewableSources* m_renewableSource1;
+    RenewableSources* m_renewableSource2;
+    RenewableSources* m_renewableSource3;
+
+>>>>>>> Stashed changes
     Disaster* m_disaster1;
     Disaster* m_disaster2;
     Disaster* m_disaster3;
     Disaster* m_disaster4;
+<<<<<<< Updated upstream
     Shop* m_WindTurbineBuy;
     Shop* m_ResponderBuy;
 
+=======
+
+    //Shop* m_shop1;
+>>>>>>> Stashed changes
     //VertexArray virtualGrid;
     //GridManager grid;
     std::list<Disaster*> lpDisasters;
     std::list<Responder*> lpResponders;
-    std::list<Shop*> lpShop;
+   // std::list<Shop*> lpShop;
+    std::list<RenewableSources*> lpRenew;
 
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     RenderWindow m_window;

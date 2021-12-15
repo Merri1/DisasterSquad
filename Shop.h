@@ -1,6 +1,8 @@
+/*
 #pragma once
 #ifndef SHOP_H
 #define SHOP_H
+
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -44,3 +46,4 @@ protected:
 
 };
 #endif
+*/

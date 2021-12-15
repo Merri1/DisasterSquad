@@ -11,6 +11,8 @@
 Disaster::Disaster()
 {
     srand(time(NULL));
+   // m_position.x = m_positionX;
+    //m_position.y = m_positionY;
 }
 
 void Disaster::spawn()
@@ -20,13 +22,17 @@ void Disaster::spawn()
     m_spawned = true;
     m_position.x = rand() % 1024;
     m_position.y = rand() % 576;
+
+    std::cout << "x = " << m_position.x << " and y = " << m_position.y;
     
 
 }
 
 bool Disaster::getSpawnStatus()
 {
+
     return m_spawned;
+
 }
 
 void Disaster::update()
@@ -44,4 +50,18 @@ sf::Sprite Disaster::getSprite()
     return m_disasterSprite;
 }
 
+int Disaster::getHealth()
+{
+    return m_health;
+}
 
+bool Disaster::isAlive()
+{
+    return(m_health > 0);
+}
+
+
+void Disaster::updateHealth(int damage)
+{
+    m_health -= damage;
+}

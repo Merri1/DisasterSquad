@@ -13,12 +13,19 @@ class Disaster
 public:
     Disaster();
     void update();
+    void getX();
+    void getY();
     bool getSpawnStatus();
     virtual void spawn();
     virtual sf::Sprite getSprite();
+    int getHealth();
+    bool isAlive();
+    void updateHealth(int damage);
     void chanceToSpread(sf::Vector2f);
     sf::Vector2f getPosition();
     sf::Vector2f m_position;
+   // int m_positionX;
+   // int m_positionY;
 
     // These are now converted to subclasses for each disaster type
     // Keep these here for now as a reminder for write up padding
