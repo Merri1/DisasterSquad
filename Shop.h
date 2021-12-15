@@ -21,12 +21,13 @@ public:
     Vector2f m_Resolution;
     Vector2i m_position;
 
-    Shop();
+    Shop(int x, int y);
 
     int getPositionX();
     int getPositionY();
     void spawn(int x, int y);
     bool isSelected();
+    void setSprite(int shopType);
     void Placed(int postionX, int positionY);
     //void Placed(bool Placed);
     void select(bool Selected);

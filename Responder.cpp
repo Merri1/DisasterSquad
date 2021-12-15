@@ -155,14 +155,8 @@ Sprite Responder::getSprite()
 	return m_Sprite;
 }
 
-
-
 int Responder::getHealth()
 {
 	return m_Health;
 }
-
-
-
-
 //1024x576 64/36 tile maps size

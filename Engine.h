@@ -24,6 +24,7 @@ public:
     void render();
     void draw();
     void update();
+    void checkSelected();
     void eventManager(Event& e);
     void checkCollisions();
     void clean(); // Reset variables, remove objects. Level 1 = 1 responder, level 2 = 2 responders at start
@@ -35,11 +36,13 @@ protected:
     const int FRAMERATE = 60;
     int camZoom;
 
-    float m_pollutionTotal;
-    float m_pollutionRate;
+    double m_pollutionTotal;
+    double m_pollutionRate;
 
-    float m_goldTotal;
-    float m_goldRate;
+    double m_goldTotal;
+    double m_goldRate;
+
+    int m_powerTotal;
 
     //Game game;
     Texture m_backgroundTexture;
@@ -47,7 +50,6 @@ protected:
     Responder* m_responder2;
     Responder* m_responder3;
     Responder* m_responder4;
-    Responder* responder;  // CHANGE THIS LATER AND USE ABOVE RESPONDERS
     RenewableSource* m_renewableSource1;
     RenewableSource* m_renewableSource2;
     RenewableSource* m_renewableSource3;
@@ -56,6 +58,8 @@ protected:
     Disaster* m_disaster3;
     Disaster* m_disaster4;
     Shop* m_WindTurbineBuy;
+    Shop* m_ResponderBuy;
+
     //VertexArray virtualGrid;
     //GridManager grid;
     std::list<Disaster*> lpDisasters;
@@ -69,7 +73,10 @@ protected:
     Texture m_textureBackground;
     Sprite m_background;
     Sprite m_spriteCrosshair;
-    Vector2f m_mousePosition;
+    Vector2f m_mousePositionMain;
+    Vector2f m_mousePositionGUI;
+    Sprite m_spriteMainCollisionBox;
+    Sprite m_spriteGUICollisionBox;
     Sprite m_spriteHeatBar;
     Sprite m_spriteHeatTitle;
     Sprite m_spritePollutionBar;
@@ -78,13 +85,15 @@ protected:
     Sprite m_spriteHeatLevel;
     Sprite m_spriteUIBar;
     Sprite m_spriteMenuBar;
-    Sprite m_spriteMoney;
-    Sprite m_spriteResponderBuyButton;
+    Sprite m_spritePower;
     TextureHolder m_textureHolder;
     Font ka1Font;
     Text m_displayIncome;
+    Text m_displayPower;
     Text m_displayHeat;
     Text m_displayPollution;
+
+    bool okayNewResponder;
 
     float m_elapsedTime;
 };

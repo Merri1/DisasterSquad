@@ -1,6 +1,8 @@
 #include "Engine.h"
 #include <iostream>
 #include<list>
+#include<sstream>
+
 using namespace std;
 using namespace sf;
 
@@ -25,16 +27,21 @@ void Engine::init()
 	m_window.setMouseCursorVisible(false);
 
 	// Initialise Responder and Disaster objects
-	responder = new Responder();
+	m_responder1 = new Responder();
 	m_disaster1 = new Wildfire();
 	m_disaster2 = new Wildfire();
 	m_disaster3 = new Wildfire();
 	m_disaster4 = new Wildfire();
 
 	//Shop initialised
-	m_WindTurbineBuy = new Shop();
+	m_ResponderBuy = new Shop(100, 2);
+	m_WindTurbineBuy = new Shop(150, 2);
 
-	//Add shop to list
+	//Add responders (add only one to begin with).
+	lpResponders.push_back(m_responder1);
+
+	//Add shops to list
+	lpShop.push_back(m_ResponderBuy);
 	lpShop.push_back(m_WindTurbineBuy);
 
 	// Add disaster objects to list of disaster pointers
@@ -44,12 +51,15 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster4);
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
-	m_pollutionTotal = 1000.0;
-	m_pollutionRate = .01;
+	m_pollutionTotal = 100.0;
+	m_pollutionRate = .001;
 
 	//Gold - Passive income - 1 gold gets added to the players total every second
 	m_goldTotal = 0;
 	m_goldRate = .01;
+
+	// Power - Can only be increase / decreased by producing new buildings.
+	m_powerTotal = 0;
 }
 
 // Seperate run() function out into smaller functions
@@ -72,6 +82,7 @@ void Engine::run()
 
 		// Handle events
 		eventManager(event);
+		checkSelected();
 		
 		// Reset the window after evry frame update
 		m_window.clear();
@@ -85,13 +96,6 @@ void Engine::run()
 			m_goldTotal = m_goldRate + m_goldTotal;
 			//cout << "Gold Total: " << m_goldTotal << endl;
 		 }
-
-		 
-
-		 
-			 
-		
-		
 	}
 }
 
@@ -128,24 +132,31 @@ void Engine::draw()
 		}
 	}
 
-	
-	m_window.draw(responder->getSprite());
-	
+	m_window.draw(m_spriteMainCollisionBox);
+	m_window.draw(m_responder1->getSprite());
+	if (okayNewResponder == true) {
+		m_window.draw(m_responder2->getSprite());
+	}
 
 	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
 	m_window.setView(m_guiView);
-
+	m_window.draw(m_spriteGUICollisionBox);
 	m_window.draw(m_spriteUIBar);
 	m_window.draw(m_spriteMenuBar);
+
+	m_ResponderBuy->setSprite(0);
+	m_window.draw(m_ResponderBuy->getSprite());
+
+	m_WindTurbineBuy->setSprite(1);
 	m_window.draw(m_WindTurbineBuy->getSprite());
+
+	m_window.draw(m_spritePower);
 	m_window.draw(m_spriteHeatBar);
 	m_window.draw(m_spriteHeatTitle);
 	m_window.draw(m_spritePollutionBar);
 	m_window.draw(m_spritePollutionTitle);
 	m_window.draw(m_spritePollutionLevel);
 	m_window.draw(m_spriteHeatLevel);
-	m_window.draw(m_spriteMoney);
-	m_window.draw(m_spriteResponderBuyButton);
 	m_window.draw(m_spriteCrosshair);
 
 	// Declare new Font.
@@ -154,12 +165,22 @@ void Engine::draw()
 		cout << "Error finding custom font.\n";
 	}
 
+	// Define power text.
+	m_displayPower.setFont(ka1Font);
+	m_displayPower.setCharacterSize(20);
+	m_displayPower.setFillColor(Color::Black);
+	m_displayPower.setPosition(260, 12);
+	m_displayPower.setString(to_string(m_powerTotal));
+	m_window.draw(m_displayPower);
+
 	// Define income text.
 	m_displayIncome.setFont(ka1Font);
 	m_displayIncome.setCharacterSize(20);
 	m_displayIncome.setFillColor(Color::Black);
-	m_displayIncome.setPosition(280, 12);
-	m_displayIncome.setString(to_string(m_goldTotal));
+	m_displayIncome.setPosition(320, 12);
+	stringstream ss;
+	ss << "G: " << m_goldTotal;
+	m_displayIncome.setString(ss.str());
 	m_window.draw(m_displayIncome);
 
 	// Define heat text.
@@ -176,62 +197,66 @@ void Engine::draw()
 	m_displayPollution.setPosition(710, 12);
 	m_displayPollution.setString("Pollution");
 
+	m_window.draw(m_displayPower);
 	m_window.draw(m_displayIncome);
 	m_window.draw(m_displayHeat);
 	m_window.draw(m_displayPollution);
 	m_window.display();
-	responder->update(m_elapsedTime);
+
+	// Iterate through alive responders and update them.
+	list<Responder*>::const_iterator cycleResponders;
+	for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++) {
+		(*cycleResponders)->update(m_elapsedTime);
+	}
 }
 
 void Engine::eventManager(Event& e)
 {
 	while (m_window.pollEvent(e))
 	{
-		m_mousePosition = m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_mainView);
-		// 
+		m_mousePositionMain = m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_mainView);
+		m_mousePositionGUI = m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView);
+		 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-
 			// If responder is already selected move them to coords of mouse click
-			if (responder->isSelected())
-			{
-				responder->moveTo(m_mousePosition.x, m_mousePosition.y);
+			// Iterate through alive responders and check if selected. If so, move them to mouse coordinates.
+			list<Responder*>::const_iterator cycleResponders;
+			for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++) {
+				if ((*cycleResponders)->isSelected())
+				{
+					(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
+				}
 			}
-
+			
 			// Check if mouse click was within then same coords as a responder
-			//if ((sf::Mouse::getPosition().x <= Responder.getPositionX()+100 && sf::Mouse::getPosition().x >= Responder.getPositionX() -50 ) && (sf::Mouse::getPosition().y <= Responder.getPositionY() +50 && sf::Mouse::getPosition().y >= Responder.getPositionY()-50))
-			//if (Responder.getPositionX() <= Mouse::getPosition().x + 50 && Responder.getPositionX() >= Mouse::getPosition().x && Responder.getPositionY() <= Mouse::getPosition().y + 50 && Responder.getPositionY() >= Mouse::getPosition().y - 50)
-			if (responder->getPositionX() <= m_mousePosition.x + 10
-				&& responder->getPositionX() >= m_mousePosition.x - 10
-				&& responder->getPositionY() <= m_mousePosition.y + 10
-				&& responder->getPositionY() >= m_mousePosition.y - 10)
-			{
-				// Set responder selected to true when clicked
-				responder->select(true);
+			list<Responder*>::const_iterator cycleResponders2;
+			for (cycleResponders2 = lpResponders.begin(); cycleResponders2 != lpResponders.end(); cycleResponders2++) {
+				if ((*cycleResponders2)->getPositionX() <= m_mousePositionMain.x + 10
+					&& (*cycleResponders2)->getPositionX() >= m_mousePositionMain.x - 10
+					&& (*cycleResponders2)->getPositionY() <= m_mousePositionMain.y + 10
+					&& (*cycleResponders2)->getPositionY() >= m_mousePositionMain.y - 10)
+				{
+					// Set responder selected to true when clicked
+					(*cycleResponders2)->select(true);
+				}
 			}
 
-			// Check if mouse click was within then same coords as a shop1
-			if (m_WindTurbineBuy->isSelected())
-			{
-				//Can't do anything for now until UI is implemented - DOING UI TODAY
-				m_WindTurbineBuy->spawn(m_mousePosition.x, m_mousePosition.y);
-				cout << "Spawn turbine " << m_mousePosition.x << " , " << m_mousePosition.y << endl;	
+			// Check if Responder buy button has been clicked.
+			if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
+				m_ResponderBuy->select(true);
+				cout << "Responder buy button has been clicked!\n";
 			}
 
-			if (m_WindTurbineBuy->getPositionX() <= m_mousePosition.x + 10
-				&& m_WindTurbineBuy->getPositionX() >= m_mousePosition.x - 10
-				&& m_WindTurbineBuy->getPositionY() <= m_mousePosition.y + 10
-				&& m_WindTurbineBuy->getPositionY() >= m_mousePosition.y - 10)
-			{
-				// Set shop1 selected to true when clicked
+			// Check if wind turbine buy button has been clicked.
+			if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
 				m_WindTurbineBuy->select(true);
-				cout << "Wind turbine buy button is selected";
+				cout << "Wind turbine buy button is selected!\n";
 			}
 		}
 
 		// For handling mouse dragging across the screen to move camera.
 		if (Mouse::isButtonPressed(Mouse::Right)) {
-
 			m_mainView.setCenter((Vector2f(m_window.mapPixelToCoords(Mouse::getPosition())), Vector2f(m_window.mapPixelToCoords(Mouse::getPosition()))));
 		}
 
@@ -241,14 +266,17 @@ void Engine::eventManager(Event& e)
 			m_window.close();
 		}
 
-		// Close window if Escape key is pressed
+		// Check for Keypress.
 		if (e.type == sf::Event::KeyPressed)
 		{
+			// Close window if Escape key is pressed
 			if (e.key.code == sf::Keyboard::Escape)
 			{
 				m_window.close();
 			}
 		}
+
+	
 
 		// Scroll in camera if mouse wheel scrolled. Up = +, down = -.
 		if (e.type == sf::Event::MouseWheelScrolled) {
@@ -276,6 +304,28 @@ void Engine::eventManager(Event& e)
 	}
 }
 
+void Engine::checkSelected() {
+
+	// Check if responder shop button is selected.
+	if (m_ResponderBuy->isSelected()) {
+		cout << "A new responder has joined the fight!\n";
+		m_responder2 = new Responder;
+		lpResponders.push_back(m_responder2);
+		okayNewResponder = true;
+		m_goldTotal -= 5;
+		// VERY IMPORTANT: Deselect button after spawn.
+		m_ResponderBuy->select(false);
+	}
+
+	// Check if wind turbine button is selected.
+	if (m_WindTurbineBuy->isSelected()) {
+		cout << "A new wind turbine has been created!\n";
+		m_goldTotal -= 5;
+		m_WindTurbineBuy->select(false);
+	}
+
+}
+
 void Engine::render()
 {
 	// Set textures, origins and positions for various game sprites 
@@ -292,20 +342,14 @@ void Engine::render()
 	m_spriteMenuBar.setTexture(m_textureHolder.GetTexture("graphics/menu_icon.png"));
 	m_spriteMenuBar.setOrigin(-6, -2);
 
-	m_spriteResponderBuyButton.setTexture(m_textureHolder.GetTexture("graphics/responder_buy_icon.png"));
-	m_spriteResponderBuyButton.setOrigin(-100, -2);
-
-	//m_spriteWindTurbineBuyButton.setTexture(m_textureHolder.GetTexture("graphics/wind_turbine_buy_button.png"));
-	//m_spriteWindTurbineBuyButton.setOrigin(-160, -2);
+	m_spritePower.setTexture(m_textureHolder.GetTexture("graphics/power_icon.png"));
+	m_spritePower.setPosition(220, 2);
 
 	m_spriteHeatBar.setTexture(m_textureHolder.GetTexture("graphics/heat_bar.png"));
 	m_spriteHeatBar.setPosition(550, 8);
 
 	m_spritePollutionBar.setTexture(m_textureHolder.GetTexture("graphics/pollution_bar.png"));
 	m_spritePollutionBar.setPosition(870, 8);
-
-	m_spriteMoney.setTexture(m_textureHolder.GetTexture("graphics/money_icon.png"));
-	m_spriteMoney.setPosition(240, 8);
 
 	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
 	m_spritePollutionLevel.setPosition(950, 5);
