@@ -22,7 +22,7 @@ void Engine::init()
 	// Call render function to initialise sprite textures and positions
 	render();
 
-	m_window.setMouseCursorVisible(true);
+	m_window.setMouseCursorVisible(false);
 
 	// Initialise Responder and Disaster objects
 	responder = new Responder();
@@ -32,17 +32,16 @@ void Engine::init()
 	m_disaster4 = new Wildfire();
 
 	//Shop initialised
-	m_shop1 = new Shop();
+	m_WindTurbineBuy = new Shop();
 
 	//Add shop to list
-	lpShop.push_back(m_shop1);
+	lpShop.push_back(m_WindTurbineBuy);
 
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
 	lpDisasters.push_back(m_disaster2);
 	lpDisasters.push_back(m_disaster3);
 	lpDisasters.push_back(m_disaster4);
-
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
 	m_pollutionTotal = 1000.0;
@@ -99,7 +98,7 @@ void Engine::run()
 void Engine::draw()
 {
 	m_window.setView(m_mainView);
-	m_spriteCrosshair.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_mainView));
+	m_spriteCrosshair.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView));
 
 	m_window.draw(m_background);
 
@@ -129,15 +128,16 @@ void Engine::draw()
 		}
 	}
 
-	m_window.draw(m_shop1->getSprite());
+	
 	m_window.draw(responder->getSprite());
-	m_window.draw(m_spriteCrosshair);
+	
 
 	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
 	m_window.setView(m_guiView);
 
 	m_window.draw(m_spriteUIBar);
 	m_window.draw(m_spriteMenuBar);
+	m_window.draw(m_WindTurbineBuy->getSprite());
 	m_window.draw(m_spriteHeatBar);
 	m_window.draw(m_spriteHeatTitle);
 	m_window.draw(m_spritePollutionBar);
@@ -145,6 +145,8 @@ void Engine::draw()
 	m_window.draw(m_spritePollutionLevel);
 	m_window.draw(m_spriteHeatLevel);
 	m_window.draw(m_spriteMoney);
+	m_window.draw(m_spriteResponderBuyButton);
+	m_window.draw(m_spriteCrosshair);
 
 	// Declare new Font.
 	Font ka1Font;
@@ -196,7 +198,6 @@ void Engine::eventManager(Event& e)
 				responder->moveTo(m_mousePosition.x, m_mousePosition.y);
 			}
 
-
 			// Check if mouse click was within then same coords as a responder
 			//if ((sf::Mouse::getPosition().x <= Responder.getPositionX()+100 && sf::Mouse::getPosition().x >= Responder.getPositionX() -50 ) && (sf::Mouse::getPosition().y <= Responder.getPositionY() +50 && sf::Mouse::getPosition().y >= Responder.getPositionY()-50))
 			//if (Responder.getPositionX() <= Mouse::getPosition().x + 50 && Responder.getPositionX() >= Mouse::getPosition().x && Responder.getPositionY() <= Mouse::getPosition().y + 50 && Responder.getPositionY() >= Mouse::getPosition().y - 50)
@@ -210,23 +211,21 @@ void Engine::eventManager(Event& e)
 			}
 
 			// Check if mouse click was within then same coords as a shop1
-			if (m_shop1->isSelected())
+			if (m_WindTurbineBuy->isSelected())
 			{
-				//Can't do anything for now until UI is implemented - Not doing UI today
-				m_shop1->spawn(m_mousePosition.x, m_mousePosition.y);
-				cout << "Spawn turbine " << m_mousePosition.x << " , " << m_mousePosition.y << endl;
-				
+				//Can't do anything for now until UI is implemented - DOING UI TODAY
+				m_WindTurbineBuy->spawn(m_mousePosition.x, m_mousePosition.y);
+				cout << "Spawn turbine " << m_mousePosition.x << " , " << m_mousePosition.y << endl;	
 			}
 
-
-			if (m_shop1->getPositionX() <= m_mousePosition.x + 10
-				&& m_shop1->getPositionX() >= m_mousePosition.x - 10
-				&& m_shop1->getPositionY() <= m_mousePosition.y + 10
-				&& m_shop1->getPositionY() >= m_mousePosition.y - 10)
+			if (m_WindTurbineBuy->getPositionX() <= m_mousePosition.x + 10
+				&& m_WindTurbineBuy->getPositionX() >= m_mousePosition.x - 10
+				&& m_WindTurbineBuy->getPositionY() <= m_mousePosition.y + 10
+				&& m_WindTurbineBuy->getPositionY() >= m_mousePosition.y - 10)
 			{
 				// Set shop1 selected to true when clicked
-				m_shop1->select(true);
-				cout << "Shop1 is selected";
+				m_WindTurbineBuy->select(true);
+				cout << "Wind turbine buy button is selected";
 			}
 		}
 
@@ -291,7 +290,13 @@ void Engine::render()
 	m_spriteUIBar.setOrigin(0, 0);
 
 	m_spriteMenuBar.setTexture(m_textureHolder.GetTexture("graphics/menu_icon.png"));
-	m_spriteMenuBar.setOrigin(-6, -6);
+	m_spriteMenuBar.setOrigin(-6, -2);
+
+	m_spriteResponderBuyButton.setTexture(m_textureHolder.GetTexture("graphics/responder_buy_icon.png"));
+	m_spriteResponderBuyButton.setOrigin(-100, -2);
+
+	//m_spriteWindTurbineBuyButton.setTexture(m_textureHolder.GetTexture("graphics/wind_turbine_buy_button.png"));
+	//m_spriteWindTurbineBuyButton.setOrigin(-160, -2);
 
 	m_spriteHeatBar.setTexture(m_textureHolder.GetTexture("graphics/heat_bar.png"));
 	m_spriteHeatBar.setPosition(550, 8);

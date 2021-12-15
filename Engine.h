@@ -55,7 +55,7 @@ protected:
     Disaster* m_disaster2;
     Disaster* m_disaster3;
     Disaster* m_disaster4;
-    Shop* m_shop1;
+    Shop* m_WindTurbineBuy;
     //VertexArray virtualGrid;
     //GridManager grid;
     std::list<Disaster*> lpDisasters;
@@ -79,6 +79,7 @@ protected:
     Sprite m_spriteUIBar;
     Sprite m_spriteMenuBar;
     Sprite m_spriteMoney;
+    Sprite m_spriteResponderBuyButton;
     TextureHolder m_textureHolder;
     Font ka1Font;
     Text m_displayIncome;
