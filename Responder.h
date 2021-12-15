@@ -47,6 +47,7 @@ protected:
     int m_Health;
     int m_MaxHealth;
     int m_attack;
+    int m_direction;
     bool m_ID;
     bool m_isSelected;
     int m_positionX;

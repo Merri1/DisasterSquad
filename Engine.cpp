@@ -276,8 +276,6 @@ void Engine::eventManager(Event& e)
 			}
 		}
 
-	
-
 		// Scroll in camera if mouse wheel scrolled. Up = +, down = -.
 		if (e.type == sf::Event::MouseWheelScrolled) {
 
@@ -323,7 +321,6 @@ void Engine::checkSelected() {
 		m_goldTotal -= 5;
 		m_WindTurbineBuy->select(false);
 	}
-
 }
 
 void Engine::render()

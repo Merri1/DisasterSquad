@@ -1,5 +1,6 @@
 #include "Responder.h"
 #include <iostream>
+#include <vector>
 
 Responder::Responder()
 {
@@ -10,6 +11,7 @@ Responder::Responder()
 	m_positionY = 300;
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
+	m_direction = 0;
 
 	m_Sprite.setOrigin(8, 8);
 	m_Sprite.setPosition(m_positionX, m_positionY);
@@ -31,7 +33,6 @@ int Responder::getPositionY()
 	return m_position.y;
 }
 
-
 void Responder::moveTo(int X, int Y)
 {
 	m_isSelected = false;
@@ -41,7 +42,8 @@ void Responder::moveTo(int X, int Y)
 
 	// Moving West.
 	if (m_DestinationX > m_positionX) {
-
+		
+		m_direction = 3;
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 		m_Sprite.setTextureRect(sf::IntRect{ 16, 144, 16, 20 });
@@ -49,6 +51,7 @@ void Responder::moveTo(int X, int Y)
 	// Moving East.
 	else if (m_DestinationX < m_positionX) {
 
+		m_direction = 2;
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 		m_Sprite.setTextureRect(sf::IntRect{ 16, 80, 16, 20 });
@@ -56,6 +59,7 @@ void Responder::moveTo(int X, int Y)
 	// Moving South.
 	else if (m_DestinationY > m_positionY) {
 
+		m_direction = 1;
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 		m_Sprite.setTextureRect(sf::IntRect{ 16, 16, 16, 20 });
@@ -63,6 +67,7 @@ void Responder::moveTo(int X, int Y)
 	// Moving North.
 	else if (m_DestinationY < m_positionY) {
 
+		m_direction = 0;
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 		m_Sprite.setTextureRect(sf::IntRect{ 16, 208, 16, 20 });
@@ -83,6 +88,22 @@ bool Responder::isSelected() {
 void Responder::select(bool Selected)
 {
 	m_isSelected = Selected;
+	
+	if (m_isSelected == true) {
+		
+		if (m_direction == 0) {
+			m_Sprite.setTextureRect(sf::IntRect{ 16, 48, 16, 20 });
+		}
+		else if (m_direction == 1) {
+			m_Sprite.setTextureRect(sf::IntRect{ 144, 16, 16, 20 });
+		}
+		else if (m_direction == 2) {
+			m_Sprite.setTextureRect(sf::IntRect{ 16, 112, 16, 20 });
+		}
+		else {
+			m_Sprite.setTextureRect(sf::IntRect{ 16, 176, 16, 20 });
+		}
+	}
 }
 
 void Responder::update(float elapsedTime)
@@ -144,6 +165,7 @@ void Responder::update(float elapsedTime)
 
 	m_Sprite.setPosition(m_positionX, m_positionY);
 }
+
 
 float Responder::getRotation()
 {
