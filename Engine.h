@@ -6,13 +6,15 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 #include "Game.h"
+#include "GameGraph.h"
+#include "Pathfinding.h"
 #include "TextureHolder.h"
 #include "Responder.h"
 #include "Disaster.h"
 #include "Wildfire.h"
 #include "GridManager.h"
 #include "Shop.h"
-#include "RenewableSources.h"
+#include "RenewableSource.h"
 #include "WindTurbine.h"
 
 #include <random>
@@ -38,13 +40,15 @@ public:
 
 protected:
     const int FRAMERATE = 60;
+    const int TILESIZE = 16;
+    const Vector2i RESOLUTION = Vector2i(1024, 576);
+    
+    float m_elapsedTime;
+    float m_pollutionTotal;
+    float m_pollutionRate;
+    float m_goldTotal;
+    float m_goldRate;
     int camZoom;
-
-    double m_pollutionTotal;
-    double m_pollutionRate;
-
-    double m_goldTotal;
-    double m_goldRate;
 
     int m_powerTotal;
 
@@ -54,39 +58,33 @@ protected:
     Responder* m_responder2;
     Responder* m_responder3;
     Responder* m_responder4;
-<<<<<<< Updated upstream
+
     RenewableSource* m_renewableSource1;
     RenewableSource* m_renewableSource2;
     RenewableSource* m_renewableSource3;
-=======
 
     Responder* responder;  // CHANGE THIS LATER AND USE ABOVE RESPONDERS
 
-    RenewableSources* m_renewableSource1;
-    RenewableSources* m_renewableSource2;
-    RenewableSources* m_renewableSource3;
-
->>>>>>> Stashed changes
     Disaster* m_disaster1;
     Disaster* m_disaster2;
     Disaster* m_disaster3;
     Disaster* m_disaster4;
-<<<<<<< Updated upstream
+
     Shop* m_WindTurbineBuy;
     Shop* m_ResponderBuy;
 
-=======
 
-    //Shop* m_shop1;
->>>>>>> Stashed changes
+    Shop* m_shop1;
     //VertexArray virtualGrid;
     //GridManager grid;
+    GameGraph graph;
+    Pathfinding pathfind;
     std::list<Disaster*> lpDisasters;
     std::list<Responder*> lpResponders;
-   // std::list<Shop*> lpShop;
-    std::list<RenewableSources*> lpRenew;
+    std::list<Shop*> lpShop;
+    std::list<RenewableSource*> lpRenew;
 
-    const Vector2i RESOLUTION = Vector2i(1024, 576);
+    //std::list<Shop*> lpShop;
     RenderWindow m_window;
     View m_mainView;
     View m_guiView;
@@ -115,6 +113,5 @@ protected:
 
     bool okayNewResponder;
 
-    float m_elapsedTime;
 };
 #endif

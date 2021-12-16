@@ -3,7 +3,7 @@
 
 WindTurbine::WindTurbine()
 {
-    RenewableSources();
+    RenewableSource();
 }
 
 

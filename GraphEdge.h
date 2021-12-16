@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #ifndef GRAPHEDGE
 #define GRAPHEDGE
 
@@ -6,12 +7,12 @@ class GraphEdge
 {
 public:
 	GraphEdge(int start, int end);
-	int getEdgeFrom();
-	int getEdgeTo();
+	int getEdgeStart();
+	int getEdgeEnd();
 
 protected:
-	int start;
-	int end;
+	int m_start;
+	int m_end;
 	const int weight = 1;
 };
 #endif

@@ -2,16 +2,16 @@
 
 GraphEdge::GraphEdge(int start, int end)
 {
-	start = start;
-	end = end;
+	m_start = start;
+	m_end = end;
 }
 
-int GraphEdge::getEdgeTo()
+int GraphEdge::getEdgeEnd()
 {
-	return end;
+	return m_end;
 }
 
-int GraphEdge::getEdgeFrom()
+int GraphEdge::getEdgeStart()
 {
-	return start;
+	return m_start;
 }

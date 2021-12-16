@@ -28,7 +28,7 @@
     <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
-    <ClCompile Include="RenewableSources.cpp" />
+    <ClCompile Include="RenewableSource.cpp" />
     <ClCompile Include="Responder.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="TextureHolder.cpp" />
@@ -44,7 +44,7 @@
     <ClInclude Include="GraphEdge.h" />
     <ClInclude Include="GridManager.h" />
     <ClInclude Include="Pathfinding.h" />
-    <ClInclude Include="RenewableSources.h" />
+    <ClInclude Include="RenewableSource.h" />
     <ClInclude Include="Responder.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="TextureHolder.h" />

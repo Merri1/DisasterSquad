@@ -1,9 +1,9 @@
 #pragma once
 #ifndef WINDTURBINE_H
 #define WINDTURBINE_H
-#include "RenewableSources.h"
+#include "RenewableSource.h"
 
-class WindTurbine : public RenewableSources
+class WindTurbine : public RenewableSource
 {
 public:
 	sf::Sprite m_Sprite;

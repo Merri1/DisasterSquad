@@ -2,20 +2,25 @@
 #ifndef PATHFINDING_H
 #define PATHFINDING_H
 
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
 #include <vector>
+#include "GameGraph.h"
 #include "GraphEdge.h"
+
+using namespace std;
 
 class Pathfinding
 {
 public:
-	//vector <int> BFS(int g, int source, int target);
+	Pathfinding();
+	vector<int> BFS(GameGraph &g, int start, int target);
+	bool containsElement(vector<int> vec, int x);
+	void generatePath();
 
 protected:
-
-	//vector <int> visited;
-	//vector <int> queue;
+	vector<int> visited;
+	vector<int> queue;
+	vector<int> previous;
+	vector<int> path;
 };
 #endif
 

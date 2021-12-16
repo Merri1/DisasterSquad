@@ -15,6 +15,7 @@ Engine::Engine()
 
 void Engine::init()
 {
+	pathfind = Pathfinding();
 	// Create a new window using resolution and framerate const values from Engine.h
 	m_window.create(VideoMode(RESOLUTION.x, RESOLUTION.y), "Disaster Squad");
 	m_window.setFramerateLimit(FRAMERATE);
@@ -26,20 +27,23 @@ void Engine::init()
 
 	m_window.setMouseCursorVisible(false);
 
+	graph.generateGraphFromFile(RESOLUTION.x/TILESIZE, RESOLUTION.y/TILESIZE, 1);
+	vector<int> path = pathfind.BFS(graph, 60, 63);
+	for (int n : path)
+	{
+		cout << n << "-";
+	}
+
 	// Initialise Responder and Disaster objects
-<<<<<<< Updated upstream
 	m_responder1 = new Responder();
-=======
 	responder = new Responder();
 	lpResponders.push_back(responder);
 
->>>>>>> Stashed changes
 	m_disaster1 = new Wildfire();
 	m_disaster2 = new Wildfire();
 	m_disaster3 = new Wildfire();
 	m_disaster4 = new Wildfire();
 
-<<<<<<< Updated upstream
 	//Shop initialised
 	m_ResponderBuy = new Shop(100, 2);
 	m_WindTurbineBuy = new Shop(150, 2);
@@ -50,7 +54,6 @@ void Engine::init()
 	//Add shops to list
 	lpShop.push_back(m_ResponderBuy);
 	lpShop.push_back(m_WindTurbineBuy);
-=======
 	//Shop object initialised
 	//m_shop1 = new Shop();
 
@@ -62,7 +65,6 @@ void Engine::init()
 
 	//Add shop to list
 	//lpShop.push_back(m_shop1);
->>>>>>> Stashed changes
 
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
@@ -102,14 +104,10 @@ void Engine::run()
 
 		// Handle events
 		eventManager(event);
-<<<<<<< Updated upstream
 		checkSelected();
-=======
 
 		collisonDetection();
 		//clean();
->>>>>>> Stashed changes
-		
 
 		// Reset the window after evry frame update
 		m_window.clear();
@@ -159,18 +157,15 @@ void Engine::draw()
 		}
 	}
 
-<<<<<<< Updated upstream
 	m_window.draw(m_spriteMainCollisionBox);
 	m_window.draw(m_responder1->getSprite());
 	if (okayNewResponder == true) {
 		m_window.draw(m_responder2->getSprite());
 	}
-=======
 	//m_window.draw(m_shop1->getSprite());
 	m_window.draw(m_renewableSource1->getSprite());
 	m_window.draw(responder->getSprite());
 	m_window.draw(m_spriteCrosshair);
->>>>>>> Stashed changes
 
 	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
 	m_window.setView(m_guiView);
@@ -178,11 +173,11 @@ void Engine::draw()
 	m_window.draw(m_spriteUIBar);
 	m_window.draw(m_spriteMenuBar);
 
-	m_ResponderBuy->setSprite(0);
-	m_window.draw(m_ResponderBuy->getSprite());
+	//m_ResponderBuy->setSprite(0);
+	//m_window.draw(m_ResponderBuy->getSprite());
 
-	m_WindTurbineBuy->setSprite(1);
-	m_window.draw(m_WindTurbineBuy->getSprite());
+	//m_WindTurbineBuy->setSprite(1);
+	//m_window.draw(m_WindTurbineBuy->getSprite());
 
 	m_window.draw(m_spritePower);
 	m_window.draw(m_spriteHeatBar);
@@ -195,7 +190,8 @@ void Engine::draw()
 
 	// Declare new Font.
 	Font ka1Font;
-	if (!ka1Font.loadFromFile("graphics/fonts/ka1.ttf")) {
+	if (!ka1Font.loadFromFile("graphics/fonts/ka1.ttf")) 
+	{
 		cout << "Error finding custom font.\n";
 	}
 
@@ -262,7 +258,7 @@ void Engine::eventManager(Event& e)
 					(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
 				}
 			}
-			
+
 			// Check if mouse click was within then same coords as a responder
 			list<Responder*>::const_iterator cycleResponders2;
 			for (cycleResponders2 = lpResponders.begin(); cycleResponders2 != lpResponders.end(); cycleResponders2++) {
@@ -275,96 +271,91 @@ void Engine::eventManager(Event& e)
 					(*cycleResponders2)->select(true);
 				}
 			}
-
-<<<<<<< Updated upstream
 			// Check if Responder buy button has been clicked.
 			if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
 				m_ResponderBuy->select(true);
-				cout << "Responder buy button has been clicked!\n";
-=======
-			// Check if mouse click was within then same coords as turbine
-			/*
-			if (m_renewableSource1->isSelected())
-			{
-				m_renewableSource1->spawn(m_mousePosition.x, m_mousePosition.y);
-				cout << "Spawn turbine " << m_mousePosition.x << " , " << m_mousePosition.y << endl;
 
-				m_renewableSource1->getSpritepos(m_mousePosition.x, m_mousePosition.y);
-				m_renewableSource1-> select(false);
-				
->>>>>>> Stashed changes
-			}
-			*/
+				// Check if mouse click was within then same coords as turbine
+				/*
+				if (m_renewableSource1->isSelected())
+				{
+					m_renewableSource1->spawn(m_mousePosition.x, m_mousePosition.y);
+					cout << "Spawn turbine " << m_mousePosition.x << " , " << m_mousePosition.y << endl;
 
-<<<<<<< Updated upstream
-			// Check if wind turbine buy button has been clicked.
-			if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
-				m_WindTurbineBuy->select(true);
-				cout << "Wind turbine buy button is selected!\n";
-=======
+					m_renewableSource1->getSpritepos(m_mousePosition.x, m_mousePosition.y);
+					m_renewableSource1-> select(false);
 
-			if (m_renewableSource1->getPositionX() <= m_mousePosition.x + 10
-				&& m_renewableSource1->getPositionX() >= m_mousePosition.x - 10
-				&& m_renewableSource1->getPositionY() <= m_mousePosition.y + 10
-				&& m_renewableSource1->getPositionY() >= m_mousePosition.y - 10)
-			{
-				// Set m_renewableSource1 selected to true when clicked
-				m_renewableSource1->select(true);
-				cout << "m_renewableSource1 is selected";
->>>>>>> Stashed changes
-			}
-		}
+				}
+				*/
 
-		// For handling mouse dragging across the screen to move camera.
-		if (Mouse::isButtonPressed(Mouse::Right)) {
-			m_mainView.setCenter((Vector2f(m_window.mapPixelToCoords(Mouse::getPosition())), Vector2f(m_window.mapPixelToCoords(Mouse::getPosition()))));
-		}
+				// Check if wind turbine buy button has been clicked.
+				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
+					m_WindTurbineBuy->select(true);
+					cout << "Wind turbine buy button is selected!\n";
 
-		// Close window if titlebar X is clicked
-		if (e.type == sf::Event::Closed)
-		{
-			m_window.close();
-		}
 
-		// Check for Keypress.
-		if (e.type == sf::Event::KeyPressed)
-		{
-			// Close window if Escape key is pressed
-			if (e.key.code == sf::Keyboard::Escape)
-			{
-				m_window.close();
-			}
-		}
+					if (m_renewableSource1->getPositionX() <= m_mousePositionMain.x + 10
+						&& m_renewableSource1->getPositionX() >= m_mousePositionMain.x - 10
+						&& m_renewableSource1->getPositionY() <= m_mousePositionMain.y + 10
+						&& m_renewableSource1->getPositionY() >= m_mousePositionMain.y - 10)
+					{
+						// Set m_renewableSource1 selected to true when clicked
+						m_renewableSource1->select(true);
+						cout << "m_renewableSource1 is selected";
+					}
+				}
 
-		// Scroll in camera if mouse wheel scrolled. Up = +, down = -.
-		if (e.type == sf::Event::MouseWheelScrolled) {
+				// For handling mouse dragging across the screen to move camera.
+				if (Mouse::isButtonPressed(Mouse::Right)) {
+					m_mainView.setCenter((Vector2f(m_window.mapPixelToCoords(Mouse::getPosition())), Vector2f(m_window.mapPixelToCoords(Mouse::getPosition()))));
+				}
 
-			// Scroll up (zoom in).
-			if (e.mouseWheelScroll.delta > 0 && camZoom < 5) {
-				m_mainView.zoom(0.8f);
+				// Close window if titlebar X is clicked
+				if (e.type == sf::Event::Closed)
+				{
+					m_window.close();
+				}
 
-				// Move camera to mouse cursor position per zoom.
-				m_mainView.move(((Vector2f(m_window.mapPixelToCoords((Mouse::getPosition())) - Vector2f(m_mainView.getCenter()))).x) * 0.9f,
-					((Vector2f(m_window.mapPixelToCoords((Mouse::getPosition())) - Vector2f(m_mainView.getCenter()))).y) * 0.9f);
-				camZoom++;
-			}
-			// Scroll down (zoom out).
-			else if (e.mouseWheelScroll.delta < 0 && camZoom > 0) {
-				m_mainView.zoom(1.2f);
-				camZoom--;
-			}
-			// Zoom out too far, reset screen size (this avoids issue where float value for zoom is fecked up after multiple zooms).
-			else if (e.mouseWheelScroll.delta < 0 && camZoom == 0) {
+				// Check for Keypress.
+				if (e.type == sf::Event::KeyPressed)
+				{
+					// Close window if Escape key is pressed
+					if (e.key.code == sf::Keyboard::Escape)
+					{
+						m_window.close();
+					}
+				}
 
-				m_mainView.reset(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
+				// Scroll in camera if mouse wheel scrolled. Up = +, down = -.
+				if (e.type == sf::Event::MouseWheelScrolled) {
+
+					// Scroll up (zoom in).
+					if (e.mouseWheelScroll.delta > 0 && camZoom < 5) {
+						m_mainView.zoom(0.8f);
+
+						// Move camera to mouse cursor position per zoom.
+						m_mainView.move(((Vector2f(m_window.mapPixelToCoords((Mouse::getPosition())) - Vector2f(m_mainView.getCenter()))).x) * 0.9f,
+							((Vector2f(m_window.mapPixelToCoords((Mouse::getPosition())) - Vector2f(m_mainView.getCenter()))).y) * 0.9f);
+						camZoom++;
+					}
+					// Scroll down (zoom out).
+					else if (e.mouseWheelScroll.delta < 0 && camZoom > 0) {
+						m_mainView.zoom(1.2f);
+						camZoom--;
+					}
+					// Zoom out too far, reset screen size (this avoids issue where float value for zoom is fecked up after multiple zooms).
+					else if (e.mouseWheelScroll.delta < 0 && camZoom == 0) {
+
+						m_mainView.reset(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
+					}
+				}
 			}
 		}
-
-		
 	}
 }
 
-void Engine::checkSelected() {
+void Engine::checkSelected() 
+{
 
 	// Check if responder shop button is selected.
 	if (m_ResponderBuy->isSelected()) {

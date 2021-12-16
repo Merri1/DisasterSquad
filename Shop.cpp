@@ -11,7 +11,7 @@
 //Shop data
 //Shop UI
 
-/*
+
 #include "Shop.h"
 #include <SFML/Graphics/Sprite.hpp>
 using namespace sf;
@@ -84,10 +84,5 @@ Sprite Shop::getSprite()
 {
 	return m_Sprite;
 }
-
-
-
-*/
-
 
 

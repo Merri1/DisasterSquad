@@ -54,10 +54,10 @@
     <ClCompile Include="FilePasser.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="RenewableSources.cpp">
+    <ClCompile Include="WindTurbine.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindTurbine.cpp">
+    <ClCompile Include="RenewableSource.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,10 +98,10 @@
     <ClInclude Include="FilePasser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RenewableSources.h">
+    <ClInclude Include="WindTurbine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WindTurbine.h">
+    <ClInclude Include="RenewableSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
