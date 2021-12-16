@@ -28,7 +28,7 @@ void Engine::init()
 	m_window.setMouseCursorVisible(false);
 
 	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
-	vector<int> path = pathfind.BFS(graph, 25, 129);
+	//vector<int> path = pathfind.BFS(graph, 25, 129);
 
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
@@ -259,7 +259,17 @@ void Engine::eventManager(Event& e)
 			{
 				if ((*cycleResponders)->isSelected())
 				{
-					(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
+					int x = m_mousePositionMain.x;
+					int y = m_mousePositionMain.y;
+					if(m_levelArray[x / 16][y / 16] == 0)
+					{
+						cout << "Yes you can move here mate" << endl;
+						(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
+					}
+					else
+					{
+						cout << "Nah you cannot move here mate" << endl;
+					}
 				}
 			}
 
@@ -273,6 +283,8 @@ void Engine::eventManager(Event& e)
 					&& (*cycleResponders2)->getPositionY() >= m_mousePositionMain.y - 10)
 				{
 					// Set responder selected to true when clicked
+					cout << (*cycleResponders2)->getPositionY() / 16 << " y" << endl;
+					cout << (*cycleResponders2)->getPositionX() / 16 << " x" << endl;
 					(*cycleResponders2)->select(true);
 				}
 			}
