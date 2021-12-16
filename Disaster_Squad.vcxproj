@@ -20,12 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Disaster.cpp" />
-    <ClCompile Include="FilePasser.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="FileParser.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameGraph.cpp" />
     <ClCompile Include="GraphEdge.cpp" />
-    <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="RenewableSource.cpp" />
@@ -38,11 +36,8 @@
   <ItemGroup>
     <ClInclude Include="Disaster.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="FilePasser.h" />
-    <ClInclude Include="Game.h" />
     <ClInclude Include="GameGraph.h" />
     <ClInclude Include="GraphEdge.h" />
-    <ClInclude Include="GridManager.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="RenewableSource.h" />
     <ClInclude Include="Responder.h" />

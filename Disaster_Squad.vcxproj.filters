@@ -18,9 +18,6 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="Responder.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -36,9 +33,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="GridManager.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="Wildfire.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -51,21 +45,18 @@
     <ClCompile Include="Pathfinding.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="FilePasser.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="WindTurbine.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="RenewableSource.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="FileParser.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Disaster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Responder.h">
@@ -80,9 +71,6 @@
     <ClInclude Include="Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GridManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Wildfire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -93,9 +81,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pathfinding.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FilePasser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WindTurbine.h">

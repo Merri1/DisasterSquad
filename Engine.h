@@ -5,14 +5,12 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
-#include "Game.h"
 #include "GameGraph.h"
 #include "Pathfinding.h"
 #include "TextureHolder.h"
 #include "Responder.h"
 #include "Disaster.h"
 #include "Wildfire.h"
-#include "GridManager.h"
 #include "Shop.h"
 #include "RenewableSource.h"
 #include "WindTurbine.h"
