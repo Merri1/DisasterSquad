@@ -40,9 +40,9 @@ int GameGraph::getGraphOrder()
 	return graphOrder;
 }
 
-void GameGraph::generateGraphFromFile(int tilesX, int tilesY, int level)
+void GameGraph::generateGraphFromFile(int(&levelArray)[36][64], int tileCols, int tileRows, int level)
 {
-	graphOrder = tilesX * tilesY;
+	graphOrder = tileCols * tileRows;
 
 	// Resize the adjacency vector to be the size of N
 	adjacencyListVector.resize(graphOrder);
@@ -71,7 +71,7 @@ void GameGraph::generateGraphFromFile(int tilesX, int tilesY, int level)
 
 	while (inputFile >> row)
 	{
-		for (int x = 0; x < tilesX; x++)
+		for (int x = 0; x < tileCols; x++)
 		{
 			const char val = row[x];
 			levelArray[y][x] = atoi(&val);
@@ -80,44 +80,41 @@ void GameGraph::generateGraphFromFile(int tilesX, int tilesY, int level)
 		y++;
 	}
 
-	for (int i = 0; i < tilesY; i++)
+	for (int i = 0; i < tileRows; i++)
 	{
-		for (int j = 0; j < tilesX; j++)
+		for (int j = 0; j < tileCols; j++)
 		{
-			cout << levelArray[i][j];
-
 			// Check top left corner add ones below and to right
-			if (i < tilesY - 1 && j < tilesX - 1)
+			if (i < tileRows - 1 && j < tileCols - 1)
 			{
 				if (levelArray[i][j] == 0 && levelArray[i][j + 1] == 0)
 				{
-					this->addEdge(i * tilesY + j, (i * tilesY) + j + 1);
+					this->addEdge(i * tileRows + j, (i * tileRows) + j + 1);
 				}
 
 				if (levelArray[i][j] == 0 && levelArray[i + 1][j] == 0)
 				{
-					this->addEdge(i * tilesY + j, (i + 1) * tilesY + j);
+					this->addEdge(i * tileRows + j, (i + 1) * tileRows + j);
 				}
 			}
 
 			// Check last row second last element
-			if (i == tilesY && j < tilesX)
+			if (i == tileRows && j < tileCols)
 			{
 				if (levelArray[i][j] == 0 && levelArray[i][j + 1] == 0)
 				{
-					this->addEdge(i * tilesY + j, (i * tilesY) + j + 1);
+					this->addEdge(i * tileRows + j, (i * tileRows) + j + 1);
 				}
 			}
 
-			if (j == tilesX - 1 && i < tilesY)
+			if (j == tileCols - 1 && i < tileRows)
 			{
 				if (levelArray[i][j] == 0 && levelArray[i + 1][j] == 0)
 				{
-					this->addEdge(i * tilesY + j, (i + 1) * tilesY + j);
+					this->addEdge(i * tileRows + j, (i + 1) * tileRows + j);
 				}
 			}
 		}
-		cout << endl;
 	}
 
 	// close the file

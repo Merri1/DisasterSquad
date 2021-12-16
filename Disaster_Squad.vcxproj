@@ -36,6 +36,7 @@
   <ItemGroup>
     <ClInclude Include="Disaster.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="FileParser.h" />
     <ClInclude Include="GameGraph.h" />
     <ClInclude Include="GraphEdge.h" />
     <ClInclude Include="Pathfinding.h" />

@@ -27,7 +27,7 @@ void Engine::init()
 
 	m_window.setMouseCursorVisible(false);
 
-	graph.generateGraphFromFile(RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
+	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
 	vector<int> path = pathfind.BFS(graph, 25, 129);
 
 	// Initialise Responder and Disaster objects

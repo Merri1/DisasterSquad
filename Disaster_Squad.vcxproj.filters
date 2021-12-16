@@ -89,5 +89,8 @@
     <ClInclude Include="RenewableSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
