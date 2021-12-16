@@ -27,13 +27,8 @@ void Engine::init()
 
 	m_window.setMouseCursorVisible(false);
 
-	graph.generateGraphFromFile(RESOLUTION.x/TILESIZE, RESOLUTION.y/TILESIZE, 1);
-	vector<int> path = pathfind.BFS(graph, 60, 63);
-	
-	for (int n : path)
-	{
-		cout << n << "-";
-	}
+	graph.generateGraphFromFile(RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
+	vector<int> path = pathfind.BFS(graph, 25, 129);
 
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
@@ -162,12 +157,14 @@ void Engine::draw()
 			
 		}
 	}
-
 	m_window.draw(m_spriteMainCollisionBox);
 	m_window.draw(m_responder1->getSprite());
-	if (okayNewResponder == true) {
+	
+	if (okayNewResponder == true) 
+	{
 		m_window.draw(m_responder2->getSprite());
 	}
+	
 	//m_window.draw(m_shop1->getSprite());
 	m_window.draw(m_renewableSource1->getSprite());
 	m_window.draw(responder->getSprite());

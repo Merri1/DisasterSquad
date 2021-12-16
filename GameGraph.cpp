@@ -87,16 +87,16 @@ void GameGraph::generateGraphFromFile(int tilesX, int tilesY, int level)
 			cout << levelArray[i][j];
 
 			// Check top left corner add ones below and to right
-			if (i < tilesY-1 && j < tilesX-1)
+			if (i < tilesY - 1 && j < tilesX - 1)
 			{
 				if (levelArray[i][j] == 0 && levelArray[i][j + 1] == 0)
 				{
-					this->addEdge(i * tilesX + j, (i * tilesX) + j + 1);
+					this->addEdge(i * tilesY + j, (i * tilesY) + j + 1);
 				}
 
 				if (levelArray[i][j] == 0 && levelArray[i + 1][j] == 0)
 				{
-					this->addEdge(i * tilesX + j, (i + 1) * tilesX + j);
+					this->addEdge(i * tilesY + j, (i + 1) * tilesY + j);
 				}
 			}
 
@@ -105,15 +105,15 @@ void GameGraph::generateGraphFromFile(int tilesX, int tilesY, int level)
 			{
 				if (levelArray[i][j] == 0 && levelArray[i][j + 1] == 0)
 				{
-					this->addEdge(i * tilesX + j, (i * tilesX) + j + 1);
+					this->addEdge(i * tilesY + j, (i * tilesY) + j + 1);
 				}
 			}
 
-			if (j == tilesX-1 && i < tilesY)
+			if (j == tilesX - 1 && i < tilesY)
 			{
 				if (levelArray[i][j] == 0 && levelArray[i + 1][j] == 0)
 				{
-					this->addEdge(i * tilesX + j, (i + 1) * tilesX + j);
+					this->addEdge(i * tilesY + j, (i + 1) * tilesY + j);
 				}
 			}
 		}
