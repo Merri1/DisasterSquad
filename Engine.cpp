@@ -29,6 +29,14 @@ void Engine::init()
 
 	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
 	//vector<int> path = pathfind.BFS(graph, 25, 129);
+	for (int i = 0; i < 36; i++)
+	{
+		for (int j = 0; j < 64; j++)
+		{
+			cout << m_levelArray[i][j];
+		}
+		cout << endl;
+	}
 
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
@@ -261,7 +269,11 @@ void Engine::eventManager(Event& e)
 				{
 					int x = m_mousePositionMain.x;
 					int y = m_mousePositionMain.y;
-					if(m_levelArray[x / 16][y / 16] == 0)
+
+					cout << x / 16 << "x - y" << y / 16 << endl;
+					cout << m_levelArray[y / 16][x / 16] << endl;
+					
+					if(m_levelArray[y / 16][x / 16] == 0)
 					{
 						cout << "Yes you can move here mate" << endl;
 						(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
