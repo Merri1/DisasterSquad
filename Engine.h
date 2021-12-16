@@ -32,7 +32,7 @@ public:
     void checkSelected();
     void eventManager(Event& e);
     void collisonDetection();
-    void Battle();
+    void battleDisaster(Responder* responder, Disaster* disaster);
     void clean(); // Reset variables, remove objects. Level 1 = 1 responder, level 2 = 2 responders at start
     // Functions here
     
