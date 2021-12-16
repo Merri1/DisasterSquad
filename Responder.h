@@ -11,6 +11,7 @@
 #include "TextureHolder.h"
 
 using namespace sf;
+using namespace std;
 
 
 class Responder
@@ -31,7 +32,8 @@ public:
     int getPositionX();
     int getPositionY();
     //void getSprite();
-    void moveTo(int postionX, int positionY);
+    void moveTo(vector<int> pathToDestination);
+    //void moveTo(int X, int Y);
     void spawn(int x, int y);
     void fightDisaster();
     int getHealth();
@@ -53,8 +55,13 @@ protected:
     bool m_isSelected;
     int m_positionX;
     int m_positionY;
+    int m_destinationTile;
+    int m_currentTile;
+    float m_speed;
+    vector<int> m_pathToFollow;
+    int m_deltaDistance = 0;
+
     int m_DestinationX;
     int m_DestinationY;
-    float m_speed;
 };
 #endif

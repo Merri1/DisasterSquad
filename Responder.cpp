@@ -39,14 +39,23 @@ int Responder::getAttack()
 	return m_attack;
 }
 
-void Responder::moveTo(int X, int Y)
+void Responder::moveTo(vector<int> pathToDestination)
+//void Responder::moveTo(int X, int Y)
 {
+	m_pathToFollow = pathToDestination;
 	m_isSelected = false;
 	m_isMoving = true;
-	m_DestinationX = X;
-	m_DestinationY = Y;
+	//m_DestinationX = X;
+	//m_DestinationY = Y;
 
-	// Moving West.
+	// Pop first tile of path vector (store first then erase) as current tile
+	m_currentTile = m_pathToFollow.front();
+	m_pathToFollow.erase(m_pathToFollow.begin());
+
+	// Store last tile in path vector as destination
+	m_destinationTile = m_pathToFollow.back();
+
+	/* Moving West.
 	if (m_DestinationX > m_positionX) {
 		
 		m_direction = 3;
@@ -78,6 +87,7 @@ void Responder::moveTo(int X, int Y)
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 		m_Sprite.setTextureRect(sf::IntRect{ 16, 208, 16, 20 });
 	}
+	*/
 }
 
 void Responder::spawn(int x, int y)
@@ -114,6 +124,45 @@ void Responder::select(bool Selected)
 
 void Responder::update(float elapsedTime)
 {
+	if (m_isMoving)
+	{
+		if (m_currentTile == m_destinationTile)
+		{
+			m_isMoving = false;
+		}
+		else
+		{
+			m_deltaDistance++;
+
+			if (m_pathToFollow.front() == m_currentTile + 1)
+			{
+				m_positionX += 1;
+			}
+			else if (m_pathToFollow.front() == m_currentTile - 1)
+			{
+				m_positionX -= 1;
+			}
+
+			if (m_pathToFollow.front() == m_currentTile + 36)
+			{
+				m_positionY += 1;
+			}
+			else if (m_pathToFollow.front() == m_currentTile - 36)
+			{
+				m_positionY -= 1;
+			}
+
+			if (m_deltaDistance > 16)
+			{
+				m_currentTile = m_pathToFollow.front();
+				m_pathToFollow.erase(m_pathToFollow.begin());
+				m_deltaDistance = 0;
+			}
+		}
+	}
+
+	//
+	/*
 	if (m_isMoving)
 	{
 		if (m_positionX != m_DestinationX)
@@ -165,6 +214,8 @@ void Responder::update(float elapsedTime)
 			m_isMoving = false;
 		}
 	}
+	*/
+	
 
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;

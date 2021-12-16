@@ -41,6 +41,7 @@ protected:
     const int TILESIZE = 16;
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     int m_levelArray[36][64];
+    vector<int> m_pathToDestination;
     
     float m_elapsedTime;
     float m_pollutionTotal;

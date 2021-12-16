@@ -28,16 +28,7 @@ void Engine::init()
 	m_window.setMouseCursorVisible(false);
 
 	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
-	//vector<int> path = pathfind.BFS(graph, 25, 129);
-	for (int i = 0; i < 36; i++)
-	{
-		for (int j = 0; j < 64; j++)
-		{
-			cout << m_levelArray[i][j];
-		}
-		cout << endl;
-	}
-
+	
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
 	responder = new Responder();
@@ -260,23 +251,30 @@ void Engine::eventManager(Event& e)
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
+			m_pathToDestination.clear();
+			int x = m_mousePositionMain.x;
+			int y = m_mousePositionMain.y;
+			int clickedTile = y / TILESIZE * RESOLUTION.y / TILESIZE + x / TILESIZE;
+
 			// If responder is already selected move them to coords of mouse click
 			// Iterate through alive responders and check if selected. If so, move them to mouse coordinates.
 			list<Responder*>::const_iterator cycleResponders;
 			for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
 			{
+				int responderTile = ((*cycleResponders)->getPositionY() / TILESIZE) * RESOLUTION.y / TILESIZE + ((*cycleResponders)->getPositionX() / TILESIZE);
+				
 				if ((*cycleResponders)->isSelected())
-				{
-					int x = m_mousePositionMain.x;
-					int y = m_mousePositionMain.y;
-
-					cout << x / 16 << "x - y" << y / 16 << endl;
-					cout << m_levelArray[y / 16][x / 16] << endl;
-					
-					if(m_levelArray[y / 16][x / 16] == 0)
+				{	
+					if(m_levelArray[y / TILESIZE][x / TILESIZE] == 0)
 					{
 						cout << "Yes you can move here mate" << endl;
-						(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
+						cout << "Generating a path for you mate" << endl;
+						
+						
+						m_pathToDestination = pathfind.BFS(graph, responderTile, clickedTile);
+
+						(*cycleResponders)->moveTo(m_pathToDestination);
+						//(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
 					}
 					else
 					{
@@ -295,8 +293,6 @@ void Engine::eventManager(Event& e)
 					&& (*cycleResponders2)->getPositionY() >= m_mousePositionMain.y - 10)
 				{
 					// Set responder selected to true when clicked
-					cout << (*cycleResponders2)->getPositionY() / 16 << " y" << endl;
-					cout << (*cycleResponders2)->getPositionX() / 16 << " x" << endl;
 					(*cycleResponders2)->select(true);
 				}
 			}

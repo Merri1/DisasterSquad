@@ -10,6 +10,11 @@ Pathfinding::Pathfinding()
 
 vector<int> Pathfinding::BFS(GameGraph &g, int start, int target)
 {
+	previous.clear();
+	queue.clear();
+	visited.clear();
+	path.clear();
+
 	// Resize previous vector to graph size
 	previous.resize(g.getGraphOrder());
 
