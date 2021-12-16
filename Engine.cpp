@@ -153,8 +153,13 @@ void Engine::draw()
 		}
 		else
 		{
-			// Else if the disaster is already spawned draw it on map each frame update
-			m_window.draw((*iter)->getSprite());
+			if ((*iter)->isAlive())
+			{
+				// Else if the disaster is already spawned draw it on map each frame update
+				//if disaster health is greater than 0 keep drawing the disaster
+				m_window.draw((*iter)->getSprite());
+			}
+			
 		}
 	}
 
@@ -419,42 +424,48 @@ void Engine::render()
 
 void Engine::collisonDetection() //Check if Responder is in a certain range of Disaster object
 {
-	list<Disaster*>::iterator iter1;
-	iter1 = lpDisasters.begin();
+	list<Responder*>::iterator iter2;
+	list<Disaster*>::iterator iter;
+	iter = lpDisasters.begin();
+	iter2 = lpResponders.begin();
 	
 
-	for (iter1 = lpDisasters.begin(); iter1 != lpDisasters.end();iter1++)
+	for (iter2 = lpResponders.begin(); iter2 != lpResponders.end(); iter2++)
 	{
 		//cout << "Responder x = " << responder->getPositionX() << " and y = " << responder->getPositionY();
-
-		if (responder->getPositionX() <= (*iter1)->getPosition().x + 10
-			&& responder->getPositionX() >= (*iter1)->getPosition().x - 10
-			&& responder->getPositionY() <= (*iter1)->getPosition().y + 10
-			&& responder->getPositionY() >= (*iter1)->getPosition().y - 10)
+		for (iter = lpDisasters.begin(); iter != lpDisasters.end(); iter++)
 		{
 			
-				//cout << "Its working";
-				Battle();
-			
-		 }
-		 
+			if((*iter)->isAlive())
+			{
+				
+				if ((*iter2)->getPositionX() <= (*iter)->getPosition().x + 10
+					&& (*iter2)->getPositionX() >= (*iter)->getPosition().x - 10
+					&& (*iter2)->getPositionY() <= (*iter)->getPosition().y + 10
+					&& (*iter2)->getPositionY() >= (*iter)->getPosition().y - 10)
+				{
+
+					//cout << "Its working";
+					battleDisaster(*iter2,*iter);
+
+				}
+			}
+		}
 
 	}
 }
 
 
-void Engine::Battle()
+void Engine::battleDisaster(Responder* responder,Disaster* disaster)
 {
 	cout << "Battle Start\n";
-	list<Disaster*>::iterator iter;
-	iter = lpDisasters.begin();
 
-	cout << "Disaster Health = " << (*iter)->getHealth() << "\n";
+	cout << "Disaster Health = " << disaster->getHealth() << "\n";
 
 	int m_damageAmount = responder->getAttack(); 
-	(*iter)->updateHealth(m_damageAmount);
+	disaster->updateHealth(m_damageAmount);
 
-	if ((*iter)->getHealth() <= 0)
+	if (disaster->getHealth() <= 0)
 	{
 		cout << "Disaster Dead";
 		//clean();
