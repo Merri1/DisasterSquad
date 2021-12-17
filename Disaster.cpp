@@ -15,13 +15,26 @@ Disaster::Disaster()
     //m_position.y = m_positionY;
 }
 
-void Disaster::spawn()
+void Disaster::spawn(int (&levelArray)[36][64])
 {
-
     m_health = 100;
     m_spawned = true;
-    m_position.x = rand() % 1024;
-    m_position.y = rand() % 576;
+
+    while (true)
+    {
+        m_position.x = rand() % 1024;
+        m_position.y = rand() % 576;
+        
+        int tileX = m_position.x / 16;
+        int tileY = m_position.y / 16;
+
+        if (levelArray[tileX][tileY] == 0)
+        {
+            m_position.x = tileX * 16 + 8;
+            m_position.y = tileY * 16 + 8;
+            break;
+        }
+    }
 
     std::cout << "x = " << m_position.x << " and y = " << m_position.y;
     

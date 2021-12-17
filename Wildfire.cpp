@@ -7,13 +7,13 @@ Wildfire::Wildfire()
 }
 
 
-void Wildfire::spawn()
+void Wildfire::spawn(int (&levelArray)[36][64])
 {
-    Disaster::spawn();
+    Disaster::spawn(levelArray);
     m_spriteTexture = TextureHolder::GetTexture(
         "graphics/wildfire.png");
     m_disasterSprite.setTexture(m_spriteTexture);
-    m_disasterSprite.setOrigin(8, 8);
+    m_disasterSprite.setOrigin(8, 10);
     m_disasterSprite.setPosition(m_position);
     
 }

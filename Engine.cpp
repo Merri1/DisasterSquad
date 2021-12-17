@@ -136,7 +136,7 @@ void Engine::draw()
 			{
 				// Random 1 in 1000 chance for it to spawn
 				std::cout << "Disaster spawned\n";
-				(*iter)->spawn();
+				(*iter)->spawn(m_levelArray);
 
 				// Reseed random generator
 				srand(time(NULL));
@@ -237,7 +237,8 @@ void Engine::draw()
 
 	// Iterate through alive responders and update them.
 	list<Responder*>::const_iterator cycleResponders;
-	for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++) {
+	for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
+	{
 		(*cycleResponders)->update(m_elapsedTime);
 	}
 }
@@ -463,29 +464,10 @@ void Engine::collisonDetection() //Check if Responder is in a certain range of D
 					&& (*iter2)->getPositionY() <= (*iter)->getPosition().y + 10
 					&& (*iter2)->getPositionY() >= (*iter)->getPosition().y - 10)
 				{
-
 					(*iter)->updateHealth(1);
 				}
 			}
 		}
 
 	}
-}
-
-
-void Engine::clean()
-{
-	list<Disaster*>::iterator iter;
-	for (iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
-	{
-		if (!(*iter)->isAlive())
-		{
-			lpDisasters.erase(iter--);
-			cout << "Disaster Removed";
-
-		}
-
-	}
-
-
 }

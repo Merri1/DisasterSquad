@@ -16,7 +16,7 @@ public:
     void getX();
     void getY();
     bool getSpawnStatus();
-    virtual void spawn();
+    virtual void spawn(int (&levelArray)[36][64]);
     virtual sf::Sprite getSprite();
     int getHealth();
     bool isAlive();

@@ -51,9 +51,6 @@
     <ClCompile Include="RenewableSource.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileParser.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Disaster.h">
@@ -87,9 +84,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenewableSource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FileParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
