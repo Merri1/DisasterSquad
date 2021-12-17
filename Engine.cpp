@@ -211,7 +211,7 @@ void Engine::draw()
 	m_displayIncome.setFillColor(Color::Black);
 	m_displayIncome.setPosition(320, 12);
 	stringstream ss;
-	ss << "G: " << m_goldTotal;
+	ss << "G: " << (int)m_goldTotal;
 	m_displayIncome.setString(ss.str());
 	m_window.draw(m_displayIncome);
 

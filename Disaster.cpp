@@ -18,7 +18,6 @@ Disaster::Disaster()
 
 void Disaster::spawn(int (&levelArray)[36][64])
 {
-    
     m_health = 1000;
     m_spawned = true;
 
