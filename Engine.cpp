@@ -464,35 +464,12 @@ void Engine::collisonDetection() //Check if Responder is in a certain range of D
 					&& (*iter2)->getPositionY() >= (*iter)->getPosition().y - 10)
 				{
 
-					//cout << "Its working";
-					battleDisaster(*iter2,*iter);
-
+					(*iter)->updateHealth(1);
 				}
 			}
 		}
 
 	}
-}
-
-
-void Engine::battleDisaster(Responder* responder,Disaster* disaster)
-{
-	cout << "Battle Start\n";
-
-	cout << "Disaster Health = " << disaster->getHealth() << "\n";
-
-	int m_damageAmount = responder->getAttack(); 
-	disaster->updateHealth(m_damageAmount);
-
-	if (disaster->getHealth() <= 0)
-	{
-		cout << "Disaster Dead";
-		//clean();
-		
-	}
-
-	
-	
 }
 
 

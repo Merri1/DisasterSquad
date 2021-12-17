@@ -12,7 +12,7 @@ Responder::Responder()
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
 	m_direction = 0;
-	m_attack = 100;
+	
 
 	m_Sprite.setOrigin(8, 14);
 	m_Sprite.setPosition(m_positionX, m_positionY);
@@ -34,10 +34,7 @@ int Responder::getPositionY()
 	return m_position.y;
 }
 
-int Responder::getAttack()
-{
-	return m_attack;
-}
+
 
 void Responder::moveTo(vector<int> pathToDestination)
 {

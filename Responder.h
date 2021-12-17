@@ -35,21 +35,20 @@ public:
     void moveTo(vector<int> pathToDestination);
     //void moveTo(int X, int Y);
     void spawn(int x, int y);
-    void fightDisaster();
+    //void fightDisaster();
     int getHealth();
     float getRotation();
     Sprite getSprite();
     bool isSelected();
     void select(bool Selected);
     void update(float elapsedTime);
-    int getAttack();
+   
 
 protected:
     bool m_isMoving;
     int m_Speed;
     int m_Health;
     int m_MaxHealth;
-    int m_attack;
     int m_direction;
     bool m_ID;
     bool m_isSelected;

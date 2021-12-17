@@ -25,7 +25,7 @@ vector<int> Pathfinding::BFS(GameGraph &g, int start, int target)
 	previous[start] = start;
 
 	// Keep looping until we've visited the target node
-	while (!containsElement(visited, target))
+	while (!containsElement(visited, target)) 
 	{
 		int current;
 
