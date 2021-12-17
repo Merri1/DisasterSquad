@@ -459,10 +459,10 @@ void Engine::collisonDetection() //Check if Responder is in a certain range of D
 			if((*iter)->isAlive())
 			{
 				
-				if ((*iter2)->getPositionX() <= (*iter)->getPosition().x + 10
-					&& (*iter2)->getPositionX() >= (*iter)->getPosition().x - 10
-					&& (*iter2)->getPositionY() <= (*iter)->getPosition().y + 10
-					&& (*iter2)->getPositionY() >= (*iter)->getPosition().y - 10)
+				if ((*iter2)->getPositionX() <= (*iter)->getPosition().x + 20
+					&& (*iter2)->getPositionX() >= (*iter)->getPosition().x - 20
+					&& (*iter2)->getPositionY() <= (*iter)->getPosition().y + 20
+					&& (*iter2)->getPositionY() >= (*iter)->getPosition().y - 20)
 				{
 					(*iter)->updateHealth(1);
 				}
