@@ -254,14 +254,16 @@ void Engine::eventManager(Event& e)
 			m_pathToDestination.clear();
 			int x = m_mousePositionMain.x;
 			int y = m_mousePositionMain.y;
-			int clickedTile = y / TILESIZE * RESOLUTION.y / TILESIZE + x / TILESIZE;
+			cout << y << " y   x " << x << endl;
+			int clickedTile = (y / TILESIZE) * (RESOLUTION.x / TILESIZE) + (x / TILESIZE);
+			cout << clickedTile << " clickedtile " << endl;
 
 			// If responder is already selected move them to coords of mouse click
 			// Iterate through alive responders and check if selected. If so, move them to mouse coordinates.
 			list<Responder*>::const_iterator cycleResponders;
 			for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
 			{
-				int responderTile = ((*cycleResponders)->getPositionY() / TILESIZE) * RESOLUTION.y / TILESIZE + ((*cycleResponders)->getPositionX() / TILESIZE);
+				int responderTile = ((*cycleResponders)->getPositionY() / TILESIZE) * RESOLUTION.x / TILESIZE + ((*cycleResponders)->getPositionX() / TILESIZE);
 				
 				if ((*cycleResponders)->isSelected())
 				{	

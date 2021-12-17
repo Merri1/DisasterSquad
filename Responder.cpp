@@ -14,7 +14,7 @@ Responder::Responder()
 	m_direction = 0;
 	m_attack = 100;
 
-	m_Sprite.setOrigin(8, 8);
+	m_Sprite.setOrigin(8, 12);
 	m_Sprite.setPosition(m_positionX, m_positionY);
 	m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 	m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
@@ -43,17 +43,27 @@ void Responder::moveTo(vector<int> pathToDestination)
 //void Responder::moveTo(int X, int Y)
 {
 	m_pathToFollow = pathToDestination;
+	
+	for (int n : m_pathToFollow)
+	{
+		cout << n << "-" << endl;
+	}
+
 	m_isSelected = false;
 	m_isMoving = true;
 	//m_DestinationX = X;
 	//m_DestinationY = Y;
 
 	// Pop first tile of path vector (store first then erase) as current tile
-	m_currentTile = m_pathToFollow.front();
-	m_pathToFollow.erase(m_pathToFollow.begin());
-
-	// Store last tile in path vector as destination
-	m_destinationTile = m_pathToFollow.back();
+	if (!m_pathToFollow.empty())
+	{
+		m_currentTile = m_pathToFollow.front();
+		// Store last tile in path vector as destination
+		m_destinationTile = m_pathToFollow.back();
+		
+		m_pathToFollow.erase(m_pathToFollow.begin());
+	}
+	
 
 	/* Moving West.
 	if (m_DestinationX > m_positionX) {
@@ -126,7 +136,7 @@ void Responder::update(float elapsedTime)
 {
 	if (m_isMoving)
 	{
-		if (m_currentTile == m_destinationTile)
+		if (m_currentTile == m_destinationTile || m_pathToFollow.empty())
 		{
 			m_isMoving = false;
 		}
@@ -143,20 +153,26 @@ void Responder::update(float elapsedTime)
 				m_positionX -= 1;
 			}
 
-			if (m_pathToFollow.front() == m_currentTile + 36)
+			if (m_pathToFollow.front() == m_currentTile + 64)
 			{
 				m_positionY += 1;
 			}
-			else if (m_pathToFollow.front() == m_currentTile - 36)
+			else if (m_pathToFollow.front() == m_currentTile - 64)
 			{
 				m_positionY -= 1;
 			}
 
 			if (m_deltaDistance > 16)
 			{
-				m_currentTile = m_pathToFollow.front();
-				m_pathToFollow.erase(m_pathToFollow.begin());
-				m_deltaDistance = 0;
+				//m_positionX = ((m_positionX / 16) * 36) + 8;
+				//m_positionY = ((m_positionY / 16) * 64) + 8;
+
+				if (!m_pathToFollow.empty())
+				{
+					m_currentTile = m_pathToFollow.front();
+					m_pathToFollow.erase(m_pathToFollow.begin());
+					m_deltaDistance = 0;
+				}
 			}
 		}
 	}

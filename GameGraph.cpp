@@ -84,34 +84,36 @@ void GameGraph::generateGraphFromFile(int(&levelArray)[36][64], int tileCols, in
 	{
 		for (int j = 0; j < tileCols; j++)
 		{
+			cout << levelArray[i][j];
+
 			// Check top left corner add ones below and to right
 			if (i < tileRows - 1 && j < tileCols - 1)
 			{
 				if (levelArray[i][j] == 0 && levelArray[i][j + 1] == 0)
 				{
-					this->addEdge(i * tileRows + j, (i * tileRows) + j + 1);
+					this->addEdge(i * tileCols + j, (i * tileCols) + j + 1);
 				}
 
 				if (levelArray[i][j] == 0 && levelArray[i + 1][j] == 0)
 				{
-					this->addEdge(i * tileRows + j, (i + 1) * tileRows + j);
+					this->addEdge(i * tileCols + j, (i + 1) * tileCols + j);
 				}
 			}
 
 			// Check last row second last element
-			if (i == tileRows && j < tileCols)
+			if (i == tileRows - 1 && j < tileCols - 1)
 			{
 				if (levelArray[i][j] == 0 && levelArray[i][j + 1] == 0)
 				{
-					this->addEdge(i * tileRows + j, (i * tileRows) + j + 1);
+					this->addEdge(i * tileCols + j, (i * tileCols) + j + 1);
 				}
 			}
 
-			if (j == tileCols - 1 && i < tileRows)
+			if (j == tileCols - 1 && i < tileRows - 1)
 			{
 				if (levelArray[i][j] == 0 && levelArray[i + 1][j] == 0)
 				{
-					this->addEdge(i * tileRows + j, (i + 1) * tileRows + j);
+					this->addEdge(i * tileCols + j, (i + 1) * tileCols + j);
 				}
 			}
 		}

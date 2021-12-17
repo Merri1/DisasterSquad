@@ -48,7 +48,7 @@ vector<int> Pathfinding::BFS(GameGraph &g, int start, int target)
 		{
 			// Add current node to visited vector
 			visited.push_back(current);
-
+			
 			// Check all the neighbours of current node
 			for (GraphEdge edge : g.getNeighbours(current))
 			{
