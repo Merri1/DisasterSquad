@@ -17,8 +17,8 @@ using namespace std;
 class Responder
 {
 public:
-    const float START_SPEED = 1;
-    const float START_HEALTH = 100;
+    const int START_SPEED = 1;
+    const int START_HEALTH = 100;
 
     Sprite m_Sprite;
     Texture m_Texture;

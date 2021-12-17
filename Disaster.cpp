@@ -30,7 +30,7 @@ void Disaster::spawn(int (&levelArray)[36][64])
         int tileX = m_position.x / 16;
         int tileY = m_position.y / 16;
 
-        if (levelArray[tileX][tileY] == 0)
+        if (levelArray[tileY][tileX] == 0)
         {
             m_position.x = tileX * 16 + 8;
             m_position.y = tileY * 16 + 8;

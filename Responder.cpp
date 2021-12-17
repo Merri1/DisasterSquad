@@ -96,12 +96,12 @@ void Responder::update(float elapsedTime)
 		}
 		else
 		{
-			m_deltaDistance++;
+			m_deltaDistance += 2;
 
 			// Check if moving East
 			if (m_pathToFollow.front() == m_currentTile + 1)
 			{
-				m_positionX += 1;
+				m_positionX += 2;
 				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 				m_Sprite.setTextureRect(sf::IntRect{ 16, 144, 16, 20 });
@@ -109,7 +109,7 @@ void Responder::update(float elapsedTime)
 			// Esle check if moving West
 			else if (m_pathToFollow.front() == m_currentTile - 1)
 			{
-				m_positionX -= 1;
+				m_positionX -= 2;
 				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 				m_Sprite.setTextureRect(sf::IntRect{ 16, 80, 16, 20 });
@@ -118,7 +118,7 @@ void Responder::update(float elapsedTime)
 			// Check if moving South
 			if (m_pathToFollow.front() == m_currentTile + 64)
 			{
-				m_positionY += 1;
+				m_positionY += 2;
 				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 				m_Sprite.setTextureRect(sf::IntRect{ 16, 16, 16, 20 });
@@ -126,7 +126,7 @@ void Responder::update(float elapsedTime)
 			// Else check if moving North
 			else if (m_pathToFollow.front() == m_currentTile - 64)
 			{
-				m_positionY -= 1;
+				m_positionY -= 2;
 				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
 				m_Sprite.setTextureRect(sf::IntRect{ 16, 208, 16, 20 });
