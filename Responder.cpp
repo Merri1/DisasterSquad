@@ -40,19 +40,11 @@ int Responder::getAttack()
 }
 
 void Responder::moveTo(vector<int> pathToDestination)
-//void Responder::moveTo(int X, int Y)
 {
 	m_pathToFollow = pathToDestination;
-	
-	for (int n : m_pathToFollow)
-	{
-		cout << n << "-" << endl;
-	}
 
 	m_isSelected = false;
 	m_isMoving = true;
-	//m_DestinationX = X;
-	//m_DestinationY = Y;
 
 	// Pop first tile of path vector (store first then erase) as current tile
 	if (!m_pathToFollow.empty())
@@ -63,33 +55,6 @@ void Responder::moveTo(vector<int> pathToDestination)
 		
 		m_pathToFollow.erase(m_pathToFollow.begin());
 	}
-	
-
-	/* Moving West.
-	if (m_DestinationX > m_positionX) {
-		
-		m_direction = 3;
-		
-	}
-	// Moving East.
-	else if (m_DestinationX < m_positionX) {
-
-		m_direction = 2;
-		
-	}
-	// Moving South.
-	else if (m_DestinationY > m_positionY) {
-
-		m_direction = 1;
-		
-	}
-	// Moving North.
-	else if (m_DestinationY < m_positionY) {
-
-		m_direction = 0;
-		
-	}
-	*/
 }
 
 void Responder::spawn(int x, int y)

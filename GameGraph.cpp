@@ -84,8 +84,6 @@ void GameGraph::generateGraphFromFile(int(&levelArray)[36][64], int tileCols, in
 	{
 		for (int j = 0; j < tileCols; j++)
 		{
-			cout << levelArray[i][j];
-
 			// Check top left corner add ones below and to right
 			if (i < tileRows - 1 && j < tileCols - 1)
 			{
