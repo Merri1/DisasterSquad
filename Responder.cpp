@@ -7,14 +7,14 @@ Responder::Responder()
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
 	m_MaxHealth = START_HEALTH;
-	m_positionX = 400;
-	m_positionY = 300;
+	m_positionX = 408;
+	m_positionY = 314;
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
 	m_direction = 0;
 	m_attack = 100;
 
-	m_Sprite.setOrigin(8, 12);
+	m_Sprite.setOrigin(8, 14);
 	m_Sprite.setPosition(m_positionX, m_positionY);
 	m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
 	m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
@@ -69,33 +69,25 @@ void Responder::moveTo(vector<int> pathToDestination)
 	if (m_DestinationX > m_positionX) {
 		
 		m_direction = 3;
-		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
-		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
-		m_Sprite.setTextureRect(sf::IntRect{ 16, 144, 16, 20 });
+		
 	}
 	// Moving East.
 	else if (m_DestinationX < m_positionX) {
 
 		m_direction = 2;
-		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
-		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
-		m_Sprite.setTextureRect(sf::IntRect{ 16, 80, 16, 20 });
+		
 	}
 	// Moving South.
 	else if (m_DestinationY > m_positionY) {
 
 		m_direction = 1;
-		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
-		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
-		m_Sprite.setTextureRect(sf::IntRect{ 16, 16, 16, 20 });
+		
 	}
 	// Moving North.
 	else if (m_DestinationY < m_positionY) {
 
 		m_direction = 0;
-		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
-		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
-		m_Sprite.setTextureRect(sf::IntRect{ 16, 208, 16, 20 });
+		
 	}
 	*/
 }
@@ -144,28 +136,44 @@ void Responder::update(float elapsedTime)
 		{
 			m_deltaDistance++;
 
+			// Check if moving East
 			if (m_pathToFollow.front() == m_currentTile + 1)
 			{
 				m_positionX += 1;
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
+				m_Sprite.setTextureRect(sf::IntRect{ 16, 144, 16, 20 });
 			}
+			// Esle check if moving West
 			else if (m_pathToFollow.front() == m_currentTile - 1)
 			{
 				m_positionX -= 1;
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
+				m_Sprite.setTextureRect(sf::IntRect{ 16, 80, 16, 20 });
 			}
 
+			// Check if moving South
 			if (m_pathToFollow.front() == m_currentTile + 64)
 			{
 				m_positionY += 1;
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
+				m_Sprite.setTextureRect(sf::IntRect{ 16, 16, 16, 20 });
 			}
+			// Else check if moving North
 			else if (m_pathToFollow.front() == m_currentTile - 64)
 			{
 				m_positionY -= 1;
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_collision_box.png"));
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/character_animations/responder_spritesheet.png"));
+				m_Sprite.setTextureRect(sf::IntRect{ 16, 208, 16, 20 });
 			}
 
 			if (m_deltaDistance > 16)
 			{
-				//m_positionX = ((m_positionX / 16) * 36) + 8;
-				//m_positionY = ((m_positionY / 16) * 64) + 8;
+				m_positionY = m_positionY / 16 * 16 + 8;
+				m_positionX = m_positionX / 16 * 16 + 8;
 
 				if (!m_pathToFollow.empty())
 				{
@@ -176,63 +184,7 @@ void Responder::update(float elapsedTime)
 			}
 		}
 	}
-
-	//
-	/*
-	if (m_isMoving)
-	{
-		if (m_positionX != m_DestinationX)
-		{
-			if (m_DestinationX > m_positionX)
-			{
-				m_positionX += m_Speed; // * t.asSeconds();
-
-				if (m_positionX > m_DestinationX)
-				{
-					m_positionX = m_DestinationX;
-				}
-			}
-			else if (m_DestinationX < m_positionX)
-			{
-				m_positionX -= m_Speed; //+ t.asSeconds();
-
-				if (m_positionX < m_DestinationX)
-				{
-					m_positionX = m_DestinationX;
-				}
-			}
-		}
-
-		if (m_positionY != m_DestinationY)
-		{
-			if (m_DestinationY > m_positionY)
-			{
-				m_positionY += m_Speed; // * t.asSeconds();
-
-				if (m_positionY > m_DestinationY)
-				{
-					m_positionY = m_DestinationY;
-				}
-			}
-			else if (m_DestinationY < m_positionY)
-			{
-				m_positionY -= m_Speed; // * t.asSeconds();
-
-				if (m_positionY < m_DestinationY)
-				{
-					m_positionY = m_DestinationY;
-				}
-			}
-		}
-
-		if (m_positionX == m_DestinationX && m_positionY == m_DestinationY)
-		{
-			m_isMoving = false;
-		}
-	}
-	*/
 	
-
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
 
