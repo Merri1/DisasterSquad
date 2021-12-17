@@ -102,7 +102,6 @@ void Engine::run()
 		checkSelected();
 
 		collisonDetection();
-		//clean();
 
 		// Reset the window after evry frame update
 		m_window.clear();
@@ -471,3 +470,6 @@ void Engine::collisonDetection() //Check if Responder is in a certain range of D
 
 	}
 }
+
+
+
