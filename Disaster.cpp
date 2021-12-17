@@ -7,6 +7,7 @@
 */
 #include "Disaster.h"
 #include <iostream>
+using namespace sf;
 
 Disaster::Disaster()
 {
@@ -17,7 +18,8 @@ Disaster::Disaster()
 
 void Disaster::spawn(int (&levelArray)[36][64])
 {
-    m_health = 100;
+    
+    m_health = 1000;
     m_spawned = true;
 
     while (true)
@@ -77,4 +79,6 @@ bool Disaster::isAlive()
 void Disaster::updateHealth(int damage)
 {
     m_health -= damage;
+    m_disasterSprite.scale(0.99,0.99);
+    
 }

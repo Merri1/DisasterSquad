@@ -151,6 +151,7 @@ void Engine::draw()
 				// Else if the disaster is already spawned draw it on map each frame update
 				//if disaster health is greater than 0 keep drawing the disaster
 				m_window.draw((*iter)->getSprite());
+
 			}
 			
 		}
