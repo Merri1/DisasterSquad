@@ -93,12 +93,9 @@ protected:
     Vector2f m_mousePositionGUI;
     Sprite m_spriteMainCollisionBox;
     Sprite m_spriteGUICollisionBox;
-    Sprite m_spriteHeatBar;
-    Sprite m_spriteHeatTitle;
     Sprite m_spritePollutionBar;
     Sprite m_spritePollutionTitle;
     Sprite m_spritePollutionLevel;
-    Sprite m_spriteHeatLevel;
     Sprite m_spriteUIBar;
     Sprite m_spriteMenuBar;
     Sprite m_spritePower;
@@ -106,8 +103,8 @@ protected:
     Font ka1Font;
     Text m_displayIncome;
     Text m_displayPower;
-    Text m_displayHeat;
     Text m_displayPollution;
+    Text m_displayPollutionRate;
 
     bool okayNewResponder;
 

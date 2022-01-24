@@ -59,7 +59,6 @@ void Engine::init()
 	lpRenew.push_back(m_renewableSource1);
 
 	//Add shop to list
-	//lpShop.push_back(m_shop1);
 
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
@@ -69,7 +68,18 @@ void Engine::init()
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
 	m_pollutionTotal = 100.0;
-	m_pollutionRate = .001;
+	m_pollutionRate = 0.01; // Natural pollution rate.
+	list<Disaster*>::const_iterator cycleDisasters; // Increase pollution rate per disaster present.
+	for (cycleDisasters = lpDisasters.begin(); cycleDisasters != lpDisasters.end(); cycleDisasters++)
+	{
+		if (m_pollutionRate >= 0.05) {
+			// Do nothing.
+		}
+		else if (m_pollutionRate < 0.05) {
+			m_pollutionRate += 0.005;
+		}
+	}
+
 
 	//Gold - Passive income - 1 gold gets added to the players total every second
 	m_goldTotal = 0;
@@ -153,7 +163,6 @@ void Engine::draw()
 				m_window.draw((*iter)->getSprite());
 
 			}
-			
 		}
 	}
 	m_window.draw(m_spriteMainCollisionBox);
@@ -167,7 +176,6 @@ void Engine::draw()
 	//m_window.draw(m_shop1->getSprite());
 	m_window.draw(m_renewableSource1->getSprite());
 	m_window.draw(responder->getSprite());
-	m_window.draw(m_spriteCrosshair);
 
 	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
 	m_window.setView(m_guiView);
@@ -182,12 +190,9 @@ void Engine::draw()
 	m_window.draw(m_WindTurbineBuy->getSprite());
 
 	m_window.draw(m_spritePower);
-	m_window.draw(m_spriteHeatBar);
-	m_window.draw(m_spriteHeatTitle);
 	m_window.draw(m_spritePollutionBar);
 	m_window.draw(m_spritePollutionTitle);
 	m_window.draw(m_spritePollutionLevel);
-	m_window.draw(m_spriteHeatLevel);
 	m_window.draw(m_spriteCrosshair);
 
 	// Declare new Font.
@@ -213,26 +218,27 @@ void Engine::draw()
 	stringstream ss;
 	ss << "G: " << (int)m_goldTotal;
 	m_displayIncome.setString(ss.str());
-	m_window.draw(m_displayIncome);
-
-	// Define heat text.
-	m_displayHeat.setFont(ka1Font);
-	m_displayHeat.setCharacterSize(20);
-	m_displayHeat.setFillColor(Color::Black);
-	m_displayHeat.setPosition(470, 12);
-	m_displayHeat.setString("Heat");
 
 	// Define pollution text.
 	m_displayPollution.setFont(ka1Font);
 	m_displayPollution.setCharacterSize(20);
 	m_displayPollution.setFillColor(Color::Black);
-	m_displayPollution.setPosition(710, 12);
+	m_displayPollution.setPosition(660, 12);
 	m_displayPollution.setString("Pollution");
+
+	// Using text to display pollution rate for testing purposes only, remove from final game.
+	m_displayPollutionRate.setFont(ka1Font);
+	m_displayPollutionRate.setCharacterSize(16);
+	m_displayPollutionRate.setFillColor(Color::White);
+	m_displayPollutionRate.setPosition(950, 12);
+	stringstream ss2;
+	ss2 << (double)m_pollutionRate;
+	m_displayPollutionRate.setString(ss2.str());
 
 	m_window.draw(m_displayPower);
 	m_window.draw(m_displayIncome);
-	m_window.draw(m_displayHeat);
 	m_window.draw(m_displayPollution);
+	m_window.draw(m_displayPollutionRate);
 	m_window.display();
 
 	// Iterate through alive responders and update them.
@@ -240,6 +246,17 @@ void Engine::draw()
 	for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
 	{
 		(*cycleResponders)->update(m_elapsedTime);
+	}
+
+	// Update position of pollution level based on the pollution rate.
+	if (m_pollutionRate == 0) {
+		m_spritePollutionLevel.move(0, 0);
+	}
+	else if (m_pollutionRate > 0 && m_spritePollutionLevel.getPosition().x < 1002) {
+		m_spritePollutionLevel.move(m_pollutionRate, 0);
+	}
+	else if (m_pollutionRate < 0 && m_spritePollutionLevel.getPosition().x > 825) {
+		m_spritePollutionLevel.move(m_pollutionRate, 0);
 	}
 }
 
@@ -426,17 +443,12 @@ void Engine::render()
 	m_spritePower.setTexture(m_textureHolder.GetTexture("graphics/power_icon.png"));
 	m_spritePower.setPosition(220, 2);
 
-	m_spriteHeatBar.setTexture(m_textureHolder.GetTexture("graphics/heat_bar.png"));
-	m_spriteHeatBar.setPosition(550, 8);
-
-	m_spritePollutionBar.setTexture(m_textureHolder.GetTexture("graphics/pollution_bar.png"));
-	m_spritePollutionBar.setPosition(870, 8);
+	m_spritePollutionBar.setTexture(m_textureHolder.GetTexture("graphics/pollution_bar2.png"));
+	m_spritePollutionBar.setPosition(820, 8);
 
 	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
-	m_spritePollutionLevel.setPosition(950, 5);
+	m_spritePollutionLevel.setPosition(850, 5);
 
-	m_spriteHeatLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
-	m_spriteHeatLevel.setPosition(600, 5);
 }
 //Complain about git hub in write up!
 
