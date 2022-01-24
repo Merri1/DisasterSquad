@@ -61,18 +61,17 @@ protected:
     RenewableSource* m_renewableSource2;
     RenewableSource* m_renewableSource3;
 
-    Responder* responder;  // CHANGE THIS LATER AND USE ABOVE RESPONDERS
-
     Disaster* m_disaster1;
     Disaster* m_disaster2;
     Disaster* m_disaster3;
     Disaster* m_disaster4;
 
-    Shop* m_WindTurbineBuy;
     Shop* m_ResponderBuy;
-
-
+    Shop* m_WindTurbineBuy;
+    Shop* m_SolarPanelBuy;
+    Shop* m_RecyclingCentreBuy;
     Shop* m_shop1;
+
     //VertexArray virtualGrid;
     //GridManager grid;
     GameGraph graph;
@@ -98,15 +97,15 @@ protected:
     Sprite m_spritePollutionLevel;
     Sprite m_spriteUIBar;
     Sprite m_spriteMenuBar;
-    Sprite m_spritePower;
     TextureHolder m_textureHolder;
     Font ka1Font;
     Text m_displayIncome;
-    Text m_displayPower;
     Text m_displayPollution;
     Text m_displayPollutionRate;
 
     bool okayNewResponder;
+    bool okayNewResponder2;
+    bool okayNewResponder3;
 
 };
 #endif

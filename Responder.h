@@ -40,6 +40,7 @@ public:
     float getRotation();
     Sprite getSprite();
     bool isSelected();
+    void setSelected(bool s);
     void select(bool Selected);
     void update(float elapsedTime);
    

@@ -34,6 +34,9 @@ int Responder::getPositionY()
 	return m_position.y;
 }
 
+void Responder::setSelected(bool s) {
+	m_isSelected = s;
+}
 
 
 void Responder::moveTo(vector<int> pathToDestination)
@@ -63,8 +66,8 @@ void Responder::spawn(int x, int y)
 
 bool Responder::isSelected() {
 	return m_isSelected;
-
 }
+
 void Responder::select(bool Selected)
 {
 	m_isSelected = Selected;
@@ -82,6 +85,20 @@ void Responder::select(bool Selected)
 		}
 		else {
 			m_Sprite.setTextureRect(sf::IntRect{ 16, 176, 16, 20 });
+		}
+	}
+	else {
+		if (m_direction == 0) {
+			m_Sprite.setTextureRect(sf::IntRect{ 16, 16, 16, 20 });
+		}
+		else if (m_direction == 1) {
+			m_Sprite.setTextureRect(sf::IntRect{ 16, 208, 16, 20 });
+		}
+		else if (m_direction == 2) {
+			m_Sprite.setTextureRect(sf::IntRect{ 16, 80, 16, 20 });
+		}
+		else {
+			m_Sprite.setTextureRect(sf::IntRect{ 16, 144, 16, 20 });
 		}
 	}
 }

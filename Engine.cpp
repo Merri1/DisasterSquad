@@ -31,17 +31,17 @@ void Engine::init()
 	
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
-	responder = new Responder();
-	lpResponders.push_back(responder);
 
 	m_disaster1 = new Wildfire();
 	m_disaster2 = new Wildfire();
 	m_disaster3 = new Wildfire();
 	m_disaster4 = new Wildfire();
 
-	//Shop initialised
+	// Initialize shops.
 	m_ResponderBuy = new Shop(100, 2);
 	m_WindTurbineBuy = new Shop(150, 2);
+	m_SolarPanelBuy = new Shop(200, 2);
+	m_RecyclingCentreBuy = new Shop(250, 2);
 
 	//Add responders (add only one to begin with).
 	lpResponders.push_back(m_responder1);
@@ -49,16 +49,14 @@ void Engine::init()
 	//Add shops to list
 	lpShop.push_back(m_ResponderBuy);
 	lpShop.push_back(m_WindTurbineBuy);
-	//Shop object initialised
-	//m_shop1 = new Shop();
+	lpShop.push_back(m_SolarPanelBuy);
+	lpShop.push_back(m_RecyclingCentreBuy);
 
 	//Initialise Renewable sources objetcs
 	m_renewableSource1 = new WindTurbine();
 
 	//Add source to list
 	lpRenew.push_back(m_renewableSource1);
-
-	//Add shop to list
 
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
@@ -79,7 +77,6 @@ void Engine::init()
 			m_pollutionRate += 0.005;
 		}
 	}
-
 
 	//Gold - Passive income - 1 gold gets added to the players total every second
 	m_goldTotal = 0;
@@ -172,11 +169,15 @@ void Engine::draw()
 	{
 		m_window.draw(m_responder2->getSprite());
 	}
+	if (okayNewResponder2 == true)
+	{
+		m_window.draw(m_responder3->getSprite());
+	}
+	if (okayNewResponder3 == true)
+	{
+		m_window.draw(m_responder4->getSprite());
+	}
 	
-	//m_window.draw(m_shop1->getSprite());
-	m_window.draw(m_renewableSource1->getSprite());
-	m_window.draw(responder->getSprite());
-
 	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
 	m_window.setView(m_guiView);
 	m_window.draw(m_spriteGUICollisionBox);
@@ -189,75 +190,71 @@ void Engine::draw()
 	m_WindTurbineBuy->setSprite(1);
 	m_window.draw(m_WindTurbineBuy->getSprite());
 
-	m_window.draw(m_spritePower);
+	m_SolarPanelBuy->setSprite(2);
+	m_window.draw(m_SolarPanelBuy->getSprite());
+
+	m_RecyclingCentreBuy->setSprite(3);
+	m_window.draw(m_RecyclingCentreBuy->getSprite());
+
 	m_window.draw(m_spritePollutionBar);
 	m_window.draw(m_spritePollutionTitle);
 	m_window.draw(m_spritePollutionLevel);
 	m_window.draw(m_spriteCrosshair);
 
 	// Declare new Font.
-	Font ka1Font;
-	if (!ka1Font.loadFromFile("graphics/fonts/ka1.ttf")) 
-	{
-		cout << "Error finding custom font.\n";
-	}
+Font ka1Font;
+if (!ka1Font.loadFromFile("graphics/fonts/ka1.ttf"))
+{
+	cout << "Error finding custom font.\n";
+}
 
-	// Define power text.
-	m_displayPower.setFont(ka1Font);
-	m_displayPower.setCharacterSize(20);
-	m_displayPower.setFillColor(Color::Black);
-	m_displayPower.setPosition(260, 12);
-	m_displayPower.setString(to_string(m_powerTotal));
-	m_window.draw(m_displayPower);
+// Define income text.
+m_displayIncome.setFont(ka1Font);
+m_displayIncome.setCharacterSize(20);
+m_displayIncome.setFillColor(Color::Black);
+m_displayIncome.setPosition(320, 12);
+stringstream ss;
+ss << "Gold: " << (int)m_goldTotal;
+m_displayIncome.setString(ss.str());
 
-	// Define income text.
-	m_displayIncome.setFont(ka1Font);
-	m_displayIncome.setCharacterSize(20);
-	m_displayIncome.setFillColor(Color::Black);
-	m_displayIncome.setPosition(320, 12);
-	stringstream ss;
-	ss << "G: " << (int)m_goldTotal;
-	m_displayIncome.setString(ss.str());
+// Define pollution text.
+m_displayPollution.setFont(ka1Font);
+m_displayPollution.setCharacterSize(20);
+m_displayPollution.setFillColor(Color::Black);
+m_displayPollution.setPosition(660, 12);
+m_displayPollution.setString("Pollution");
 
-	// Define pollution text.
-	m_displayPollution.setFont(ka1Font);
-	m_displayPollution.setCharacterSize(20);
-	m_displayPollution.setFillColor(Color::Black);
-	m_displayPollution.setPosition(660, 12);
-	m_displayPollution.setString("Pollution");
+// Using text to display pollution rate for testing purposes only, remove from final game.
+m_displayPollutionRate.setFont(ka1Font);
+m_displayPollutionRate.setCharacterSize(16);
+m_displayPollutionRate.setFillColor(Color::White);
+m_displayPollutionRate.setPosition(950, 12);
+stringstream ss2;
+ss2 << (double)m_pollutionRate;
+m_displayPollutionRate.setString(ss2.str());
 
-	// Using text to display pollution rate for testing purposes only, remove from final game.
-	m_displayPollutionRate.setFont(ka1Font);
-	m_displayPollutionRate.setCharacterSize(16);
-	m_displayPollutionRate.setFillColor(Color::White);
-	m_displayPollutionRate.setPosition(950, 12);
-	stringstream ss2;
-	ss2 << (double)m_pollutionRate;
-	m_displayPollutionRate.setString(ss2.str());
+m_window.draw(m_displayIncome);
+m_window.draw(m_displayPollution);
+m_window.draw(m_displayPollutionRate);
+m_window.display();
 
-	m_window.draw(m_displayPower);
-	m_window.draw(m_displayIncome);
-	m_window.draw(m_displayPollution);
-	m_window.draw(m_displayPollutionRate);
-	m_window.display();
+// Iterate through alive responders and update them.
+list<Responder*>::const_iterator cycleResponders;
+for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
+{
+	(*cycleResponders)->update(m_elapsedTime);
+}
 
-	// Iterate through alive responders and update them.
-	list<Responder*>::const_iterator cycleResponders;
-	for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
-	{
-		(*cycleResponders)->update(m_elapsedTime);
-	}
-
-	// Update position of pollution level based on the pollution rate.
-	if (m_pollutionRate == 0) {
-		m_spritePollutionLevel.move(0, 0);
-	}
-	else if (m_pollutionRate > 0 && m_spritePollutionLevel.getPosition().x < 1002) {
-		m_spritePollutionLevel.move(m_pollutionRate, 0);
-	}
-	else if (m_pollutionRate < 0 && m_spritePollutionLevel.getPosition().x > 825) {
-		m_spritePollutionLevel.move(m_pollutionRate, 0);
-	}
+// Update position of pollution level based on the pollution rate.
+if (m_pollutionRate == 0) {
+	m_spritePollutionLevel.move(0, 0);
+}
+else if (m_pollutionRate > 0 && m_spritePollutionLevel.getPosition().x < 1002) {
+	m_spritePollutionLevel.move(m_pollutionRate, 0);
+}
+else if (m_pollutionRate < 0 && m_spritePollutionLevel.getPosition().x > 825) {
+	m_spritePollutionLevel.move(m_pollutionRate, 0);
+}
 }
 
 void Engine::eventManager(Event& e)
@@ -282,17 +279,15 @@ void Engine::eventManager(Event& e)
 			for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
 			{
 				int responderTile = ((*cycleResponders)->getPositionY() / TILESIZE) * RESOLUTION.x / TILESIZE + ((*cycleResponders)->getPositionX() / TILESIZE);
-				
+
 				if ((*cycleResponders)->isSelected())
-				{	
-					if(m_levelArray[y / TILESIZE][x / TILESIZE] == 0)
+				{
+					if (m_levelArray[y / TILESIZE][x / TILESIZE] == 0)
 					{
 						cout << "Yes you can move here mate" << endl;
 						cout << "Generating a path for you mate" << endl;
-						
-						
-						m_pathToDestination = pathfind.BFS(graph, responderTile, clickedTile);
 
+						m_pathToDestination = pathfind.BFS(graph, responderTile, clickedTile);
 						(*cycleResponders)->moveTo(m_pathToDestination);
 						//(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
 					}
@@ -307,53 +302,33 @@ void Engine::eventManager(Event& e)
 			list<Responder*>::const_iterator cycleResponders2;
 			for (cycleResponders2 = lpResponders.begin(); cycleResponders2 != lpResponders.end(); cycleResponders2++)
 			{
-				if ((*cycleResponders2)->getPositionX() <= m_mousePositionMain.x + 10
-					&& (*cycleResponders2)->getPositionX() >= m_mousePositionMain.x - 10
-					&& (*cycleResponders2)->getPositionY() <= m_mousePositionMain.y + 10
-					&& (*cycleResponders2)->getPositionY() >= m_mousePositionMain.y - 10)
-				{
-					// Set responder selected to true when clicked
-					(*cycleResponders2)->select(true);
+				if ((*cycleResponders2)->m_Sprite.getGlobalBounds().contains(m_mousePositionMain)) {
+
+						// Set responder selected to true when clicked
+						(*cycleResponders2)->select(true);
+				}	
+				else {
+					(*cycleResponders2)->select(false);
 				}
 			}
 
-			if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5)
-			{
-				m_ResponderBuy->select(true);
-			}
-			/*
-			if (m_renewableSource1->isSelected())
-			{
-				m_renewableSource1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
-				cout << "Spawn turbine " << m_mousePositionMain.x << " , " << m_mousePositionMain.y << endl;
+			// Check if buy Responder button clicked.
+			if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
 
-				m_renewableSource1->getSpritepos(m_mousePositionMain.x, m_mousePositionMain.y);
-				m_renewableSource1-> select(false);
-
-			}
-			*
-
-			// Check if wind turbine buy button has been clicked.
-			if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
-				m_WindTurbineBuy->select(true);
-				cout << "Wind turbine buy button is selected!\n";
-
-
-				if (m_renewableSource1->getPositionX() <= m_mousePositionMain.x + 10
-					&& m_renewableSource1->getPositionX() >= m_mousePositionMain.x - 10
-					&& m_renewableSource1->getPositionY() <= m_mousePositionMain.y + 10
-					&& m_renewableSource1->getPositionY() >= m_mousePositionMain.y - 10)
+				// Cycle through to check if any responders are obstructing the spawn.
+				list<Responder*>::const_iterator cycleResponders3;
+				for (cycleResponders3 = lpResponders.begin(); cycleResponders3 != lpResponders.end(); cycleResponders3++)
 				{
-					// Set m_renewableSource1 selected to true when clicked
-					m_renewableSource1->select(true);
-					cout << "m_renewableSource1 is selected";
+					// If responder already there, no spawn.
+					if ((*cycleResponders3)->m_position.x != 408 && (*cycleResponders3)->m_position.y != 314) {
+						m_ResponderBuy->select(true);
+					}
 				}
-			}*/
+			}
 		}
-		// For handling mouse dragging across the screen to move camera.
 
-		if (Mouse::isButtonPressed(Mouse::Right))
-		{
+		// For handling mouse dragging across the screen to move camera.
+		if (Mouse::isButtonPressed(Mouse::Right)) {
 			m_mainView.setCenter((Vector2f(m_window.mapPixelToCoords(Mouse::getPosition())), Vector2f(m_window.mapPixelToCoords(Mouse::getPosition()))));
 		}
 
@@ -374,10 +349,10 @@ void Engine::eventManager(Event& e)
 		}
 
 		// Scroll in camera if mouse wheel scrolled. Up = +, down = -.
-		if (e.type == sf::Event::MouseWheelScrolled) 
+		if (e.type == sf::Event::MouseWheelScrolled)
 		{
 			// Scroll up (zoom in).
-			if (e.mouseWheelScroll.delta > 0 && camZoom < 5) 
+			if (e.mouseWheelScroll.delta > 0 && camZoom < 5)
 			{
 				m_mainView.zoom(0.8f);
 
@@ -387,13 +362,13 @@ void Engine::eventManager(Event& e)
 				camZoom++;
 			}
 			// Scroll down (zoom out).
-			else if (e.mouseWheelScroll.delta < 0 && camZoom > 0) 
+			else if (e.mouseWheelScroll.delta < 0 && camZoom > 0)
 			{
 				m_mainView.zoom(1.2f);
 				camZoom--;
 			}
 			// Zoom out too far, reset screen size (this avoids issue where float value for zoom is fecked up after multiple zooms).
-			else if (e.mouseWheelScroll.delta < 0 && camZoom == 0) 
+			else if (e.mouseWheelScroll.delta < 0 && camZoom == 0)
 			{
 				m_mainView.reset(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 			}
@@ -404,16 +379,40 @@ void Engine::eventManager(Event& e)
 
 void Engine::checkSelected() 
 {
-
 	// Check if responder shop button is selected.
 	if (m_ResponderBuy->isSelected()) {
-		cout << "A new responder has joined the fight!\n";
-		m_responder2 = new Responder;
-		lpResponders.push_back(m_responder2);
-		okayNewResponder = true;
-		m_goldTotal -= 5;
+	
+			if (lpResponders.size() > 4) {
+				// Do nothing, add error sound.
+			}
+			else if (lpResponders.size() <= 3) {
+
+				if (lpResponders.size() == 1) {
+					m_responder2 = new Responder;
+					lpResponders.push_back(m_responder2);
+					okayNewResponder = true;
+					m_goldTotal -= 5;
+					cout << "A new responder has joined the fight!\n";
+					m_ResponderBuy->select(false);
+				}
+				else if (lpResponders.size() == 2) {
+					m_responder3 = new Responder;
+					lpResponders.push_back(m_responder3);
+					okayNewResponder2 = true;
+					m_goldTotal -= 5;
+					cout << "A new responder has joined the fight!\n";
+					m_ResponderBuy->select(false);
+				}
+				else if (lpResponders.size() == 3) {
+					m_responder4 = new Responder;
+					lpResponders.push_back(m_responder4);
+					okayNewResponder3 = true;
+					m_goldTotal -= 5;
+					cout << "A new responder has joined the fight!\n";
+					m_ResponderBuy->select(false);
+				}
+			}
 		// VERY IMPORTANT: Deselect button after spawn.
-		m_ResponderBuy->select(false);
 	}
 
 	// Check if wind turbine button is selected.
@@ -440,15 +439,11 @@ void Engine::render()
 	m_spriteMenuBar.setTexture(m_textureHolder.GetTexture("graphics/menu_icon.png"));
 	m_spriteMenuBar.setOrigin(-6, -2);
 
-	m_spritePower.setTexture(m_textureHolder.GetTexture("graphics/power_icon.png"));
-	m_spritePower.setPosition(220, 2);
-
 	m_spritePollutionBar.setTexture(m_textureHolder.GetTexture("graphics/pollution_bar2.png"));
 	m_spritePollutionBar.setPosition(820, 8);
 
 	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
 	m_spritePollutionLevel.setPosition(850, 5);
-
 }
 //Complain about git hub in write up!
 

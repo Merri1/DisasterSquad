@@ -4,7 +4,6 @@
 
 */
 
-
 #include "RenewableSource.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <iostream>
@@ -13,26 +12,26 @@ using namespace std;
 
 RenewableSource::RenewableSource()
 {
-
+    m_health;
+    m_type;
+    m_environmental;
+    m_boost;
+    m_positionX;
+    m_positionY;
 }
 
 void RenewableSource::spawn()
 {
-
     m_spawned = true;
     m_position.x = 500;
     m_position.y = 300;
 
     cout << "x = " << m_position.x << " and y = " << m_position.y;
-
-
 }
 
 bool RenewableSource::getSpawnStatus()
 {
-
     return m_spawned;
-
 }
 
 void RenewableSource::update()
@@ -55,12 +54,10 @@ sf::Sprite RenewableSource::getSprite()
     return m_disasterSprite;
 }
 
-
 bool RenewableSource::isSelected()
 {
     cout << "Turbine Selected";
     return m_isSelected;
-
 }
 
 void RenewableSource::select(bool Selected)

@@ -42,6 +42,14 @@ void Shop::setSprite(int shopType) {
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/shop_buy_spritesheet.png"));
 		m_Sprite.setTextureRect(sf::IntRect{ 40, 0, 40, 40 });
 	}
+	else if (shopType == 2) {
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/shop_buy_spritesheet.png"));
+		m_Sprite.setTextureRect(sf::IntRect{ 0, 40, 40, 40 });
+	}
+	else if (shopType == 3) {
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/shop_buy_spritesheet.png"));
+		m_Sprite.setTextureRect(sf::IntRect{ 40, 40, 40, 40 });
+	}
 }
 
 int Shop::getPositionX()

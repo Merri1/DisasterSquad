@@ -25,15 +25,13 @@ public:
     int m_positionX;
     int m_positionY;
 
-    // These are now converted to subclasses for each disaster type
-    // Keep these here for now as a reminder for write up padding
-    //void fire();
-    //void flood();
-    //void drought();
-
 protected:
     bool m_spawned = false;
     bool m_isSelected;
+    int m_health;
+    int m_type;
+    int m_environmental;
+    int m_boost;
     sf::Sprite m_disasterSprite;
     sf::Texture m_spriteTexture;
 };
