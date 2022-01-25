@@ -31,6 +31,9 @@ void Engine::init()
 	
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
+	m_responder2 = new Responder();
+	lpResponders.push_back(m_responder2);
+	lpResponders.push_back(m_responder1);
 
 	m_disaster1 = new Wildfire();
 	m_disaster2 = new Wildfire();
@@ -43,8 +46,7 @@ void Engine::init()
 	m_SolarPanelBuy = new Shop(200, 2);
 	m_RecyclingCentreBuy = new Shop(250, 2);
 
-	//Add responders (add only one to begin with).
-	lpResponders.push_back(m_responder1);
+	
 
 	//Add shops to list
 	lpShop.push_back(m_ResponderBuy);
@@ -135,9 +137,12 @@ void Engine::draw()
 	// For loop to iterate through disaster
 	for (list<Disaster*>::const_iterator iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
 	{
+		
+
 		// Check if disaster is not spawned yet
 		if (!(*iter)->getSpawnStatus())
 		{
+			
 			if (rand() % 1000 == 0)
 			{
 				// Random 1 in 1000 chance for it to spawn
@@ -158,10 +163,10 @@ void Engine::draw()
 				// Else if the disaster is already spawned draw it on map each frame update
 				//if disaster health is greater than 0 keep drawing the disaster
 				m_window.draw((*iter)->getSprite());
-
 			}
 		}
 	}
+
 	m_window.draw(m_spriteMainCollisionBox);
 	m_window.draw(m_responder1->getSprite());
 	
@@ -178,6 +183,11 @@ void Engine::draw()
 		m_window.draw(m_responder4->getSprite());
 	}
 	
+	//m_window.draw(m_shop1->getSprite());
+	m_window.draw(m_renewableSource1->getSprite());
+	m_window.draw(m_responder2->getSprite());
+	m_window.draw(m_spriteCrosshair);
+
 	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
 	m_window.setView(m_guiView);
 	m_window.draw(m_spriteGUICollisionBox);

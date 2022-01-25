@@ -13,13 +13,14 @@ Disaster::Disaster()
 {
     srand(time(NULL));
    // m_position.x = m_positionX;
-    //m_position.y = m_positionY;
+   //m_position.y = m_positionY;
 }
 
 void Disaster::spawn(int (&levelArray)[36][64])
 {
     m_health = 1000;
     m_spawned = true;
+    m_disasterSprite.setScale(1,1);
 
     while (true)
     {
@@ -47,6 +48,18 @@ bool Disaster::getSpawnStatus()
 
     return m_spawned;
 
+}
+
+void Disaster::setSpawnStatus()
+{
+    if (getHealth() == 0)
+    {
+        m_spawned == false;
+    }
+    else
+    {
+        m_spawned == true;
+    }
 }
 
 void Disaster::update()
@@ -77,7 +90,14 @@ bool Disaster::isAlive()
 
 void Disaster::updateHealth(int damage)
 {
-    m_health -= damage;
-    m_disasterSprite.scale(0.99,0.99);
-    
+    if (m_health <= 200)
+    {
+        m_spawned = false;
+        m_health == 0;
+    }
+    else
+    {
+        m_health -= damage;
+        m_disasterSprite.scale(0.99, 0.99);
+    }  
 }
