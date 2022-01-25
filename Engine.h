@@ -14,6 +14,8 @@
 #include "Shop.h"
 #include "RenewableSource.h"
 #include "WindTurbine.h"
+#include "SolarPanel.h"
+#include "RecyclingCentre.h"
 
 #include <random>
 #include <list>
@@ -57,9 +59,17 @@ protected:
     Responder* m_responder3;
     Responder* m_responder4;
 
-    RenewableSource* m_renewableSource1;
-    RenewableSource* m_renewableSource2;
-    RenewableSource* m_renewableSource3;
+    RenewableSource* m_solar1;
+    RenewableSource* m_solar2;
+    RenewableSource* m_solar3;
+    RenewableSource* m_solar4;
+
+    RenewableSource* m_turbine1;
+    RenewableSource* m_turbine2;
+    RenewableSource* m_turbine3;
+
+    RenewableSource* m_recycle1;
+    RenewableSource* m_recycle2;
 
     Disaster* m_disaster1;
     Disaster* m_disaster2;
@@ -79,7 +89,7 @@ protected:
     std::list<Disaster*> lpDisasters;
     std::list<Responder*> lpResponders;
     std::list<Shop*> lpShop;
-    std::list<RenewableSource*> lpRenew;
+    std::list<RenewableSource*> lpRenewableSource;
 
     //std::list<Shop*> lpShop;
     RenderWindow m_window;
@@ -105,7 +115,8 @@ protected:
 
     bool okayNewResponder;
     bool okayNewResponder2;
-    bool okayNewResponder3;
+    bool okayNewResponder3; 
+    bool okayNewTurbine;
 
 };
 #endif

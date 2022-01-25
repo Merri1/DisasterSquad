@@ -51,6 +51,12 @@
     <ClCompile Include="RenewableSource.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="SolarPanel.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecyclingCentre.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Disaster.h">
@@ -84,6 +90,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenewableSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SolarPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RecyclingCentre.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

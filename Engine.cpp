@@ -46,19 +46,16 @@ void Engine::init()
 	m_SolarPanelBuy = new Shop(200, 2);
 	m_RecyclingCentreBuy = new Shop(250, 2);
 
-	
-
 	//Add shops to list
 	lpShop.push_back(m_ResponderBuy);
 	lpShop.push_back(m_WindTurbineBuy);
 	lpShop.push_back(m_SolarPanelBuy);
 	lpShop.push_back(m_RecyclingCentreBuy);
 
-	//Initialise Renewable sources objetcs
-	m_renewableSource1 = new WindTurbine();
-
-	//Add source to list
-	lpRenew.push_back(m_renewableSource1);
+	// Initialise Renewable sources objetcs
+	m_turbine1 = new WindTurbine();
+	m_turbine2 = new WindTurbine();
+	m_turbine3 = new WindTurbine();
 
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
@@ -130,15 +127,14 @@ void Engine::run()
 void Engine::draw()
 {
 	m_window.setView(m_mainView);
-	m_spriteCrosshair.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView));
 
+	m_spriteCrosshair.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView));
+	
 	m_window.draw(m_background);
 
 	// For loop to iterate through disaster
 	for (list<Disaster*>::const_iterator iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
 	{
-		
-
 		// Check if disaster is not spawned yet
 		if (!(*iter)->getSpawnStatus())
 		{
@@ -182,11 +178,13 @@ void Engine::draw()
 	{
 		m_window.draw(m_responder4->getSprite());
 	}
+
+	if (okayNewTurbine == true) {
+
+		m_window.draw(m_turbine1->getSprite());
+	}
 	
-	//m_window.draw(m_shop1->getSprite());
-	m_window.draw(m_renewableSource1->getSprite());
 	m_window.draw(m_responder2->getSprite());
-	m_window.draw(m_spriteCrosshair);
 
 	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
 	m_window.setView(m_guiView);
@@ -209,6 +207,7 @@ void Engine::draw()
 	m_window.draw(m_spritePollutionBar);
 	m_window.draw(m_spritePollutionTitle);
 	m_window.draw(m_spritePollutionLevel);
+
 	m_window.draw(m_spriteCrosshair);
 
 	// Declare new Font.
@@ -335,6 +334,28 @@ void Engine::eventManager(Event& e)
 					}
 				}
 			}
+
+			// Check if buy wind turbine button clicked.
+			if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) {
+
+				/*int x = m_mousePositionMain.x;
+				int y = m_mousePositionMain.y;
+				cout << y << " y   x " << x << endl;
+				int clickedTile = (y / TILESIZE) * (RESOLUTION.x / TILESIZE) + (x / TILESIZE);
+				cout << clickedTile << " clickedtile " << endl;*/
+
+				/*if (m_levelArray[y / TILESIZE][x / TILESIZE] == 0) {*/
+
+					m_WindTurbineBuy->select(true);
+					m_turbine1->spawn("turbine", 100, 10, 5, 30, 400, 330);
+				/*}*/
+			}
+
+			// Check if buy solar panel button clicked.
+			if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) {}
+
+			// Check if buy recycling centre button clicked.
+			if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) {}
 		}
 
 		// For handling mouse dragging across the screen to move camera.
@@ -386,7 +407,6 @@ void Engine::eventManager(Event& e)
 	}
 }
 
-
 void Engine::checkSelected() 
 {
 	// Check if responder shop button is selected.
@@ -427,10 +447,17 @@ void Engine::checkSelected()
 
 	// Check if wind turbine button is selected.
 	if (m_WindTurbineBuy->isSelected()) {
+		
+		lpRenewableSource.push_back(m_turbine1);
+		okayNewTurbine = true;
+		m_goldTotal -= 1;
 		cout << "A new wind turbine has been created!\n";
-		m_goldTotal -= 5;
 		m_WindTurbineBuy->select(false);
 	}
+
+	// Check if solar panel button is selected.
+
+	// Check if recycling centre button is selected.
 }
 
 void Engine::render()

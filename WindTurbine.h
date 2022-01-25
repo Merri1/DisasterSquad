@@ -8,11 +8,12 @@ class WindTurbine : public RenewableSource
 public:
 	sf::Sprite m_Sprite;
 	WindTurbine();
-	virtual void spawn();
-	virtual sf::Sprite getSprite();
+	void update();
+	void setSprite();
 
 protected:
-	
+	int m_positionX;
+	int m_positionY;
 };
 
 #endif
