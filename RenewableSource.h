@@ -1,4 +1,3 @@
-#pragma once
 #ifndef RENEWABLESOURCE_H
 #define RENEWABLESOURCE_H
 #include <SFML/System.hpp>

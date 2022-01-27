@@ -1,4 +1,3 @@
-#pragma once
 #ifndef DISASTER_H
 #define DISASTER_H
 #include <SFML/System.hpp>

@@ -1,4 +1,3 @@
-#pragma once
 #ifndef SOLARPANEL_H
 #define SOLARPANEL_H
 #include "RenewableSource.h"
@@ -15,5 +14,4 @@ protected:
 	int m_positionX;
 	int m_positionY;
 };
-
-#endif#pragma once
+#endif

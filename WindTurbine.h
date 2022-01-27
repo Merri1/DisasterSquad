@@ -1,4 +1,3 @@
-#pragma once
 #ifndef WINDTURBINE_H
 #define WINDTURBINE_H
 #include "RenewableSource.h"

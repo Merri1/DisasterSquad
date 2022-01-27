@@ -1,4 +1,3 @@
-#pragma once
 #ifndef RECYCLINGCENTRE_H
 #define RECYCLINGCENTRE_H
 #include "RenewableSource.h"

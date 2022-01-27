@@ -1,4 +1,3 @@
-#pragma once
 #ifndef WILDFIRE_H
 #define WILDFIRE_H
 #include "Disaster.h"

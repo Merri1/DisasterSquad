@@ -1,4 +1,3 @@
-#pragma once
 #ifndef GAMEGRAPH
 #define GAMEGRAPH
 #include "GraphEdge.h"
