@@ -42,7 +42,9 @@ protected:
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     int m_levelArray[36][64];
     vector<int> m_pathToDestination;
+    enum class State { PAUSED, PLAYING, MAIN_MENU, GAME_OVER };
     
+    State m_gameState;
     float m_elapsedTime;
     float m_pollutionTotal;
     float m_pollutionRate;
@@ -95,9 +97,14 @@ protected:
     RenderWindow m_window;
     View m_mainView;
     View m_guiView;
-    Texture m_textureBackground;
+    View m_mainMenuView;
+    Sprite m_menuBackground;
+    Sprite m_playMenuButton;
+    Sprite m_exitMenuButton;
+    Sprite m_howtoMenuButton;
     Sprite m_background;
     Sprite m_spriteCrosshair;
+    Vector2f m_mousePositionMenu;
     Vector2f m_mousePositionMain;
     Vector2f m_mousePositionGUI;
     Sprite m_spriteMainCollisionBox;
@@ -109,6 +116,12 @@ protected:
     Sprite m_spriteMenuBar;
     TextureHolder m_textureHolder;
     Font ka1Font;
+    Font m_vcrFont;
+    Text m_titleTipText;
+    Text m_titleTipShadowText;
+    Text m_playMenuText;
+    Text m_howtoMenuText;
+    Text m_exitMenuText;
     Text m_displayIncome;
     Text m_displayPollution;
     Text m_displayPollutionRate;
