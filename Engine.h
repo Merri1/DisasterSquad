@@ -32,6 +32,7 @@ public:
     void checkSelected();
     void eventManager(Event& e);
     void collisonDetection();
+    int coordinateToTile(Vector2f position);
     // Functions here
     
 

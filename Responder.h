@@ -17,18 +17,10 @@ using namespace std;
 class Responder
 {
 public:
-    const int START_SPEED = 1;
-    const int START_HEALTH = 100;
-
-    Sprite m_Sprite;
-    Texture m_Texture;
-    Vector2f m_Resolution;
-    Vector2i m_position;
     
-    // What size is the current arena
-    IntRect m_Area;
 
     Responder();
+    Vector2f getPosition();
     int getPositionX();
     int getPositionY();
     //void getSprite();
@@ -46,6 +38,16 @@ public:
    
 
 protected:
+    const int START_SPEED = 1;
+    const int START_HEALTH = 100;
+
+    Sprite m_Sprite;
+    Texture m_Texture;
+    Vector2f m_Resolution;
+    Vector2f m_position;
+
+    // What size is the current arena
+    IntRect m_Area;
     bool m_isMoving;
     int m_Speed;
     int m_Health;

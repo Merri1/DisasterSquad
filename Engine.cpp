@@ -339,27 +339,20 @@ void Engine::eventManager(Event& e)
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			m_pathToDestination.clear();
-			int x = m_mousePositionMain.x;
-			int y = m_mousePositionMain.y;
-			cout << y << " y   x " << x << endl;
-			int clickedTile = (y / TILESIZE) * (RESOLUTION.x / TILESIZE) + (x / TILESIZE);
-			cout << clickedTile << " clickedtile " << endl;
-
+			
 			// If responder is already selected move them to coords of mouse click
 			// Iterate through alive responders and check if selected. If so, move them to mouse coordinates.
 			list<Responder*>::const_iterator cycleResponders;
 			for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
 			{
-				int responderTile = ((*cycleResponders)->getPositionY() / TILESIZE) * RESOLUTION.x / TILESIZE + ((*cycleResponders)->getPositionX() / TILESIZE);
-
 				if ((*cycleResponders)->isSelected())
 				{
-					if (m_levelArray[y / TILESIZE][x / TILESIZE] == 0)
+					if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
 					{
 						cout << "Yes you can move here mate" << endl;
 						cout << "Generating a path for you mate" << endl;
 
-						m_pathToDestination = pathfind.BFS(graph, responderTile, clickedTile);
+						m_pathToDestination = pathfind.BFS(graph, coordinateToTile((*cycleResponders)->getPosition()), coordinateToTile(m_mousePositionMain));
 						(*cycleResponders)->moveTo(m_pathToDestination);
 						//(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
 					}
@@ -374,7 +367,7 @@ void Engine::eventManager(Event& e)
 			list<Responder*>::const_iterator cycleResponders2;
 			for (cycleResponders2 = lpResponders.begin(); cycleResponders2 != lpResponders.end(); cycleResponders2++)
 			{
-				if ((*cycleResponders2)->m_Sprite.getGlobalBounds().contains(m_mousePositionMain)) {
+				if ((*cycleResponders2)->getSprite().getGlobalBounds().contains(m_mousePositionMain)) {
 
 						// Set responder selected to true when clicked
 						(*cycleResponders2)->select(true);
@@ -392,7 +385,7 @@ void Engine::eventManager(Event& e)
 				for (cycleResponders3 = lpResponders.begin(); cycleResponders3 != lpResponders.end(); cycleResponders3++)
 				{
 					// If responder already there, no spawn.
-					if ((*cycleResponders3)->m_position.x != 408 && (*cycleResponders3)->m_position.y != 314) {
+					if ((*cycleResponders3)->getPositionX() != 408 && (*cycleResponders3)->getPositionY() != 314) {
 						m_ResponderBuy->select(true);
 					}
 				}
@@ -616,6 +609,11 @@ void Engine::collisonDetection() //Check if Responder is in a certain range of D
 		}
 
 	}
+}
+
+int Engine::coordinateToTile(Vector2f position)
+{
+	return (int(position.y / TILESIZE) * (RESOLUTION.x / TILESIZE) + int(position.x / TILESIZE));
 }
 
 

@@ -24,6 +24,11 @@ Responder::Responder()
 	m_isMoving = false;
 }
 
+Vector2f Responder::getPosition()
+{
+	return m_position;
+}
+
 int Responder::getPositionX()
 {
 	return m_position.x;
