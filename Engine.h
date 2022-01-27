@@ -48,6 +48,7 @@ protected:
     float m_pollutionRate;
     float m_goldTotal;
     float m_goldRate;
+    float m_wildfireTotal;
     int camZoom;
 
     int m_powerTotal;
@@ -107,11 +108,13 @@ protected:
     Sprite m_spritePollutionLevel;
     Sprite m_spriteUIBar;
     Sprite m_spriteMenuBar;
+    Sprite m_spriteWildfireCounter;
     TextureHolder m_textureHolder;
     Font ka1Font;
     Text m_displayIncome;
     Text m_displayPollution;
     Text m_displayPollutionRate;
+   
 
     bool okayNewResponder;
     bool okayNewResponder2;

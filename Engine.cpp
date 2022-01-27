@@ -66,6 +66,7 @@ void Engine::init()
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
 	m_pollutionTotal = 100.0;
 	m_pollutionRate = 0.01; // Natural pollution rate.
+
 	list<Disaster*>::const_iterator cycleDisasters; // Increase pollution rate per disaster present.
 	for (cycleDisasters = lpDisasters.begin(); cycleDisasters != lpDisasters.end(); cycleDisasters++)
 	{
@@ -207,6 +208,7 @@ void Engine::draw()
 	m_window.draw(m_spritePollutionBar);
 	m_window.draw(m_spritePollutionTitle);
 	m_window.draw(m_spritePollutionLevel);
+	m_window.draw(m_spriteWildfireCounter);
 
 	m_window.draw(m_spriteCrosshair);
 
@@ -242,10 +244,16 @@ stringstream ss2;
 ss2 << (double)m_pollutionRate;
 m_displayPollutionRate.setString(ss2.str());
 
+
+
+
+
 m_window.draw(m_displayIncome);
 m_window.draw(m_displayPollution);
 m_window.draw(m_displayPollutionRate);
 m_window.display();
+
+
 
 // Iterate through alive responders and update them.
 list<Responder*>::const_iterator cycleResponders;
@@ -481,6 +489,9 @@ void Engine::render()
 
 	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
 	m_spritePollutionLevel.setPosition(850, 5);
+
+	m_spriteWildfireCounter.setTexture(m_textureHolder.GetTexture("graphics/wildfire_counter_icon.png"));
+	m_spriteWildfireCounter.setPosition(450,4);
 }
 //Complain about git hub in write up!
 
