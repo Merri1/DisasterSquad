@@ -15,17 +15,17 @@ Engine::Engine()
 
 void Engine::init()
 {
+	m_gameState = State::MAIN_MENU;
 	pathfind = Pathfinding();
 	// Create a new window using resolution and framerate const values from Engine.h
 	m_window.create(VideoMode(RESOLUTION.x, RESOLUTION.y), "Disaster Squad");
 	m_window.setFramerateLimit(FRAMERATE);
 	m_mainView = View(sf::FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 	m_guiView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y)); // All UI elements, HUD.
-	
+	m_mainMenuView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
+
 	// Call render function to initialise sprite textures and positions
 	render();
-
-	m_window.setMouseCursorVisible(false);
 
 	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
 	
@@ -84,6 +84,42 @@ void Engine::init()
 
 	// Power - Can only be increase / decreased by producing new buildings.
 	m_powerTotal = 0;
+
+	m_vcrFont.loadFromFile("graphics/fonts/vcr.ttf");
+
+	m_titleTipText.setFont(m_vcrFont);
+	m_titleTipText.setCharacterSize(18);
+	m_titleTipText.setFillColor(Color::Yellow);
+	m_titleTipText.setPosition(750, 140);
+	m_titleTipText.setString("GET IT WHILE IT'S HOT");
+	m_titleTipText.setStyle(Text::Bold);
+	m_titleTipText.setRotation(-15);
+
+	m_titleTipShadowText.setFont(m_vcrFont);
+	m_titleTipShadowText.setCharacterSize(18);
+	m_titleTipShadowText.setFillColor(Color::Black);
+	m_titleTipShadowText.setPosition(749, 142);
+	m_titleTipShadowText.setString("GET IT WHILE IT'S HOT");
+	m_titleTipShadowText.setStyle(Text::Bold);
+	m_titleTipShadowText.setRotation(-15);
+
+	m_playMenuText.setFont(m_vcrFont);
+	m_playMenuText.setCharacterSize(28);
+	m_playMenuText.setFillColor(Color::White);
+	m_playMenuText.setPosition(441, 217);
+	m_playMenuText.setString("PLAY GAME");
+
+	m_howtoMenuText.setFont(m_vcrFont);
+	m_howtoMenuText.setCharacterSize(28);
+	m_howtoMenuText.setFillColor(Color::White);
+	m_howtoMenuText.setPosition(425, 285);
+	m_howtoMenuText.setString("HOW TO PLAY");
+
+	m_exitMenuText.setFont(m_vcrFont);
+	m_exitMenuText.setCharacterSize(28);
+	m_exitMenuText.setFillColor(Color::White);
+	m_exitMenuText.setPosition(441, 353);
+	m_exitMenuText.setString("EXIT GAME");
 }
 
 // Seperate run() function out into smaller functions
@@ -127,151 +163,169 @@ void Engine::run()
 
 void Engine::draw()
 {
-	m_window.setView(m_mainView);
-
-	m_spriteCrosshair.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView));
-	
-	m_window.draw(m_background);
-
-	// For loop to iterate through disaster
-	for (list<Disaster*>::const_iterator iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
+	if (m_gameState == State::MAIN_MENU)
 	{
-		// Check if disaster is not spawned yet
-		if (!(*iter)->getSpawnStatus())
-		{
-			
-			if (rand() % 1000 == 0)
-			{
-				// Random 1 in 1000 chance for it to spawn
-				std::cout << "Disaster spawned\n";
-				(*iter)->spawn(m_levelArray);
+		m_window.setMouseCursorVisible(true);
+		m_window.setView(m_mainMenuView);
+		m_window.draw(m_menuBackground);
+		m_window.draw(m_titleTipShadowText);
+		m_window.draw(m_titleTipText);
+		m_window.draw(m_playMenuButton);
+		m_window.draw(m_howtoMenuButton);
+		m_window.draw(m_exitMenuButton);
+		m_window.draw(m_playMenuText);
+		m_window.draw(m_howtoMenuText);
+		m_window.draw(m_exitMenuText);
 
-				// Reseed random generator
-				srand(time(NULL));
-
-				// Exit for loop so only one disaster is spawned per frame update
-				break;
-			}
-		}
-		else
-		{
-			if ((*iter)->isAlive())
-			{
-				// Else if the disaster is already spawned draw it on map each frame update
-				//if disaster health is greater than 0 keep drawing the disaster
-				m_window.draw((*iter)->getSprite());
-			}
-		}
+		m_window.display();
 	}
 
-	m_window.draw(m_spriteMainCollisionBox);
-	m_window.draw(m_responder1->getSprite());
-	
-	if (okayNewResponder == true) 
+	if (m_gameState == State::PLAYING)
 	{
+		m_window.setMouseCursorVisible(false);
+		m_window.setView(m_mainView);
+
+		m_spriteCrosshair.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView));
+
+		m_window.draw(m_background);
+
+		// For loop to iterate through disaster
+		for (list<Disaster*>::const_iterator iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
+		{
+			// Check if disaster is not spawned yet
+			if (!(*iter)->getSpawnStatus())
+			{
+
+				if (rand() % 1000 == 0)
+				{
+					// Random 1 in 1000 chance for it to spawn
+					std::cout << "Disaster spawned\n";
+					(*iter)->spawn(m_levelArray);
+
+					// Reseed random generator
+					srand(time(NULL));
+
+					// Exit for loop so only one disaster is spawned per frame update
+					break;
+				}
+			}
+			else
+			{
+				if ((*iter)->isAlive())
+				{
+					// Else if the disaster is already spawned draw it on map each frame update
+					//if disaster health is greater than 0 keep drawing the disaster
+					m_window.draw((*iter)->getSprite());
+				}
+			}
+		}
+
+		m_window.draw(m_spriteMainCollisionBox);
+		m_window.draw(m_responder1->getSprite());
+
+		if (okayNewResponder == true)
+		{
+			m_window.draw(m_responder2->getSprite());
+		}
+		if (okayNewResponder2 == true)
+		{
+			m_window.draw(m_responder3->getSprite());
+		}
+		if (okayNewResponder3 == true)
+		{
+			m_window.draw(m_responder4->getSprite());
+		}
+
+		if (okayNewTurbine == true) {
+
+			m_window.draw(m_turbine1->getSprite());
+		}
+
 		m_window.draw(m_responder2->getSprite());
-	}
-	if (okayNewResponder2 == true)
-	{
-		m_window.draw(m_responder3->getSprite());
-	}
-	if (okayNewResponder3 == true)
-	{
-		m_window.draw(m_responder4->getSprite());
-	}
 
-	if (okayNewTurbine == true) {
+		// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
+		m_window.setView(m_guiView);
+		m_window.draw(m_spriteGUICollisionBox);
+		m_window.draw(m_spriteUIBar);
+		m_window.draw(m_spriteMenuBar);
 
-		m_window.draw(m_turbine1->getSprite());
-	}
-	
-	m_window.draw(m_responder2->getSprite());
+		m_ResponderBuy->setSprite(0);
+		m_window.draw(m_ResponderBuy->getSprite());
 
-	// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
-	m_window.setView(m_guiView);
-	m_window.draw(m_spriteGUICollisionBox);
-	m_window.draw(m_spriteUIBar);
-	m_window.draw(m_spriteMenuBar);
+		m_WindTurbineBuy->setSprite(1);
+		m_window.draw(m_WindTurbineBuy->getSprite());
 
-	m_ResponderBuy->setSprite(0);
-	m_window.draw(m_ResponderBuy->getSprite());
+		m_SolarPanelBuy->setSprite(2);
+		m_window.draw(m_SolarPanelBuy->getSprite());
 
-	m_WindTurbineBuy->setSprite(1);
-	m_window.draw(m_WindTurbineBuy->getSprite());
-
-	m_SolarPanelBuy->setSprite(2);
-	m_window.draw(m_SolarPanelBuy->getSprite());
-
-	m_RecyclingCentreBuy->setSprite(3);
-	m_window.draw(m_RecyclingCentreBuy->getSprite());
+		m_RecyclingCentreBuy->setSprite(3);
+		m_window.draw(m_RecyclingCentreBuy->getSprite());
 
 	m_window.draw(m_spritePollutionBar);
 	m_window.draw(m_spritePollutionTitle);
 	m_window.draw(m_spritePollutionLevel);
 	m_window.draw(m_spriteWildfireCounter);
 
-	m_window.draw(m_spriteCrosshair);
+		m_window.draw(m_spriteCrosshair);
 
-	// Declare new Font.
-Font ka1Font;
-if (!ka1Font.loadFromFile("graphics/fonts/ka1.ttf"))
-{
-	cout << "Error finding custom font.\n";
-}
+		// Declare new Font.
+		Font ka1Font;
+		if (!ka1Font.loadFromFile("graphics/fonts/ka1.ttf"))
+		{
+			cout << "Error finding custom font.\n";
+		}
 
-// Define income text.
-m_displayIncome.setFont(ka1Font);
-m_displayIncome.setCharacterSize(20);
-m_displayIncome.setFillColor(Color::Black);
-m_displayIncome.setPosition(320, 12);
-stringstream ss;
-ss << "Gold: " << (int)m_goldTotal;
-m_displayIncome.setString(ss.str());
+		// Define income text.
+		m_displayIncome.setFont(ka1Font);
+		m_displayIncome.setCharacterSize(20);
+		m_displayIncome.setFillColor(Color::Black);
+		m_displayIncome.setPosition(320, 12);
+		stringstream ss;
+		ss << "Gold: " << (int)m_goldTotal;
+		m_displayIncome.setString(ss.str());
 
-// Define pollution text.
-m_displayPollution.setFont(ka1Font);
-m_displayPollution.setCharacterSize(20);
-m_displayPollution.setFillColor(Color::Black);
-m_displayPollution.setPosition(660, 12);
-m_displayPollution.setString("Pollution");
+		// Define pollution text.
+		m_displayPollution.setFont(ka1Font);
+		m_displayPollution.setCharacterSize(20);
+		m_displayPollution.setFillColor(Color::Black);
+		m_displayPollution.setPosition(660, 12);
+		m_displayPollution.setString("Pollution");
 
-// Using text to display pollution rate for testing purposes only, remove from final game.
-m_displayPollutionRate.setFont(ka1Font);
-m_displayPollutionRate.setCharacterSize(16);
-m_displayPollutionRate.setFillColor(Color::White);
-m_displayPollutionRate.setPosition(950, 12);
-stringstream ss2;
-ss2 << (double)m_pollutionRate;
-m_displayPollutionRate.setString(ss2.str());
+		// Using text to display pollution rate for testing purposes only, remove from final game.
+		m_displayPollutionRate.setFont(ka1Font);
+		m_displayPollutionRate.setCharacterSize(16);
+		m_displayPollutionRate.setFillColor(Color::White);
+		m_displayPollutionRate.setPosition(950, 12);
+		stringstream ss2;
+		ss2 << (double)m_pollutionRate;
+		m_displayPollutionRate.setString(ss2.str());
 
+		m_window.draw(m_displayIncome);
+		m_window.draw(m_displayPollution);
+		m_window.draw(m_displayPollutionRate);
+		m_window.display();
 
+		// Iterate through alive responders and update them.
+		list<Responder*>::const_iterator cycleResponders;
+		for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
+		{
+			(*cycleResponders)->update(m_elapsedTime);
+		}
 
-
-
-m_window.draw(m_displayIncome);
-m_window.draw(m_displayPollution);
-m_window.draw(m_displayPollutionRate);
-m_window.display();
-
-
-
-// Iterate through alive responders and update them.
-list<Responder*>::const_iterator cycleResponders;
-for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
-{
-	(*cycleResponders)->update(m_elapsedTime);
-}
-
-// Update position of pollution level based on the pollution rate.
-if (m_pollutionRate == 0) {
-	m_spritePollutionLevel.move(0, 0);
-}
-else if (m_pollutionRate > 0 && m_spritePollutionLevel.getPosition().x < 1002) {
-	m_spritePollutionLevel.move(m_pollutionRate, 0);
-}
-else if (m_pollutionRate < 0 && m_spritePollutionLevel.getPosition().x > 825) {
-	m_spritePollutionLevel.move(m_pollutionRate, 0);
-}
+		// Update position of pollution level based on the pollution rate.
+		if (m_pollutionRate == 0)
+		{
+			m_spritePollutionLevel.move(0, 0);
+		}
+		else if (m_pollutionRate > 0 && m_spritePollutionLevel.getPosition().x < 1002)
+		{
+			m_spritePollutionLevel.move(m_pollutionRate, 0);
+		}
+		else if (m_pollutionRate < 0 && m_spritePollutionLevel.getPosition().x > 825)
+		{
+			m_spritePollutionLevel.move(m_pollutionRate, 0);
+		}
+	}
 }
 
 void Engine::eventManager(Event& e)
@@ -280,6 +334,7 @@ void Engine::eventManager(Event& e)
 	{
 		m_mousePositionMain = m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_mainView);
 		m_mousePositionGUI = m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView);
+		m_mousePositionMenu = m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_mainMenuView);
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
@@ -364,6 +419,24 @@ void Engine::eventManager(Event& e)
 
 			// Check if buy recycling centre button clicked.
 			if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) {}
+		
+			if (m_gameState == State::MAIN_MENU)
+			{
+				if (m_playMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				{
+					m_gameState = State::PLAYING;
+				}
+
+				if (m_howtoMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				{
+					// Show game rules
+				}
+
+				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				{
+					m_window.close();
+				}
+			}
 		}
 
 		// For handling mouse dragging across the screen to move camera.
@@ -470,6 +543,24 @@ void Engine::checkSelected()
 
 void Engine::render()
 {
+	// Set textures and position for main menu
+	m_menuBackground.setTexture(m_textureHolder.GetTexture("graphics/main_menu/menu_background.png"));
+	m_menuBackground.setOrigin(0, 0);
+	m_menuBackground.setPosition(0, 0);
+	m_menuBackground.setScale(0.25, 0.25);
+
+	m_playMenuButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
+	m_playMenuButton.setOrigin(0, 0);
+	m_playMenuButton.setPosition(387, 212);
+
+	m_howtoMenuButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
+	m_howtoMenuButton.setOrigin(0, 0);
+	m_howtoMenuButton.setPosition(387, 280);
+
+	m_exitMenuButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
+	m_exitMenuButton.setOrigin(0, 0);
+	m_exitMenuButton.setPosition(387, 348);
+
 	// Set textures, origins and positions for various game sprites 
 	m_background.setTexture(m_textureHolder.GetTexture("graphics/Grasslandsmap.png"));
 	m_background.setOrigin(0, 0);
