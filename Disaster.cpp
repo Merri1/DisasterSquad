@@ -93,7 +93,7 @@ void Disaster::updateHealth(int damage)
     if (m_health <= 200)
     {
         m_spawned = false;
-        m_health == 0;
+        m_health = 0;
     }
     else
     {

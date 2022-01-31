@@ -10,6 +10,7 @@
 #include "Responder.h"
 #include "Disaster.h"
 #include "Wildfire.h"
+#include "Tornado.h"
 #include "Shop.h"
 #include "RenewableSource.h"
 #include "WindTurbine.h"
@@ -86,6 +87,11 @@ protected:
     Disaster* m_disaster2;
     Disaster* m_disaster3;
     Disaster* m_disaster4;
+
+    Disaster* m_disaster5;
+    Disaster* m_disaster6;
+    Disaster* m_disaster7;
+    Disaster* m_disaster8;
 
     Shop* m_ResponderBuy;
     Shop* m_WindTurbineBuy;

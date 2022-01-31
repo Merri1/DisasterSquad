@@ -31,6 +31,7 @@
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="SolarPanel.cpp" />
     <ClCompile Include="TextureHolder.cpp" />
+    <ClCompile Include="Tornado.cpp" />
     <ClCompile Include="Wildfire.cpp" />
     <ClCompile Include="WindTurbine.cpp" />
   </ItemGroup>
@@ -46,6 +47,7 @@
     <ClInclude Include="Shop.h" />
     <ClInclude Include="SolarPanel.h" />
     <ClInclude Include="TextureHolder.h" />
+    <ClInclude Include="Tornado.h" />
     <ClInclude Include="Wildfire.h" />
     <ClInclude Include="WindTurbine.h" />
   </ItemGroup>

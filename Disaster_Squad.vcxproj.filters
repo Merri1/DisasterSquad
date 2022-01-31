@@ -57,6 +57,9 @@
     <ClCompile Include="RecyclingCentre.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Tornado.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Disaster.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RecyclingCentre.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tornado.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

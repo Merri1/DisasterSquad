@@ -41,6 +41,11 @@ void Engine::init()
 	m_disaster3 = new Wildfire();
 	m_disaster4 = new Wildfire();
 
+	m_disaster5 = new Tornado();
+	m_disaster6 = new Tornado();
+	m_disaster7 = new Tornado();
+	m_disaster8 = new Tornado();
+
 	// Initialize shops.
 	m_ResponderBuy = new Shop(100, 2);
 	m_WindTurbineBuy = new Shop(150, 2);
@@ -63,6 +68,11 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster2);
 	lpDisasters.push_back(m_disaster3);
 	lpDisasters.push_back(m_disaster4);
+
+	lpDisasters.push_back(m_disaster5);
+	lpDisasters.push_back(m_disaster6);
+	lpDisasters.push_back(m_disaster7);
+	lpDisasters.push_back(m_disaster8);
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
 	m_pollutionCurrent = 101;
