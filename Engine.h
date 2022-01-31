@@ -39,16 +39,20 @@ public:
 protected:
     const int FRAMERATE = 60;
     const int TILESIZE = 16;
+    const int MAX_POLLUTION = 1000;
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     int m_levelArray[36][64];
     vector<int> m_pathToDestination;
     enum class State { PAUSED, PLAYING, MAIN_MENU, GAME_OVER, LEVEL_UP };
     
     State m_gameState;
+    bool m_mainMenu;
     bool m_difficultySelectionMenu;
+    bool m_aboutMenu;
+    bool m_howToMenu;
     float m_difficultyMultiplier;
     float m_elapsedTime;
-    float m_pollutionTotal;
+    float m_pollutionCurrent;
     float m_pollutionRate;
     float m_goldTotal;
     float m_goldRate;

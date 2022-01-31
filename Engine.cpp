@@ -183,7 +183,7 @@ void Engine::draw()
 		m_window.draw(m_titleTipShadowText);
 		m_window.draw(m_titleTipText);
 
-		if (!m_difficultySelectionMenu)
+		if (m_mainMenu)
 		{
 			m_window.draw(m_playMenuButton);
 			m_window.draw(m_howtoMenuButton);
@@ -194,7 +194,7 @@ void Engine::draw()
 			m_window.draw(m_aboutMenuText);
 			m_window.draw(m_exitMenuText);
 		}
-		else
+		else if (m_difficultySelectionMenu)
 		{
 			m_window.draw(m_easyDifficultyButton);
 			m_window.draw(m_mediumDifficultyButton);
@@ -202,6 +202,14 @@ void Engine::draw()
 			m_window.draw(m_easyDifficultyText);
 			m_window.draw(m_hardDifficultyText);
 			m_window.draw(m_mediumDifficultyText);
+		}
+		else if (m_aboutMenu)
+		{
+
+		}
+		else if (m_howToMenu)
+		{
+
 		}
 
 		m_window.display();
