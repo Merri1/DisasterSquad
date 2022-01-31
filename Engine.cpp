@@ -76,65 +76,6 @@ void Engine::init()
 	m_difficultySelectionMenu = false;
 	m_aboutMenu = false;
 	m_howToMenu = false;
-
-	m_vcrFont.loadFromFile("graphics/fonts/vcr.ttf");
-	m_titleTipText.setFont(m_vcrFont);
-	m_titleTipText.setCharacterSize(18);
-	m_titleTipText.setFillColor(Color::Yellow);
-	m_titleTipText.setPosition(750, 140);
-	m_titleTipText.setString("GET IT WHILE IT'S HOT");
-	m_titleTipText.setStyle(Text::Bold);
-	m_titleTipText.setRotation(-15);
-
-	m_titleTipShadowText.setFont(m_vcrFont);
-	m_titleTipShadowText.setCharacterSize(18);
-	m_titleTipShadowText.setFillColor(Color::Black);
-	m_titleTipShadowText.setPosition(749, 142);
-	m_titleTipShadowText.setString("GET IT WHILE IT'S HOT");
-	m_titleTipShadowText.setStyle(Text::Bold);
-	m_titleTipShadowText.setRotation(-15);
-
-	m_playMenuText.setFont(m_vcrFont);
-	m_playMenuText.setCharacterSize(28);
-	m_playMenuText.setFillColor(Color::White);
-	m_playMenuText.setPosition(441, 217);
-	m_playMenuText.setString("PLAY GAME");
-
-	m_howtoMenuText.setFont(m_vcrFont);
-	m_howtoMenuText.setCharacterSize(28);
-	m_howtoMenuText.setFillColor(Color::White);
-	m_howtoMenuText.setPosition(425, 285);
-	m_howtoMenuText.setString("HOW TO PLAY");
-
-	m_aboutMenuText.setFont(m_vcrFont);
-	m_aboutMenuText.setCharacterSize(28);
-	m_aboutMenuText.setFillColor(Color::White);
-	m_aboutMenuText.setPosition(433, 353);
-	m_aboutMenuText.setString("ABOUT GAME");
-
-	m_exitMenuText.setFont(m_vcrFont);
-	m_exitMenuText.setCharacterSize(28);
-	m_exitMenuText.setFillColor(Color::White);
-	m_exitMenuText.setPosition(441, 421);
-	m_exitMenuText.setString("EXIT GAME");
-
-	m_easyDifficultyText.setFont(m_vcrFont);
-	m_easyDifficultyText.setCharacterSize(28);
-	m_easyDifficultyText.setFillColor(Color::White);
-	m_easyDifficultyText.setPosition(481, 217);
-	m_easyDifficultyText.setString("EASY");
-
-	m_mediumDifficultyText.setFont(m_vcrFont);
-	m_mediumDifficultyText.setCharacterSize(28);
-	m_mediumDifficultyText.setFillColor(Color::White);
-	m_mediumDifficultyText.setPosition(465, 285);
-	m_mediumDifficultyText.setString("MEDIUM");
-
-	m_hardDifficultyText.setFont(m_vcrFont);
-	m_hardDifficultyText.setCharacterSize(28);
-	m_hardDifficultyText.setFillColor(Color::White);
-	m_hardDifficultyText.setPosition(481, 353);
-	m_hardDifficultyText.setString("HARD");
 }
 
 // Seperate run() function out into smaller functions
@@ -206,10 +147,8 @@ void Engine::draw()
 			m_window.draw(m_easyDifficultyText);
 			m_window.draw(m_hardDifficultyText);
 			m_window.draw(m_mediumDifficultyText);
-			
-			//m_exitMenuButton.setPosition();
 			m_window.draw(m_exitMenuButton);
-			m_window.draw(m_exitMenuText);
+			m_window.draw(m_backButtonText);
 		}
 		else if (m_aboutMenu)
 		{
@@ -649,6 +588,71 @@ void Engine::render()
 	m_hardDifficultyButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
 	m_hardDifficultyButton.setOrigin(0, 0);
 	m_hardDifficultyButton.setPosition(387, 348);
+
+	m_vcrFont.loadFromFile("graphics/fonts/vcr.ttf");
+	m_titleTipText.setFont(m_vcrFont);
+	m_titleTipText.setCharacterSize(18);
+	m_titleTipText.setFillColor(Color::Yellow);
+	m_titleTipText.setPosition(750, 140);
+	m_titleTipText.setString("GET IT WHILE IT'S HOT");
+	m_titleTipText.setStyle(Text::Bold);
+	m_titleTipText.setRotation(-15);
+
+	m_titleTipShadowText.setFont(m_vcrFont);
+	m_titleTipShadowText.setCharacterSize(18);
+	m_titleTipShadowText.setFillColor(Color::Black);
+	m_titleTipShadowText.setPosition(749, 142);
+	m_titleTipShadowText.setString("GET IT WHILE IT'S HOT");
+	m_titleTipShadowText.setStyle(Text::Bold);
+	m_titleTipShadowText.setRotation(-15);
+
+	m_playMenuText.setFont(m_vcrFont);
+	m_playMenuText.setCharacterSize(28);
+	m_playMenuText.setFillColor(Color::White);
+	m_playMenuText.setPosition(441, 217);
+	m_playMenuText.setString("PLAY GAME");
+
+	m_howtoMenuText.setFont(m_vcrFont);
+	m_howtoMenuText.setCharacterSize(28);
+	m_howtoMenuText.setFillColor(Color::White);
+	m_howtoMenuText.setPosition(425, 285);
+	m_howtoMenuText.setString("HOW TO PLAY");
+
+	m_aboutMenuText.setFont(m_vcrFont);
+	m_aboutMenuText.setCharacterSize(28);
+	m_aboutMenuText.setFillColor(Color::White);
+	m_aboutMenuText.setPosition(433, 353);
+	m_aboutMenuText.setString("ABOUT GAME");
+
+	m_exitMenuText.setFont(m_vcrFont);
+	m_exitMenuText.setCharacterSize(28);
+	m_exitMenuText.setFillColor(Color::White);
+	m_exitMenuText.setPosition(441, 421);
+	m_exitMenuText.setString("EXIT GAME");
+
+	m_easyDifficultyText.setFont(m_vcrFont);
+	m_easyDifficultyText.setCharacterSize(28);
+	m_easyDifficultyText.setFillColor(Color::White);
+	m_easyDifficultyText.setPosition(481, 217);
+	m_easyDifficultyText.setString("EASY");
+
+	m_mediumDifficultyText.setFont(m_vcrFont);
+	m_mediumDifficultyText.setCharacterSize(28);
+	m_mediumDifficultyText.setFillColor(Color::White);
+	m_mediumDifficultyText.setPosition(465, 285);
+	m_mediumDifficultyText.setString("MEDIUM");
+
+	m_hardDifficultyText.setFont(m_vcrFont);
+	m_hardDifficultyText.setCharacterSize(28);
+	m_hardDifficultyText.setFillColor(Color::White);
+	m_hardDifficultyText.setPosition(481, 353);
+	m_hardDifficultyText.setString("HARD");
+
+	m_backButtonText.setFont(m_vcrFont);
+	m_backButtonText.setCharacterSize(28);
+	m_backButtonText.setFillColor(Color::White);
+	m_backButtonText.setPosition(481, 421);
+	m_backButtonText.setString("BACK");
 
 	// Set textures, origins and positions for various game sprites 
 	m_background.setTexture(m_textureHolder.GetTexture("graphics/Grasslandsmap.png"));

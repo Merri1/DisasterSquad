@@ -143,6 +143,7 @@ protected:
     Text m_easyDifficultyText;
     Text m_mediumDifficultyText;
     Text m_hardDifficultyText;
+    Text m_backButtonText;
     Text m_displayIncome;
     Text m_displayPollution;
     Text m_displayPollutionRate;
