@@ -65,12 +65,17 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster4);
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
-	m_pollutionTotal = 1000.0;
+	m_pollutionCurrent = 0;
 	m_pollutionRate = 0.01; // Natural pollution rate.
 
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 0;
 	m_goldRate = .1;
+
+	m_mainMenu = true;
+	m_difficultySelectionMenu = false;
+	m_aboutMenu = false;
+	m_howToMenu = false;
 
 	m_vcrFont.loadFromFile("graphics/fonts/vcr.ttf");
 	m_titleTipText.setFont(m_vcrFont);
@@ -113,7 +118,6 @@ void Engine::init()
 	m_exitMenuText.setPosition(441, 421);
 	m_exitMenuText.setString("EXIT GAME");
 
-	m_difficultySelectionMenu = false;
 	m_easyDifficultyText.setFont(m_vcrFont);
 	m_easyDifficultyText.setCharacterSize(28);
 	m_easyDifficultyText.setFillColor(Color::White);
@@ -162,7 +166,7 @@ void Engine::run()
 		//Every second that passes in game the pollution rate and gold amount gets increased
 		if(m_elapsedTime > 1000) 
 		{
-			m_pollutionTotal += (m_pollutionRate * m_difficultyMultiplier);
+			m_pollutionCurrent += (m_pollutionRate * m_difficultyMultiplier);
 			//cout<<"Pollution total is:" << m_pollutionTotal << endl;
 
 			m_goldTotal += m_goldRate; ///m_difficultyMultiplier;
@@ -202,6 +206,10 @@ void Engine::draw()
 			m_window.draw(m_easyDifficultyText);
 			m_window.draw(m_hardDifficultyText);
 			m_window.draw(m_mediumDifficultyText);
+			
+			//m_exitMenuButton.setPosition();
+			m_window.draw(m_exitMenuButton);
+			m_window.draw(m_exitMenuText);
 		}
 		else if (m_aboutMenu)
 		{
@@ -374,11 +382,12 @@ void Engine::eventManager(Event& e)
 		{
 			if (m_gameState == State::MAIN_MENU)
 			{
-				if (!m_difficultySelectionMenu)
+				if (m_mainMenu)
 				{
 					if (m_playMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
 						m_difficultySelectionMenu = true;
+						m_mainMenu = false;
 					}
 
 					if (m_howtoMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
@@ -391,13 +400,12 @@ void Engine::eventManager(Event& e)
 						m_window.close();
 					}
 				}
-				else
+				else if(m_difficultySelectionMenu)
 				{
 					if (m_easyDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
 						m_difficultyMultiplier = 1;
 						m_gameState = State::PLAYING;
-						std::cout << "Difficulty multiplier: " << m_difficultyMultiplier << endl;
 					}
 
 					if (m_mediumDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
@@ -410,6 +418,12 @@ void Engine::eventManager(Event& e)
 					{
 						m_difficultyMultiplier = 2;
 						m_gameState = State::PLAYING;
+					}
+
+					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+					{
+						m_difficultySelectionMenu = false;
+						m_mainMenu = true;
 					}
 				}
 			}
