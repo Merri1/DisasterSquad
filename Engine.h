@@ -42,7 +42,7 @@ protected:
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     int m_levelArray[36][64];
     vector<int> m_pathToDestination;
-    enum class State { PAUSED, PLAYING, MAIN_MENU, GAME_OVER };
+    enum class State { PAUSED, PLAYING, MAIN_MENU, GAME_OVER, LEVEL_UP };
     
     State m_gameState;
     bool m_difficultySelectionMenu;
@@ -101,11 +101,13 @@ protected:
     View m_mainView;
     View m_guiView;
     View m_mainMenuView;
+    View m_gameOverView;
     
     Sprite m_menuBackground;
     Sprite m_playMenuButton;
-    Sprite m_exitMenuButton;
     Sprite m_howtoMenuButton;
+    Sprite m_aboutMenuButton;
+    Sprite m_exitMenuButton;
     Sprite m_easyDifficultyButton;
     Sprite m_mediumDifficultyButton;
     Sprite m_hardDifficultyButton;
@@ -132,6 +134,7 @@ protected:
     Text m_titleTipShadowText;
     Text m_playMenuText;
     Text m_howtoMenuText;
+    Text m_aboutMenuText;
     Text m_exitMenuText;
     Text m_easyDifficultyText;
     Text m_mediumDifficultyText;

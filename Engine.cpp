@@ -112,10 +112,16 @@ void Engine::init()
 	m_howtoMenuText.setPosition(425, 285);
 	m_howtoMenuText.setString("HOW TO PLAY");
 
+	m_aboutMenuText.setFont(m_vcrFont);
+	m_aboutMenuText.setCharacterSize(28);
+	m_aboutMenuText.setFillColor(Color::White);
+	m_aboutMenuText.setPosition(433, 353);
+	m_aboutMenuText.setString("ABOUT GAME");
+
 	m_exitMenuText.setFont(m_vcrFont);
 	m_exitMenuText.setCharacterSize(28);
 	m_exitMenuText.setFillColor(Color::White);
-	m_exitMenuText.setPosition(441, 353);
+	m_exitMenuText.setPosition(441, 421);
 	m_exitMenuText.setString("EXIT GAME");
 
 	m_difficultySelectionMenu = false;
@@ -192,9 +198,11 @@ void Engine::draw()
 		{
 			m_window.draw(m_playMenuButton);
 			m_window.draw(m_howtoMenuButton);
+			m_window.draw(m_aboutMenuButton);
 			m_window.draw(m_exitMenuButton);
 			m_window.draw(m_playMenuText);
 			m_window.draw(m_howtoMenuText);
+			m_window.draw(m_aboutMenuText);
 			m_window.draw(m_exitMenuText);
 		}
 		else
@@ -611,9 +619,13 @@ void Engine::render()
 	m_howtoMenuButton.setOrigin(0, 0);
 	m_howtoMenuButton.setPosition(387, 280);
 
+	m_aboutMenuButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
+	m_aboutMenuButton.setOrigin(0, 0);
+	m_aboutMenuButton.setPosition(387, 348);
+
 	m_exitMenuButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
 	m_exitMenuButton.setOrigin(0, 0);
-	m_exitMenuButton.setPosition(387, 348);
+	m_exitMenuButton.setPosition(387, 416);
 
 	m_easyDifficultyButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
 	m_easyDifficultyButton.setOrigin(0, 0);
