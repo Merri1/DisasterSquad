@@ -65,19 +65,8 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster4);
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
-	m_pollutionTotal = 100.0;
+	m_pollutionTotal = 1000.0;
 	m_pollutionRate = 0.01; // Natural pollution rate.
-
-	list<Disaster*>::const_iterator cycleDisasters; // Increase pollution rate per disaster present.
-	for (cycleDisasters = lpDisasters.begin(); cycleDisasters != lpDisasters.end(); cycleDisasters++)
-	{
-		if (m_pollutionRate >= 0.05) {
-			// Do nothing.
-		}
-		else if (m_pollutionRate < 0.05) {
-			m_pollutionRate += 0.005;
-		}
-	}
 
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 0;
@@ -173,10 +162,10 @@ void Engine::run()
 		//Every second that passes in game the pollution rate and gold amount gets increased
 		if(m_elapsedTime > 1000) 
 		{
-			m_pollutionTotal += m_pollutionRate;
+			m_pollutionTotal += (m_pollutionRate * m_difficultyMultiplier);
 			//cout<<"Pollution total is:" << m_pollutionTotal << endl;
 
-			m_goldTotal += m_goldRate;
+			m_goldTotal += m_goldRate; ///m_difficultyMultiplier;
 			m_elapsedTime = 0;
 			//cout << "Gold Total: " << m_goldTotal << endl;
 		 }
@@ -461,7 +450,7 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy Responder button clicked.
-				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5)
+				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= (5 * m_difficultyMultiplier))
 				{
 					// Cycle through to check if any responders are obstructing the spawn.
 					list<Responder*>::const_iterator cycleResponders3;
@@ -476,7 +465,7 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy wind turbine button clicked.
-				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1)
+				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= (1 * m_difficultyMultiplier))
 				{
 					/*int x = m_mousePositionMain.x;
 					int y = m_mousePositionMain.y;
@@ -491,12 +480,12 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy solar panel button clicked.
-				if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1)
+				if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= (1 * m_difficultyMultiplier))
 				{
 				}
 
 				// Check if buy recycling centre button clicked.
-				if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1)
+				if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= (1 * m_difficultyMultiplier))
 				{
 				}
 			}
@@ -564,7 +553,7 @@ void Engine::checkSelected()
 					m_responder2 = new Responder;
 					lpResponders.push_back(m_responder2);
 					okayNewResponder = true;
-					m_goldTotal -= 5;
+					m_goldTotal -= (5 * m_difficultyMultiplier);
 					cout << "A new responder has joined the fight!\n";
 					m_ResponderBuy->select(false);
 				}
@@ -572,7 +561,7 @@ void Engine::checkSelected()
 					m_responder3 = new Responder;
 					lpResponders.push_back(m_responder3);
 					okayNewResponder2 = true;
-					m_goldTotal -= 5;
+					m_goldTotal -= (5 * m_difficultyMultiplier);
 					cout << "A new responder has joined the fight!\n";
 					m_ResponderBuy->select(false);
 				}
@@ -580,7 +569,7 @@ void Engine::checkSelected()
 					m_responder4 = new Responder;
 					lpResponders.push_back(m_responder4);
 					okayNewResponder3 = true;
-					m_goldTotal -= 5;
+					m_goldTotal -= (5 * m_difficultyMultiplier);
 					cout << "A new responder has joined the fight!\n";
 					m_ResponderBuy->select(false);
 				}
@@ -593,7 +582,7 @@ void Engine::checkSelected()
 		
 		lpRenewableSource.push_back(m_turbine1);
 		okayNewTurbine = true;
-		m_goldTotal -= 1;
+		m_goldTotal -= (1 * m_difficultyMultiplier);
 		cout << "A new wind turbine has been created!\n";
 		m_WindTurbineBuy->select(false);
 	}
