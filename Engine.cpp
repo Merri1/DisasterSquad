@@ -79,15 +79,11 @@ void Engine::init()
 		}
 	}
 
-	//Gold - Passive income - 1 gold gets added to the players total every second
+	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 0;
-	m_goldRate = .01;
-
-	// Power - Can only be increase / decreased by producing new buildings.
-	m_powerTotal = 0;
+	m_goldRate = .1;
 
 	m_vcrFont.loadFromFile("graphics/fonts/vcr.ttf");
-
 	m_titleTipText.setFont(m_vcrFont);
 	m_titleTipText.setCharacterSize(18);
 	m_titleTipText.setFillColor(Color::Yellow);
@@ -121,6 +117,25 @@ void Engine::init()
 	m_exitMenuText.setFillColor(Color::White);
 	m_exitMenuText.setPosition(441, 353);
 	m_exitMenuText.setString("EXIT GAME");
+
+	m_difficultySelectionMenu = false;
+	m_easyDifficultyText.setFont(m_vcrFont);
+	m_easyDifficultyText.setCharacterSize(28);
+	m_easyDifficultyText.setFillColor(Color::White);
+	m_easyDifficultyText.setPosition(481, 217);
+	m_easyDifficultyText.setString("EASY");
+
+	m_mediumDifficultyText.setFont(m_vcrFont);
+	m_mediumDifficultyText.setCharacterSize(28);
+	m_mediumDifficultyText.setFillColor(Color::White);
+	m_mediumDifficultyText.setPosition(465, 285);
+	m_mediumDifficultyText.setString("MEDIUM");
+
+	m_hardDifficultyText.setFont(m_vcrFont);
+	m_hardDifficultyText.setCharacterSize(28);
+	m_hardDifficultyText.setFillColor(Color::White);
+	m_hardDifficultyText.setPosition(481, 353);
+	m_hardDifficultyText.setString("HARD");
 }
 
 // Seperate run() function out into smaller functions
@@ -156,6 +171,7 @@ void Engine::run()
 			//cout<<"Pollution total is:" << m_pollutionTotal << endl;
 
 			m_goldTotal += m_goldRate;
+			m_elapsedTime = 0;
 			//cout << "Gold Total: " << m_goldTotal << endl;
 		 }
 	}
@@ -166,16 +182,30 @@ void Engine::draw()
 	if (m_gameState == State::MAIN_MENU)
 	{
 		m_window.setMouseCursorVisible(true);
+		
 		m_window.setView(m_mainMenuView);
 		m_window.draw(m_menuBackground);
 		m_window.draw(m_titleTipShadowText);
 		m_window.draw(m_titleTipText);
-		m_window.draw(m_playMenuButton);
-		m_window.draw(m_howtoMenuButton);
-		m_window.draw(m_exitMenuButton);
-		m_window.draw(m_playMenuText);
-		m_window.draw(m_howtoMenuText);
-		m_window.draw(m_exitMenuText);
+
+		if (!m_difficultySelectionMenu)
+		{
+			m_window.draw(m_playMenuButton);
+			m_window.draw(m_howtoMenuButton);
+			m_window.draw(m_exitMenuButton);
+			m_window.draw(m_playMenuText);
+			m_window.draw(m_howtoMenuText);
+			m_window.draw(m_exitMenuText);
+		}
+		else
+		{
+			m_window.draw(m_easyDifficultyButton);
+			m_window.draw(m_mediumDifficultyButton);
+			m_window.draw(m_hardDifficultyButton);
+			m_window.draw(m_easyDifficultyText);
+			m_window.draw(m_hardDifficultyText);
+			m_window.draw(m_mediumDifficultyText);
+		}
 
 		m_window.display();
 	}
@@ -235,8 +265,8 @@ void Engine::draw()
 			m_window.draw(m_responder4->getSprite());
 		}
 
-		if (okayNewTurbine == true) {
-
+		if (okayNewTurbine == true) 
+		{
 			m_window.draw(m_turbine1->getSprite());
 		}
 
@@ -337,100 +367,129 @@ void Engine::eventManager(Event& e)
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			m_pathToDestination.clear();
-			
-			// If responder is already selected move them to coords of mouse click
-			// Iterate through alive responders and check if selected. If so, move them to mouse coordinates.
-			list<Responder*>::const_iterator cycleResponders;
-			for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
+			if (m_gameState == State::MAIN_MENU)
 			{
-				if ((*cycleResponders)->isSelected())
+				if (!m_difficultySelectionMenu)
 				{
-					if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
+					if (m_playMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
-						cout << "Yes you can move here mate" << endl;
-						cout << "Generating a path for you mate" << endl;
-
-						m_pathToDestination = pathfind.BFS(graph, coordinateToTile((*cycleResponders)->getPosition()), coordinateToTile(m_mousePositionMain));
-						(*cycleResponders)->moveTo(m_pathToDestination);
-						//(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
+						m_difficultySelectionMenu = true;
 					}
-					else
+
+					if (m_howtoMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
-						cout << "Nah you cannot move here mate" << endl;
+						// Show game rules
+					}
+
+					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+					{
+						m_window.close();
+					}
+				}
+				else
+				{
+					if (m_easyDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
+					{
+						m_difficultyMultiplier = 1;
+						m_gameState = State::PLAYING;
+						std::cout << "Difficulty multiplier: " << m_difficultyMultiplier << endl;
+					}
+
+					if (m_mediumDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
+					{
+						m_difficultyMultiplier = 1.5;
+						m_gameState = State::PLAYING;
+					}
+
+					if (m_hardDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
+					{
+						m_difficultyMultiplier = 2;
+						m_gameState = State::PLAYING;
 					}
 				}
 			}
-
-			// Check if mouse click was within then same coords as a responder
-			list<Responder*>::const_iterator cycleResponders2;
-			for (cycleResponders2 = lpResponders.begin(); cycleResponders2 != lpResponders.end(); cycleResponders2++)
+			
+			if (m_gameState == State::PLAYING)
 			{
-				if ((*cycleResponders2)->getSprite().getGlobalBounds().contains(m_mousePositionMain)) 
+				m_pathToDestination.clear();
+
+				// If responder is already selected move them to coords of mouse click
+				// Iterate through alive responders and check if selected. If so, move them to mouse coordinates.
+				list<Responder*>::const_iterator cycleResponders;
+				for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
 				{
+					if ((*cycleResponders)->isSelected())
+					{
+						if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
+						{
+							cout << "Yes you can move here mate" << endl;
+							cout << "Generating a path for you mate" << endl;
+
+							m_pathToDestination = pathfind.BFS(graph, coordinateToTile((*cycleResponders)->getPosition()), coordinateToTile(m_mousePositionMain));
+							(*cycleResponders)->moveTo(m_pathToDestination);
+							//(*cycleResponders)->moveTo(m_mousePositionMain.x, m_mousePositionMain.y);
+						}
+						else
+						{
+							cout << "Nah you cannot move here mate" << endl;
+						}
+					}
+				}
+
+				// Check if mouse click was within then same coords as a responder
+				list<Responder*>::const_iterator cycleResponders2;
+				for (cycleResponders2 = lpResponders.begin(); cycleResponders2 != lpResponders.end(); cycleResponders2++)
+				{
+					if ((*cycleResponders2)->getSprite().getGlobalBounds().contains(m_mousePositionMain))
+					{
 
 						// Set responder selected to true when clicked
 						(*cycleResponders2)->select(true);
-				}	
-				else 
-				{
-					(*cycleResponders2)->select(false);
-				}
-			}
-
-			// Check if buy Responder button clicked.
-			if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) 
-			{
-				// Cycle through to check if any responders are obstructing the spawn.
-				list<Responder*>::const_iterator cycleResponders3;
-				for (cycleResponders3 = lpResponders.begin(); cycleResponders3 != lpResponders.end(); cycleResponders3++)
-				{
-					// If responder already there, no spawn.
-					if ((*cycleResponders3)->getPositionX() != 408 && (*cycleResponders3)->getPositionY() != 314) 
+					}
+					else
 					{
-						m_ResponderBuy->select(true);
+						(*cycleResponders2)->select(false);
 					}
 				}
-			}
 
-			// Check if buy wind turbine button clicked.
-			if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) 
-			{
-				/*int x = m_mousePositionMain.x;
-				int y = m_mousePositionMain.y;
-				cout << y << " y   x " << x << endl;
-				int clickedTile = (y / TILESIZE) * (RESOLUTION.x / TILESIZE) + (x / TILESIZE);
-				cout << clickedTile << " clickedtile " << endl;*/
-
-				/*if (m_levelArray[y / TILESIZE][x / TILESIZE] == 0) {*/
-				m_WindTurbineBuy->select(true);
-				m_turbine1->spawn("turbine", 100, 10, 5, 30, 400, 330);
-				/*}*/
-			}
-
-			// Check if buy solar panel button clicked.
-			if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) 
-			{}
-
-			// Check if buy recycling centre button clicked.
-			if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) 
-			{}
-		
-			if (m_gameState == State::MAIN_MENU)
-			{
-				if (m_playMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				// Check if buy Responder button clicked.
+				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5)
 				{
-					m_gameState = State::PLAYING;
+					// Cycle through to check if any responders are obstructing the spawn.
+					list<Responder*>::const_iterator cycleResponders3;
+					for (cycleResponders3 = lpResponders.begin(); cycleResponders3 != lpResponders.end(); cycleResponders3++)
+					{
+						// If responder already there, no spawn.
+						if ((*cycleResponders3)->getPositionX() != 408 && (*cycleResponders3)->getPositionY() != 314)
+						{
+							m_ResponderBuy->select(true);
+						}
+					}
 				}
 
-				if (m_howtoMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				// Check if buy wind turbine button clicked.
+				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1)
 				{
-					// Show game rules
+					/*int x = m_mousePositionMain.x;
+					int y = m_mousePositionMain.y;
+					cout << y << " y   x " << x << endl;
+					int clickedTile = (y / TILESIZE) * (RESOLUTION.x / TILESIZE) + (x / TILESIZE);
+					cout << clickedTile << " clickedtile " << endl;*/
+
+					/*if (m_levelArray[y / TILESIZE][x / TILESIZE] == 0) {*/
+					m_WindTurbineBuy->select(true);
+					m_turbine1->spawn("turbine", 100, 10, 5, 30, 400, 330);
+					/*}*/
 				}
 
-				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				// Check if buy solar panel button clicked.
+				if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1)
 				{
-					m_window.close();
+				}
+
+				// Check if buy recycling centre button clicked.
+				if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1)
+				{
 				}
 			}
 		}
@@ -555,6 +614,18 @@ void Engine::render()
 	m_exitMenuButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
 	m_exitMenuButton.setOrigin(0, 0);
 	m_exitMenuButton.setPosition(387, 348);
+
+	m_easyDifficultyButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
+	m_easyDifficultyButton.setOrigin(0, 0);
+	m_easyDifficultyButton.setPosition(387, 212);
+
+	m_mediumDifficultyButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
+	m_mediumDifficultyButton.setOrigin(0, 0);
+	m_mediumDifficultyButton.setPosition(387, 280);
+
+	m_hardDifficultyButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
+	m_hardDifficultyButton.setOrigin(0, 0);
+	m_hardDifficultyButton.setPosition(387, 348);
 
 	// Set textures, origins and positions for various game sprites 
 	m_background.setTexture(m_textureHolder.GetTexture("graphics/Grasslandsmap.png"));

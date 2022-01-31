@@ -45,6 +45,8 @@ protected:
     enum class State { PAUSED, PLAYING, MAIN_MENU, GAME_OVER };
     
     State m_gameState;
+    bool m_difficultySelectionMenu;
+    float m_difficultyMultiplier;
     float m_elapsedTime;
     float m_pollutionTotal;
     float m_pollutionRate;
@@ -99,15 +101,21 @@ protected:
     View m_mainView;
     View m_guiView;
     View m_mainMenuView;
+    
     Sprite m_menuBackground;
     Sprite m_playMenuButton;
     Sprite m_exitMenuButton;
     Sprite m_howtoMenuButton;
+    Sprite m_easyDifficultyButton;
+    Sprite m_mediumDifficultyButton;
+    Sprite m_hardDifficultyButton;
     Sprite m_background;
     Sprite m_spriteCrosshair;
+    
     Vector2f m_mousePositionMenu;
     Vector2f m_mousePositionMain;
     Vector2f m_mousePositionGUI;
+    
     Sprite m_spriteMainCollisionBox;
     Sprite m_spriteGUICollisionBox;
     Sprite m_spritePollutionBar;
@@ -116,6 +124,7 @@ protected:
     Sprite m_spriteUIBar;
     Sprite m_spriteMenuBar;
     Sprite m_spriteWildfireCounter;
+    
     TextureHolder m_textureHolder;
     Font ka1Font;
     Font m_vcrFont;
@@ -124,6 +133,9 @@ protected:
     Text m_playMenuText;
     Text m_howtoMenuText;
     Text m_exitMenuText;
+    Text m_easyDifficultyText;
+    Text m_mediumDifficultyText;
+    Text m_hardDifficultyText;
     Text m_displayIncome;
     Text m_displayPollution;
     Text m_displayPollutionRate;
