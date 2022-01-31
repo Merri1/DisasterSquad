@@ -31,6 +31,7 @@ void Engine::init()
 
 	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
 	
+	m_elapsedTime = 0;
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
 	m_responder2 = new Responder();
@@ -76,8 +77,8 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster8);
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
-	m_pollutionCurrent = 991;
-	m_pollutionRate = 1; // Natural pollution rate.
+	m_pollutionCurrent = 101;
+	m_pollutionRate = 0.5; // Natural pollution rate.
 
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 0;
@@ -95,7 +96,6 @@ void Engine::init()
 void Engine::run()
 {
 	Clock gameClock;
-	m_elapsedTime = 0;
 
 	while(m_window.isOpen())
 	{		
@@ -318,6 +318,17 @@ void Engine::draw()
 		{
 			m_spritePollutionLevel.move(m_pollutionRate, 0);
 		}
+
+		if (m_pollutionCurrent <= MIN_POLLUTION)
+		{
+			m_gameState = State::GAME_OVER;
+			m_gameWin = true;
+		}
+		else if ((int)m_pollutionCurrent >= MAX_POLLUTION)
+		{
+			m_gameState = State::GAME_OVER;
+			m_gameWin = false;
+		}
 	}
 	
 	if (m_gameState == State::GAME_OVER)
@@ -332,18 +343,8 @@ void Engine::draw()
 		m_window.draw(m_gameOverText);
 
 		m_window.draw(m_exitMenuButton);
+		m_window.draw(m_backButtonText);
 		m_window.display();
-	}
-
-	if (m_pollutionCurrent <= MIN_POLLUTION)
-	{
-		m_gameState = State::GAME_OVER;
-		m_gameWin = true;
-	}
-	else if ((int)m_pollutionCurrent >= MAX_POLLUTION)
-	{
-		m_gameState = State::GAME_OVER;
-		m_gameWin = false;
 	}
 }
 
@@ -357,7 +358,14 @@ void Engine::eventManager(Event& e)
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			if (m_gameState == State::MAIN_MENU)
+			if (m_gameState == State::GAME_OVER)
+			{
+				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				{
+					init();
+				}
+			}
+			else if (m_gameState == State::MAIN_MENU)
 			{
 				if (m_mainMenu)
 				{
@@ -688,8 +696,8 @@ void Engine::render()
 	m_backButtonText.setFont(m_vcrFont);
 	m_backButtonText.setCharacterSize(28);
 	m_backButtonText.setFillColor(Color::White);
-	m_backButtonText.setPosition(481, 421);
-	m_backButtonText.setString("BACK");
+	m_backButtonText.setPosition(441, 421);
+	m_backButtonText.setString("MAIN MENU");
 
 	m_gameOverText.setFont(m_vcrFont);
 	m_gameOverText.setCharacterSize(28);
