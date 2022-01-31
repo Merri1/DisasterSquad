@@ -149,7 +149,7 @@ protected:
     Text m_displayIncome;
     Text m_displayPollution;
     Text m_displayPollutionRate;
-   
+    Text m_gameOverText;
 
     bool okayNewResponder;
     bool okayNewResponder2;

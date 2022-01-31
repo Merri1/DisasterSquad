@@ -65,7 +65,7 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster4);
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
-	m_pollutionCurrent = 0;
+	m_pollutionCurrent = 101;
 	m_pollutionRate = 0.01; // Natural pollution rate.
 
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
@@ -162,8 +162,7 @@ void Engine::draw()
 
 		m_window.display();
 	}
-
-	if (m_gameState == State::PLAYING)
+	else if (m_gameState == State::PLAYING)
 	{
 		if (m_pollutionCurrent >= MAX_POLLUTION)
 		{
@@ -319,10 +318,16 @@ void Engine::draw()
 			m_spritePollutionLevel.move(m_pollutionRate, 0);
 		}
 	}
-
-	if (m_gameState == State::GAME_OVER)
+	else if (m_gameState == State::GAME_OVER)
 	{
+		m_window.setView(m_gameOverView);
+		m_window.setMouseCursorVisible(true);
+		m_window.draw(m_menuBackground);
+		m_window.draw(m_titleTipShadowText);
+		m_window.draw(m_titleTipText);
+		m_window.draw(m_gameOverText);
 
+		m_window.draw(m_exitMenuButton);
 	}
 }
 
@@ -383,8 +388,7 @@ void Engine::eventManager(Event& e)
 					}
 				}
 			}
-			
-			if (m_gameState == State::PLAYING)
+			else if (m_gameState == State::PLAYING)
 			{
 				m_pathToDestination.clear();
 
@@ -670,6 +674,11 @@ void Engine::render()
 	m_backButtonText.setFillColor(Color::White);
 	m_backButtonText.setPosition(481, 421);
 	m_backButtonText.setString("BACK");
+
+	//m_gameOverText.setFont(m_vcrFont);
+	//m_gameOverText.setCharacterSize(28);
+	//m_gameOverText.setFillColor(Color::White);
+	//m_gameOverText.setOrigin((m_gameOverText.getLocalBounds().width);
 
 	// Set textures, origins and positions for various game sprites 
 	m_background.setTexture(m_textureHolder.GetTexture("graphics/Grasslandsmap.png"));
