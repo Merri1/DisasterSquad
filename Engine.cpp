@@ -21,6 +21,7 @@ void Engine::init()
 	m_window.create(VideoMode(RESOLUTION.x, RESOLUTION.y), "Disaster Squad");
 	m_window.setFramerateLimit(FRAMERATE);
 	m_mainView = View(sf::FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
+	m_mainView.zoom(0.5f);
 	m_guiView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y)); // All UI elements, HUD.
 	m_mainMenuView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 
@@ -132,7 +133,6 @@ void Engine::run()
 	while(m_window.isOpen())
 	{		
 		//cout << "TIME" << m_elapsedTime << endl;
-
 		Time dt = gameClock.restart();
 		m_elapsedTime += dt.asMilliseconds();
 		Event event;
@@ -150,12 +150,12 @@ void Engine::run()
 		m_window.clear();
 
 		//Every second that passes in game the pollution rate and gold amount gets increased
-		 if(m_elapsedTime > 100) {
-
-			m_pollutionTotal = m_pollutionRate + m_pollutionTotal;
+		if(m_elapsedTime > 1000) 
+		{
+			m_pollutionTotal += m_pollutionRate;
 			//cout<<"Pollution total is:" << m_pollutionTotal << endl;
 
-			m_goldTotal = m_goldRate + m_goldTotal;
+			m_goldTotal += m_goldRate;
 			//cout << "Gold Total: " << m_goldTotal << endl;
 		 }
 	}
@@ -184,7 +184,7 @@ void Engine::draw()
 	{
 		m_window.setMouseCursorVisible(false);
 		m_window.setView(m_mainView);
-
+		
 		m_spriteCrosshair.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView));
 
 		m_window.draw(m_background);
@@ -195,7 +195,6 @@ void Engine::draw()
 			// Check if disaster is not spawned yet
 			if (!(*iter)->getSpawnStatus())
 			{
-
 				if (rand() % 1000 == 0)
 				{
 					// Random 1 in 1000 chance for it to spawn
@@ -261,10 +260,10 @@ void Engine::draw()
 		m_RecyclingCentreBuy->setSprite(3);
 		m_window.draw(m_RecyclingCentreBuy->getSprite());
 
-	m_window.draw(m_spritePollutionBar);
-	m_window.draw(m_spritePollutionTitle);
-	m_window.draw(m_spritePollutionLevel);
-	m_window.draw(m_spriteWildfireCounter);
+		m_window.draw(m_spritePollutionBar);
+		m_window.draw(m_spritePollutionTitle);
+		m_window.draw(m_spritePollutionLevel);
+		m_window.draw(m_spriteWildfireCounter);
 
 		m_window.draw(m_spriteCrosshair);
 
@@ -367,33 +366,36 @@ void Engine::eventManager(Event& e)
 			list<Responder*>::const_iterator cycleResponders2;
 			for (cycleResponders2 = lpResponders.begin(); cycleResponders2 != lpResponders.end(); cycleResponders2++)
 			{
-				if ((*cycleResponders2)->getSprite().getGlobalBounds().contains(m_mousePositionMain)) {
+				if ((*cycleResponders2)->getSprite().getGlobalBounds().contains(m_mousePositionMain)) 
+				{
 
 						// Set responder selected to true when clicked
 						(*cycleResponders2)->select(true);
 				}	
-				else {
+				else 
+				{
 					(*cycleResponders2)->select(false);
 				}
 			}
 
 			// Check if buy Responder button clicked.
-			if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) {
-
+			if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 5) 
+			{
 				// Cycle through to check if any responders are obstructing the spawn.
 				list<Responder*>::const_iterator cycleResponders3;
 				for (cycleResponders3 = lpResponders.begin(); cycleResponders3 != lpResponders.end(); cycleResponders3++)
 				{
 					// If responder already there, no spawn.
-					if ((*cycleResponders3)->getPositionX() != 408 && (*cycleResponders3)->getPositionY() != 314) {
+					if ((*cycleResponders3)->getPositionX() != 408 && (*cycleResponders3)->getPositionY() != 314) 
+					{
 						m_ResponderBuy->select(true);
 					}
 				}
 			}
 
 			// Check if buy wind turbine button clicked.
-			if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) {
-
+			if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) 
+			{
 				/*int x = m_mousePositionMain.x;
 				int y = m_mousePositionMain.y;
 				cout << y << " y   x " << x << endl;
@@ -401,17 +403,18 @@ void Engine::eventManager(Event& e)
 				cout << clickedTile << " clickedtile " << endl;*/
 
 				/*if (m_levelArray[y / TILESIZE][x / TILESIZE] == 0) {*/
-
-					m_WindTurbineBuy->select(true);
-					m_turbine1->spawn("turbine", 100, 10, 5, 30, 400, 330);
+				m_WindTurbineBuy->select(true);
+				m_turbine1->spawn("turbine", 100, 10, 5, 30, 400, 330);
 				/*}*/
 			}
 
 			// Check if buy solar panel button clicked.
-			if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) {}
+			if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) 
+			{}
 
 			// Check if buy recycling centre button clicked.
-			if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) {}
+			if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= 1) 
+			{}
 		
 			if (m_gameState == State::MAIN_MENU)
 			{
@@ -434,7 +437,7 @@ void Engine::eventManager(Event& e)
 
 		// For handling mouse dragging across the screen to move camera.
 		if (Mouse::isButtonPressed(Mouse::Right)) {
-			m_mainView.setCenter((Vector2f(m_window.mapPixelToCoords(Mouse::getPosition())), Vector2f(m_window.mapPixelToCoords(Mouse::getPosition()))));
+			m_mainView.setCenter(m_mousePositionMain);
 		}
 
 		// Close window if titlebar X is clicked
@@ -462,8 +465,7 @@ void Engine::eventManager(Event& e)
 				m_mainView.zoom(0.8f);
 
 				// Move camera to mouse cursor position per zoom.
-				m_mainView.move(((Vector2f(m_window.mapPixelToCoords((Mouse::getPosition())) - Vector2f(m_mainView.getCenter()))).x) * 0.9f,
-					((Vector2f(m_window.mapPixelToCoords((Mouse::getPosition())) - Vector2f(m_mainView.getCenter()))).y) * 0.9f);
+				m_mainView.setCenter(m_mousePositionMain);
 				camZoom++;
 			}
 			// Scroll down (zoom out).
