@@ -40,6 +40,7 @@ protected:
     const int FRAMERATE = 60;
     const int TILESIZE = 16;
     const int MAX_POLLUTION = 1000;
+    const int MIN_POLLUTION = 100;
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     int m_levelArray[36][64];
     vector<int> m_pathToDestination;
@@ -50,6 +51,7 @@ protected:
     bool m_difficultySelectionMenu;
     bool m_aboutMenu;
     bool m_howToMenu;
+    bool m_gameWin;
     float m_difficultyMultiplier;
     float m_elapsedTime;
     float m_pollutionCurrent;

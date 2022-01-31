@@ -72,6 +72,7 @@ void Engine::init()
 	m_goldTotal = 0;
 	m_goldRate = .1;
 
+	m_gameWin = false;
 	m_mainMenu = true;
 	m_difficultySelectionMenu = false;
 	m_aboutMenu = false;
@@ -164,6 +165,17 @@ void Engine::draw()
 
 	if (m_gameState == State::PLAYING)
 	{
+		if (m_pollutionCurrent >= MAX_POLLUTION)
+		{
+			m_gameState = State::GAME_OVER;
+			m_gameWin = false;
+		}
+
+		if (m_pollutionCurrent <= MIN_POLLUTION)
+		{
+			m_gameState = State::GAME_OVER;
+			m_gameWin = true;
+		}
 		m_window.setMouseCursorVisible(false);
 		m_window.setView(m_mainView);
 		
@@ -306,6 +318,11 @@ void Engine::draw()
 		{
 			m_spritePollutionLevel.move(m_pollutionRate, 0);
 		}
+	}
+
+	if (m_gameState == State::GAME_OVER)
+	{
+
 	}
 }
 
