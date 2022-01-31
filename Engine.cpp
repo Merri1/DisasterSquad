@@ -230,7 +230,7 @@ void Engine::draw()
 			// Check if disaster is not spawned yet
 			if (!(*iter)->getSpawnStatus())
 			{
-				if (rand() % 1000 == 0)
+				if (rand() % 3000/m_difficultyMultiplier == 0)
 				{
 					// Random 1 in 1000 chance for it to spawn
 					std::cout << "Disaster spawned\n";
