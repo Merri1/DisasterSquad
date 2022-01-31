@@ -24,6 +24,7 @@ void Engine::init()
 	m_mainView.zoom(0.5f);
 	m_guiView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y)); // All UI elements, HUD.
 	m_mainMenuView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
+	m_gameOverView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 
 	// Call render function to initialise sprite textures and positions
 	render();
@@ -75,8 +76,8 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster8);
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
-	m_pollutionCurrent = 101;
-	m_pollutionRate = 0.01; // Natural pollution rate.
+	m_pollutionCurrent = 991;
+	m_pollutionRate = 1; // Natural pollution rate.
 
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 0;
@@ -172,19 +173,9 @@ void Engine::draw()
 
 		m_window.display();
 	}
-	else if (m_gameState == State::PLAYING)
+	
+	if (m_gameState == State::PLAYING)
 	{
-		if (m_pollutionCurrent >= MAX_POLLUTION)
-		{
-			m_gameState = State::GAME_OVER;
-			m_gameWin = false;
-		}
-
-		if (m_pollutionCurrent <= MIN_POLLUTION)
-		{
-			m_gameState = State::GAME_OVER;
-			m_gameWin = true;
-		}
 		m_window.setMouseCursorVisible(false);
 		m_window.setView(m_mainView);
 		
@@ -328,16 +319,31 @@ void Engine::draw()
 			m_spritePollutionLevel.move(m_pollutionRate, 0);
 		}
 	}
-	else if (m_gameState == State::GAME_OVER)
+	
+	if (m_gameState == State::GAME_OVER)
 	{
-		m_window.setView(m_gameOverView);
+		std::cout << "Game Over" << endl;
+		m_window.clear();
 		m_window.setMouseCursorVisible(true);
+		m_window.setView(m_gameOverView);
 		m_window.draw(m_menuBackground);
 		m_window.draw(m_titleTipShadowText);
 		m_window.draw(m_titleTipText);
 		m_window.draw(m_gameOverText);
 
 		m_window.draw(m_exitMenuButton);
+		m_window.display();
+	}
+
+	if (m_pollutionCurrent <= MIN_POLLUTION)
+	{
+		m_gameState = State::GAME_OVER;
+		m_gameWin = true;
+	}
+	else if ((int)m_pollutionCurrent >= MAX_POLLUTION)
+	{
+		m_gameState = State::GAME_OVER;
+		m_gameWin = false;
 	}
 }
 
@@ -685,10 +691,12 @@ void Engine::render()
 	m_backButtonText.setPosition(481, 421);
 	m_backButtonText.setString("BACK");
 
-	//m_gameOverText.setFont(m_vcrFont);
-	//m_gameOverText.setCharacterSize(28);
-	//m_gameOverText.setFillColor(Color::White);
-	//m_gameOverText.setOrigin((m_gameOverText.getLocalBounds().width);
+	m_gameOverText.setFont(m_vcrFont);
+	m_gameOverText.setCharacterSize(28);
+	m_gameOverText.setFillColor(Color::White);
+	m_gameOverText.setString("Unfortunately you've let pollution run out of control.\nNow the world is doomed.\nBetter luck next time.\nYour score was: 420");
+	m_gameOverText.setOrigin((m_gameOverText.getGlobalBounds().width / 2), (m_gameOverText.getGlobalBounds().height / 2));
+	m_gameOverText.setPosition((RESOLUTION.x / 2), 250);
 
 	// Set textures, origins and positions for various game sprites 
 	m_background.setTexture(m_textureHolder.GetTexture("graphics/Grasslandsmap.png"));
