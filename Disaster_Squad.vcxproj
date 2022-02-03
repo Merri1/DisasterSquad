@@ -30,6 +30,7 @@
     <ClCompile Include="Responder.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="SolarPanel.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="TextureHolder.cpp" />
     <ClCompile Include="Tornado.cpp" />
     <ClCompile Include="Wildfire.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Responder.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="SolarPanel.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="TextureHolder.h" />
     <ClInclude Include="Tornado.h" />
     <ClInclude Include="Wildfire.h" />

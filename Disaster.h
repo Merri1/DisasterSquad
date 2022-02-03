@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 #include "TextureHolder.h"
+#include "SoundManager.h"
 #include <random>
 
 
@@ -26,16 +27,11 @@ public:
     void chanceToSpread(sf::Vector2f);
     sf::Vector2f getPosition();
     sf::Vector2f m_position;
-   // int m_positionX;
-   // int m_positionY;
-
-    // These are now converted to subclasses for each disaster type
-    // Keep these here for now as a reminder for write up padding
-    //void fire();
-    //void flood();
-    //void drought();
+    static SoundBuffer g_wildfireSoundBuffer; // Global variable
+    static SoundBuffer g_tornadoSoundBuffer;
 
 protected:
+    Sound m_disasterSound;
     int m_difficultyChance; // Chance of spreading depending on selected difficulty 
     float m_health;
     bool m_spawned = false;

@@ -32,6 +32,7 @@ void Engine::init()
 	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
 	
 	m_elapsedTime = 0;
+
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
 	m_responder2 = new Responder();
@@ -78,7 +79,7 @@ void Engine::init()
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
 	m_pollutionCurrent = 101;
-	m_pollutionRate = 0.5; // Natural pollution rate.
+	m_pollutionRate = 0.1; // Natural pollution rate.
 
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 0;
@@ -96,6 +97,7 @@ void Engine::init()
 void Engine::run()
 {
 	Clock gameClock;
+	m_sound.gameMusic();
 
 	while(m_window.isOpen())
 	{		
@@ -189,7 +191,7 @@ void Engine::draw()
 			// Check if disaster is not spawned yet
 			if (!(*iter)->getSpawnStatus())
 			{
-				if (rand() % 3000/m_difficultyMultiplier == 0)
+				if (rand() % 3000/m_difficultyMultiplier < 1)
 				{
 					// Random 1 in 1000 chance for it to spawn
 					std::cout << "Disaster spawned\n";
@@ -204,21 +206,19 @@ void Engine::draw()
 			}
 			else
 			{
-				if ((*iter)->isAlive())
-				{
-					// Else if the disaster is already spawned draw it on map each frame update
-					//if disaster health is greater than 0 keep drawing the disaster
-					m_window.draw((*iter)->getSprite());
-				}
-
 				if ((*iter)->getHealth() < 200)
 				{
 					m_levelArray[(int)(*iter)->getPosition().y / 16][(int)(*iter)->getPosition().x / 16] = 0;
 					(*iter)->destroyDisaster();
 					m_goldTotal = m_goldTotal + 5;
 				}
+				else if ((*iter)->isAlive())
+				{
+					// Else if the disaster is already spawned draw it on map each frame update
+					//if disaster health is greater than 0 keep drawing the disaster
+					m_window.draw((*iter)->getSprite());
+				}
 			}
-
 		}
 
 		m_window.draw(m_spriteMainCollisionBox);
@@ -370,6 +370,7 @@ void Engine::eventManager(Event& e)
 			{
 				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
 				{
+					m_sound.click();
 					init();
 				}
 			}
@@ -379,17 +380,25 @@ void Engine::eventManager(Event& e)
 				{
 					if (m_playMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
+						m_sound.click();
 						m_difficultySelectionMenu = true;
 						m_mainMenu = false;
 					}
 
 					if (m_howtoMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
+						m_sound.click();
 						// Show game rules
+					}
+
+					if (m_aboutMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+					{
+						m_sound.click();
 					}
 
 					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
+						m_sound.click();
 						m_window.close();
 					}
 				}
@@ -397,24 +406,28 @@ void Engine::eventManager(Event& e)
 				{
 					if (m_easyDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
+						m_sound.click();
 						m_difficultyMultiplier = 1;
 						m_gameState = State::PLAYING;
 					}
 
 					if (m_mediumDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
+						m_sound.click();
 						m_difficultyMultiplier = 1.5;
 						m_gameState = State::PLAYING;
 					}
 
 					if (m_hardDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
+						m_sound.click();
 						m_difficultyMultiplier = 2;
 						m_gameState = State::PLAYING;
 					}
 
 					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
+						m_sound.click();
 						m_difficultySelectionMenu = false;
 						m_mainMenu = true;
 					}

@@ -1,6 +1,7 @@
 #include "Wildfire.h"
 #include <iostream>
 
+
 Wildfire::Wildfire()
 {
 	Disaster();
@@ -9,13 +10,17 @@ Wildfire::Wildfire()
 
 void Wildfire::spawn(int (&levelArray)[36][64])
 {
+    g_wildfireSoundBuffer.loadFromFile("sounds/fire.wav");
+    m_disasterSound.setBuffer(g_wildfireSoundBuffer);
+    m_disasterSound.setVolume(30);
+    
     Disaster::spawn(levelArray);
     m_spriteTexture = TextureHolder::GetTexture(
         "graphics/wildfire.png");
     m_disasterSprite.setTexture(m_spriteTexture);
     m_disasterSprite.setOrigin(8, 10);
     m_disasterSprite.setPosition(m_position);
-    
+    //m_disasterSound.play();
 }
 
 sf::Sprite Wildfire::getSprite()

@@ -9,6 +9,10 @@ Tornado::Tornado()
 
 void Tornado::spawn(int(&levelArray)[36][64])
 {
+    g_tornadoSoundBuffer.loadFromFile("sounds/tornado.wav");
+    m_disasterSound.setBuffer(g_tornadoSoundBuffer);
+    m_disasterSound.setVolume(80);
+    
     Disaster::spawn(levelArray);
     m_spriteTexture = TextureHolder::GetTexture(
         "graphics/tornado.png");

@@ -16,6 +16,7 @@
 #include "WindTurbine.h"
 #include "SolarPanel.h"
 #include "RecyclingCentre.h"
+#include "SoundManager.h"
 
 #include <random>
 #include <list>
@@ -98,6 +99,8 @@ protected:
     Shop* m_SolarPanelBuy;
     Shop* m_RecyclingCentreBuy;
     Shop* m_shop1;
+
+    SoundManager m_sound;
 
     //VertexArray virtualGrid;
     //GridManager grid;

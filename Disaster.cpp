@@ -9,11 +9,13 @@
 #include <iostream>
 using namespace sf;
 
+SoundBuffer Disaster::g_wildfireSoundBuffer;
+SoundBuffer Disaster::g_tornadoSoundBuffer;
+
+
 Disaster::Disaster()
 {
     srand(time(NULL));
-   // m_position.x = m_positionX;
-   //m_position.y = m_positionY;
 }
 
 void Disaster::spawn(int (&levelArray)[36][64])
@@ -34,11 +36,15 @@ void Disaster::spawn(int (&levelArray)[36][64])
         {
             m_position.x = tileX * 16 + 8;
             m_position.y = tileY * 16 + 8;
-            break;
-
+            
             levelArray[tileY][tileX] = 1;
+            srand(time(NULL));
+            break;
         }
     }
+
+    m_disasterSound.play();
+    m_disasterSound.setLoop(true);
 
     std::cout << "x = " << m_position.x << " and y = " << m_position.y;
     
@@ -47,9 +53,7 @@ void Disaster::spawn(int (&levelArray)[36][64])
 
 bool Disaster::getSpawnStatus()
 {
-
     return m_spawned;
-
 }
 
 void Disaster::setSpawnStatus()
@@ -89,7 +93,6 @@ bool Disaster::isAlive()
     return(m_health > 0);
 }
 
-
 void Disaster::updateHealth(int damage)
 {
     m_health -= damage;
@@ -98,6 +101,7 @@ void Disaster::updateHealth(int damage)
 
 void Disaster::destroyDisaster()
 {
-   m_spawned = false;
-   m_health = 0;
+    m_disasterSound.stop();
+    m_spawned = false;
+    m_health = 0;
 }
