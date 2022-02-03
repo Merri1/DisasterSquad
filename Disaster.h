@@ -31,7 +31,9 @@ public:
     static SoundBuffer g_tornadoSoundBuffer;
 
 protected:
+    const float MAX_HEALTH = 1000;
     Sound m_disasterSound;
+    float m_soundVolume;
     int m_difficultyChance; // Chance of spreading depending on selected difficulty 
     float m_health;
     bool m_spawned = false;

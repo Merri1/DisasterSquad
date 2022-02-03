@@ -20,7 +20,7 @@ Disaster::Disaster()
 
 void Disaster::spawn(int (&levelArray)[36][64])
 {
-    m_health = 1000;
+    m_health = MAX_HEALTH;
     m_spawned = true;
     m_disasterSprite.setScale(1,1);
 
@@ -47,8 +47,6 @@ void Disaster::spawn(int (&levelArray)[36][64])
     m_disasterSound.setLoop(true);
 
     std::cout << "x = " << m_position.x << " and y = " << m_position.y;
-    
-
 }
 
 bool Disaster::getSpawnStatus()
@@ -96,7 +94,16 @@ bool Disaster::isAlive()
 void Disaster::updateHealth(int damage)
 {
     m_health -= damage;
-    m_disasterSprite.setScale(m_health/1000, m_health/1000); 
+    m_disasterSprite.setScale(m_health/1000, m_health/1000);
+    
+    if ((int)m_health % 100 == 0)
+    {
+        m_soundVolume -= m_soundVolume/10;
+    }
+    m_disasterSound.setVolume(m_soundVolume);
+    
+    std::cout << m_soundVolume << std::endl;
+    std::cout << m_health << std::endl;
 }
 
 void Disaster::destroyDisaster()

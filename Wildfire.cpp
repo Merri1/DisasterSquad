@@ -10,9 +10,10 @@ Wildfire::Wildfire()
 
 void Wildfire::spawn(int (&levelArray)[36][64])
 {
+    m_soundVolume = 50;
     g_wildfireSoundBuffer.loadFromFile("sounds/fire.wav");
     m_disasterSound.setBuffer(g_wildfireSoundBuffer);
-    m_disasterSound.setVolume(30);
+    m_disasterSound.setVolume(m_soundVolume);
     
     Disaster::spawn(levelArray);
     m_spriteTexture = TextureHolder::GetTexture(

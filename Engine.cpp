@@ -36,6 +36,7 @@ void Engine::init()
 
 	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
 	
+	m_totalGameTime = 0;
 	m_elapsedTime = 0;
 
 	// Initialise Responder and Disaster objects
@@ -111,6 +112,7 @@ void Engine::run()
 		//cout << "TIME" << m_elapsedTime << endl;
 		Time dt = gameClock.restart();
 		m_elapsedTime += dt.asMilliseconds();
+		m_totalGameTime += m_elapsedTime;
 		Event event;
 		
 		// Draw each object to the screen
@@ -340,11 +342,13 @@ void Engine::draw()
 		{
 			m_gameState = State::GAME_OVER;
 			m_gameWin = true;
+			resetLists();
 		}
-		else if ((int)m_pollutionCurrent >= MAX_POLLUTION)
+		else if (m_pollutionCurrent >= MAX_POLLUTION)
 		{
 			m_gameState = State::GAME_OVER;
 			m_gameWin = false;
+			resetLists();
 		}
 	}
 	
@@ -382,6 +386,7 @@ void Engine::eventManager(Event& e)
 				{
 					m_sound.click();
 					init();
+					run();
 				}
 			}
 			else if (m_gameState == State::MAIN_MENU)
@@ -791,6 +796,22 @@ void Engine::collisionDetection() //Check if Responder is in a certain range of 
 		}
 
 	}
+}
+
+void Engine::resetLists()
+{
+	for (list<Disaster*>::const_iterator iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
+	{
+		// Check if disaster is not spawned yet
+		if ((*iter)->getSpawnStatus())
+		{
+			(*iter)->destroyDisaster();
+		}
+	}
+
+	lpDisasters.clear();
+	lpResponders.clear();
+	lpRenewableSource.clear();
 }
 
 int Engine::coordinateToTile(Vector2f position)

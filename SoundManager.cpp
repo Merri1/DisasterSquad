@@ -20,7 +20,7 @@ void SoundManager::click()
 
 void SoundManager::gameMusic()
 {
-	m_gameMusicSound.setVolume(10);
+	m_gameMusicSound.setVolume(20);
 	m_gameMusicSound.play();
 	m_gameMusicSound.setLoop(true);
 }

@@ -34,6 +34,7 @@ public:
     void checkSelected();
     void eventManager(Event& e);
     void collisionDetection();
+    void resetLists();
     int coordinateToTile(Vector2f position);
     // Functions here
     
@@ -57,6 +58,7 @@ protected:
     bool m_gameWin;
     float m_difficultyMultiplier;
     float m_elapsedTime;
+    float m_totalGameTime;
     float m_pollutionCurrent;
     float m_pollutionRate;
     float m_goldTotal;
