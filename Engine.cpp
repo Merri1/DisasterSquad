@@ -111,7 +111,7 @@ void Engine::run()
 		eventManager(event);
 		checkSelected();
 
-		collisonDetection();
+		collisionDetection();
 
 		// Reset the window after evry frame update
 		m_window.clear();
@@ -211,9 +211,9 @@ void Engine::draw()
 					m_window.draw((*iter)->getSprite());
 				}
 
-
 				if ((*iter)->getHealth() < 200)
 				{
+					m_levelArray[(int)(*iter)->getPosition().y / 16][(int)(*iter)->getPosition().x / 16] = 0;
 					(*iter)->destroyDisaster();
 					m_goldTotal = m_goldTotal + 5;
 				}
@@ -506,7 +506,8 @@ void Engine::eventManager(Event& e)
 		}
 
 		// For handling mouse dragging across the screen to move camera.
-		if (Mouse::isButtonPressed(Mouse::Right)) {
+		if (Mouse::isButtonPressed(Mouse::Right)) 
+		{
 			m_mainView.setCenter(m_mousePositionMain);
 		}
 
@@ -741,7 +742,7 @@ void Engine::render()
 
 
 
-void Engine::collisonDetection() //Check if Responder is in a certain range of Disaster object
+void Engine::collisionDetection() //Check if Responder is in a certain range of Disaster object
 {
 	list<Responder*>::iterator iter2;
 	list<Disaster*>::iterator iter;

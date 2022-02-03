@@ -35,6 +35,8 @@ void Disaster::spawn(int (&levelArray)[36][64])
             m_position.x = tileX * 16 + 8;
             m_position.y = tileY * 16 + 8;
             break;
+
+            levelArray[tileY][tileX] = 1;
         }
     }
 
@@ -91,7 +93,7 @@ bool Disaster::isAlive()
 void Disaster::updateHealth(int damage)
 {
     m_health -= damage;
-    m_disasterSprite.scale(0.99, 0.99); 
+    m_disasterSprite.setScale(m_health/1000, m_health/1000); 
 }
 
 void Disaster::destroyDisaster()
