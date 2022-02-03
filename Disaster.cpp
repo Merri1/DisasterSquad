@@ -90,14 +90,12 @@ bool Disaster::isAlive()
 
 void Disaster::updateHealth(int damage)
 {
-    if (m_health <= 200)
-    {
-        m_spawned = false;
-        m_health = 0;
-    }
-    else
-    {
-        m_health -= damage;
-        m_disasterSprite.scale(0.99, 0.99);
-    }  
+    m_health -= damage;
+    m_disasterSprite.scale(0.99, 0.99); 
+}
+
+void Disaster::destroyDisaster()
+{
+   m_spawned = false;
+   m_health = 0;
 }

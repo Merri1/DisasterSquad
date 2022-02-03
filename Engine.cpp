@@ -210,7 +210,15 @@ void Engine::draw()
 					//if disaster health is greater than 0 keep drawing the disaster
 					m_window.draw((*iter)->getSprite());
 				}
+
+
+				if ((*iter)->getHealth() < 200)
+				{
+					(*iter)->destroyDisaster();
+					m_goldTotal = m_goldTotal + 5;
+				}
 			}
+
 		}
 
 		m_window.draw(m_spriteMainCollisionBox);
