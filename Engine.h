@@ -17,6 +17,7 @@
 #include "SolarPanel.h"
 #include "RecyclingCentre.h"
 #include "SoundManager.h"
+#include "HiscoreManager.h"
 
 #include <random>
 #include <list>

@@ -3,6 +3,7 @@
 #include<list>
 #include<sstream>
 
+
 using namespace std;
 using namespace sf;
 
@@ -27,7 +28,8 @@ void Engine::init()
 	m_gameOverView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 
 	//Player Score
-	m_score = 0;
+	m_score = 100;
+
 
 	// Call render function to initialise sprite textures and positions
 	render();
@@ -82,7 +84,7 @@ void Engine::init()
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
 	m_pollutionCurrent = 101;
-	m_pollutionRate = 0.1; // Natural pollution rate.
+	m_pollutionRate = 0.5; // Natural pollution rate.
 
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 0;

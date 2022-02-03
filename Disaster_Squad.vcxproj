@@ -23,6 +23,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameGraph.cpp" />
     <ClCompile Include="GraphEdge.cpp" />
+    <ClCompile Include="HiscoreManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="RecyclingCentre.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameGraph.h" />
     <ClInclude Include="GraphEdge.h" />
+    <ClInclude Include="HiscoreManager.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="RecyclingCentre.h" />
     <ClInclude Include="RenewableSource.h" />
