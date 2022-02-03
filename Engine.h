@@ -65,6 +65,8 @@ protected:
 
     int m_powerTotal;
 
+    int m_score;
+
     //Game game;
     Texture m_backgroundTexture;
     Responder* m_responder1;

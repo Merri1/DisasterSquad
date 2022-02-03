@@ -26,6 +26,9 @@ void Engine::init()
 	m_mainMenuView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 	m_gameOverView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 
+	//Player Score
+	m_score = 0;
+
 	// Call render function to initialise sprite textures and positions
 	render();
 
@@ -90,6 +93,8 @@ void Engine::init()
 	m_difficultySelectionMenu = false;
 	m_aboutMenu = false;
 	m_howToMenu = false;
+
+	
 }
 
 // Seperate run() function out into smaller functions
@@ -211,6 +216,8 @@ void Engine::draw()
 					m_levelArray[(int)(*iter)->getPosition().y / 16][(int)(*iter)->getPosition().x / 16] = 0;
 					(*iter)->destroyDisaster();
 					m_goldTotal = m_goldTotal + 5;
+					m_score = m_score + 10;
+					cout << m_score << endl;
 				}
 				else if ((*iter)->isAlive())
 				{
@@ -289,7 +296,7 @@ void Engine::draw()
 		m_displayPollution.setFont(ka1Font);
 		m_displayPollution.setCharacterSize(20);
 		m_displayPollution.setFillColor(Color::Black);
-		m_displayPollution.setPosition(660, 12);
+		m_displayPollution.setPosition(460, 12);
 		m_displayPollution.setString("Pollution");
 
 		// Using text to display pollution rate for testing purposes only, remove from final game.
@@ -341,7 +348,8 @@ void Engine::draw()
 	
 	if (m_gameState == State::GAME_OVER)
 	{
-		std::cout << "Game Over" << endl;
+		//std::cout << "Game Over" << endl;
+		m_gameOverText.setString("Unfortunately you've let pollution run out of control.\nNow the world is doomed.\nBetter luck next time.\nYour score was: " + std::to_string(m_score));
 		m_window.clear();
 		m_window.setMouseCursorVisible(true);
 		m_window.setView(m_gameOverView);
@@ -724,7 +732,7 @@ void Engine::render()
 	m_gameOverText.setFont(m_vcrFont);
 	m_gameOverText.setCharacterSize(28);
 	m_gameOverText.setFillColor(Color::White);
-	m_gameOverText.setString("Unfortunately you've let pollution run out of control.\nNow the world is doomed.\nBetter luck next time.\nYour score was: 420");
+	m_gameOverText.setString("Unfortunately you've let pollution run out of control.\nNow the world is doomed.\nBetter luck next time.\nYour score was: ");
 	m_gameOverText.setOrigin((m_gameOverText.getGlobalBounds().width / 2), (m_gameOverText.getGlobalBounds().height / 2));
 	m_gameOverText.setPosition((RESOLUTION.x / 2), 250);
 
@@ -748,8 +756,6 @@ void Engine::render()
 	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
 	m_spritePollutionLevel.setPosition(850, 5);
 
-	m_spriteWildfireCounter.setTexture(m_textureHolder.GetTexture("graphics/wildfire_counter_icon.png"));
-	m_spriteWildfireCounter.setPosition(450,4);
 }
 //Complain about git hub in write up!
 
