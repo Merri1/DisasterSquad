@@ -45,16 +45,7 @@
     <ClCompile Include="Pathfinding.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindTurbine.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="RenewableSource.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SolarPanel.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RecyclingCentre.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="Tornado.cpp">
@@ -95,16 +86,7 @@
     <ClInclude Include="Pathfinding.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WindTurbine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RenewableSource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SolarPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RecyclingCentre.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tornado.h">

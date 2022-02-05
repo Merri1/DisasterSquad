@@ -47,6 +47,7 @@ int	compareScore(int playerScore)
     {
         hiScore = playerScore;
     }
+    return 0;
 }
 
 void printScores()

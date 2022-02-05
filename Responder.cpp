@@ -12,7 +12,6 @@ Responder::Responder()
 	m_position.x = m_positionX;
 	m_position.y = m_positionY;
 	m_direction = 0;
-	
 
 	m_Sprite.setOrigin(8, 14);
 	m_Sprite.setPosition(m_positionX, m_positionY);

@@ -68,9 +68,18 @@ void Engine::init()
 	lpShop.push_back(m_RecyclingCentreBuy);
 
 	// Initialise Renewable sources objetcs
-	m_turbine1 = new WindTurbine();
-	m_turbine2 = new WindTurbine();
-	m_turbine3 = new WindTurbine();
+	// Wind turbines
+	m_turbine1 = new RenewableSource("turbine");
+	m_turbine2 = new RenewableSource("turbine");
+	m_turbine3 = new RenewableSource("turbine");
+
+	// Solar panels
+	m_solar1 = new RenewableSource("solar");
+	m_solar2 = new RenewableSource("solar");
+	m_solar3 = new RenewableSource("solar");
+
+	// Recycling centres
+
 
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
@@ -121,6 +130,7 @@ void Engine::run()
 		// Handle events
 		eventManager(event);
 		checkSelected();
+		updateCursor();
 
 		collisionDetection();
 
@@ -190,7 +200,7 @@ void Engine::draw()
 		m_window.setMouseCursorVisible(false);
 		m_window.setView(m_mainView);
 		
-		m_spriteCrosshair.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView));
+		m_spriteCursor.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView));
 
 		m_window.draw(m_background);
 
@@ -248,12 +258,16 @@ void Engine::draw()
 			m_window.draw(m_responder4->getSprite());
 		}
 
-		if (okayNewTurbine == true) 
-		{
-			m_window.draw(m_turbine1->getSprite());
+		m_window.draw(m_responder2->getSprite());
+
+		// Iterate through all active and draw them.
+		list<RenewableSource*>::const_iterator cycleRenewable;
+		for (cycleRenewable = lpRenewableSource.begin(); cycleRenewable != lpRenewableSource.end(); cycleRenewable++) {
+
+			m_window.draw((*cycleRenewable)->getSprite());
+			(*cycleRenewable)->update(m_elapsedTime);
 		}
 
-		m_window.draw(m_responder2->getSprite());
 
 		// Switch to second GUI view for UI elements. Seperate to allow for scaling UI.
 		m_window.setView(m_guiView);
@@ -278,7 +292,7 @@ void Engine::draw()
 		m_window.draw(m_spritePollutionLevel);
 		m_window.draw(m_spriteWildfireCounter);
 
-		m_window.draw(m_spriteCrosshair);
+		m_window.draw(m_spriteCursor);
 
 		// Declare new Font.
 		Font ka1Font;
@@ -492,43 +506,96 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy Responder button clicked.
-				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= (5 * m_difficultyMultiplier))
+				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
 				{
-					// Cycle through to check if any responders are obstructing the spawn.
-					list<Responder*>::const_iterator cycleResponders3;
-					for (cycleResponders3 = lpResponders.begin(); cycleResponders3 != lpResponders.end(); cycleResponders3++)
+					// Check if you have the cash.
+					if (m_goldTotal >= (5 * m_difficultyMultiplier))
 					{
-						// If responder already there, no spawn.
-						if ((*cycleResponders3)->getPositionX() != 408 && (*cycleResponders3)->getPositionY() != 314)
+						// Cycle through to check if any responders are obstructing the spawn.
+						list<Responder*>::const_iterator cycleResponders3;
+						for (cycleResponders3 = lpResponders.begin(); cycleResponders3 != lpResponders.end(); cycleResponders3++)
 						{
-							m_ResponderBuy->select(true);
+							// If responder already there, no spawn.
+							if ((*cycleResponders3)->getPositionX() != 408 && (*cycleResponders3)->getPositionY() != 314)
+							{
+								m_sound.shopClick();
+								m_ResponderBuy->select(true);
+							}
 						}
+					}
+					else 
+					{
+						m_sound.errorClick();
 					}
 				}
 
-				// Check if buy wind turbine button clicked.
-				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= (1 * m_difficultyMultiplier))
+				// Check if buy solar panel button clicked.
+				if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
 				{
-					/*int x = m_mousePositionMain.x;
-					int y = m_mousePositionMain.y;
-					cout << y << " y   x " << x << endl;
-					int clickedTile = (y / TILESIZE) * (RESOLUTION.x / TILESIZE) + (x / TILESIZE);
-					cout << clickedTile << " clickedtile " << endl;*/
-
-					/*if (m_levelArray[y / TILESIZE][x / TILESIZE] == 0) {*/
-					m_WindTurbineBuy->select(true);
-					m_turbine1->spawn("turbine", 100, 10, 5, 30, 400, 330);
-					/*}*/
+					// Check if you have the cash.
+					if (m_goldTotal >= (1 * m_difficultyMultiplier))
+					{
+						m_sound.shopClick();
+						m_SolarPanelBuy->select(true);
+						m_cursorStyle = 3;
+					}
+					else
+					{
+						m_sound.errorClick();
+					}
 				}
 
-				// Check if buy solar panel button clicked.
-				if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= (1 * m_difficultyMultiplier))
+				// Check if another click is made while wind turbine selected.
+				if (m_SolarPanelBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) 
 				{
+					m_solar1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+					lpRenewableSource.push_back(m_solar1);
+					m_solar1->isPlaced();
+					m_goldTotal -= (1 * m_difficultyMultiplier);
+					cout << "A new solar panel has been created!\n";
+					m_SolarPanelBuy->select(false);
+					m_cursorStyle = 0;
+				}
+
+				// Check if buy wind turbine button clicked.
+				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
+				{
+					// Check if you have the cash.
+					if (m_goldTotal >= (1 * m_difficultyMultiplier)) {
+
+						m_sound.shopClick();
+						m_WindTurbineBuy->select(true);
+						m_cursorStyle = 2;
+					}
+					else
+					{
+						m_sound.errorClick();
+					}
+				}
+
+				// Check if another click is made while wind turbine selected.
+				if (m_WindTurbineBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) {
+
+					m_turbine1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+					lpRenewableSource.push_back(m_turbine1);
+					m_turbine1->isPlaced();
+					m_goldTotal -= (1 * m_difficultyMultiplier);
+					cout << "A new wind turbine has been created!\n"; 
+					m_WindTurbineBuy->select(false); 
+					m_cursorStyle = 0;
 				}
 
 				// Check if buy recycling centre button clicked.
-				if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_goldTotal >= (1 * m_difficultyMultiplier))
+				if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
 				{
+					if (m_goldTotal >= (1 * m_difficultyMultiplier))
+					{
+
+					}
+					else
+					{
+						m_sound.errorClick();
+					}
 				}
 			}
 		}
@@ -586,53 +653,39 @@ void Engine::checkSelected()
 {
 	// Check if responder shop button is selected.
 	if (m_ResponderBuy->isSelected()) {
-	
-			if (lpResponders.size() > 4) {
-				// Do nothing, add error sound.
-			}
-			else if (lpResponders.size() <= 3) {
 
-				if (lpResponders.size() == 1) {
-					m_responder2 = new Responder;
-					lpResponders.push_back(m_responder2);
-					okayNewResponder = true;
-					m_goldTotal -= (5 * m_difficultyMultiplier);
-					cout << "A new responder has joined the fight!\n";
-					m_ResponderBuy->select(false);
-				}
-				else if (lpResponders.size() == 2) {
-					m_responder3 = new Responder;
-					lpResponders.push_back(m_responder3);
-					okayNewResponder2 = true;
-					m_goldTotal -= (5 * m_difficultyMultiplier);
-					cout << "A new responder has joined the fight!\n";
-					m_ResponderBuy->select(false);
-				}
-				else if (lpResponders.size() == 3) {
-					m_responder4 = new Responder;
-					lpResponders.push_back(m_responder4);
-					okayNewResponder3 = true;
-					m_goldTotal -= (5 * m_difficultyMultiplier);
-					cout << "A new responder has joined the fight!\n";
-					m_ResponderBuy->select(false);
-				}
+		if (lpResponders.size() > 4) {
+			// Do nothing, add error sound.
+		}
+		else if (lpResponders.size() <= 3) {
+
+			if (lpResponders.size() == 1) {
+				m_responder2 = new Responder;
+				lpResponders.push_back(m_responder2);
+				okayNewResponder = true;
+				m_goldTotal -= (5 * m_difficultyMultiplier);
+				cout << "A new responder has joined the fight!\n";
+				m_ResponderBuy->select(false);
 			}
+			else if (lpResponders.size() == 2) {
+				m_responder3 = new Responder;
+				lpResponders.push_back(m_responder3);
+				okayNewResponder2 = true;
+				m_goldTotal -= (5 * m_difficultyMultiplier);
+				cout << "A new responder has joined the fight!\n";
+				m_ResponderBuy->select(false);
+			}
+			else if (lpResponders.size() == 3) {
+				m_responder4 = new Responder;
+				lpResponders.push_back(m_responder4);
+				okayNewResponder3 = true;
+				m_goldTotal -= (5 * m_difficultyMultiplier);
+				cout << "A new responder has joined the fight!\n";
+				m_ResponderBuy->select(false);
+			}
+		}
 		// VERY IMPORTANT: Deselect button after spawn.
 	}
-
-	// Check if wind turbine button is selected.
-	if (m_WindTurbineBuy->isSelected()) {
-		
-		lpRenewableSource.push_back(m_turbine1);
-		okayNewTurbine = true;
-		m_goldTotal -= (1 * m_difficultyMultiplier);
-		cout << "A new wind turbine has been created!\n";
-		m_WindTurbineBuy->select(false);
-	}
-
-	// Check if solar panel button is selected.
-
-	// Check if recycling centre button is selected.
 }
 
 void Engine::render()
@@ -748,9 +801,6 @@ void Engine::render()
 	m_background.setOrigin(0, 0);
 	m_background.setPosition(0, 0);
 
-	m_spriteCrosshair.setTexture(m_textureHolder.GetTexture("graphics/crosshair.png"));
-	m_spriteCrosshair.setOrigin(25, 25);
-
 	m_spriteUIBar.setTexture(m_textureHolder.GetTexture("graphics/ui_bar.png"));
 	m_spriteUIBar.setOrigin(0, 0);
 
@@ -763,10 +813,60 @@ void Engine::render()
 	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
 	m_spritePollutionLevel.setPosition(850, 5);
 
+
+}//Complain about git hub in write up!
+
+
+void Engine::updateCursor() // Update cursor to reflect current UI positions and options.
+{
+	// If / else to choose between cursor styles.
+	if (m_cursorStyle == 0)
+	{
+		// Crosshair for main view.
+		m_spriteCursor.setTexture(m_textureHolder.GetTexture("graphics/cursor_spritesheet.png"));
+		m_spriteCursor.setTextureRect(IntRect{ 0, 0, 40, 40 });
+		m_spriteCursor.setOrigin(20, 20);
+	}
+
+	// Mouse cursor for GUI view.
+	if (m_cursorStyle == 1)
+	{
+		m_spriteCursor.setTexture(m_textureHolder.GetTexture("graphics/cursor_spritesheet.png"));
+		m_spriteCursor.setTextureRect(IntRect{ 48, 0, 32, 40 });
+		m_spriteCursor.setOrigin(16, 20);
+	}
+
+	// Cursor to wind turbine placement.
+	if (m_cursorStyle == 2)
+	{
+		if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) 
+		{
+			m_spriteCursor.setTexture(m_textureHolder.GetTexture("graphics/cursor_spritesheet.png"));
+			m_spriteCursor.setTextureRect(IntRect{ 96, 8, 16, 32 });
+			m_spriteCursor.setOrigin(8, 16);
+		}
+		else {
+			m_spriteCursor.setTexture(m_textureHolder.GetTexture("graphics/cursor_spritesheet.png"));
+			m_spriteCursor.setTextureRect(IntRect{ 128, 8, 16, 32 });
+			m_spriteCursor.setOrigin(8, 16);
+		}
+	}
+
+	// Cursor to solar panel placement.
+	if (m_cursorStyle == 3) {
+		if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
+		{
+			m_spriteCursor.setTexture(m_textureHolder.GetTexture("graphics/cursor_spritesheet.png"));
+			m_spriteCursor.setTextureRect(IntRect{ 160, 16, 26, 24 });
+			m_spriteCursor.setOrigin(13, 12);
+		}
+		else {
+			m_spriteCursor.setTexture(m_textureHolder.GetTexture("graphics/cursor_spritesheet.png"));
+			m_spriteCursor.setTextureRect(IntRect{ 192, 16, 26, 24 });
+			m_spriteCursor.setOrigin(13, 12);
+		}
+	}
 }
-//Complain about git hub in write up!
-
-
 
 void Engine::collisionDetection() //Check if Responder is in a certain range of Disaster object
 {
@@ -818,6 +918,4 @@ int Engine::coordinateToTile(Vector2f position)
 {
 	return (int(position.y / TILESIZE) * (RESOLUTION.x / TILESIZE) + int(position.x / TILESIZE));
 }
-
-
 

@@ -13,9 +13,6 @@
 #include "Tornado.h"
 #include "Shop.h"
 #include "RenewableSource.h"
-#include "WindTurbine.h"
-#include "SolarPanel.h"
-#include "RecyclingCentre.h"
 #include "SoundManager.h"
 #include "HiscoreManager.h"
 
@@ -33,6 +30,7 @@ public:
     void update();
     void checkSelected();
     void eventManager(Event& e);
+    void updateCursor();
     void collisionDetection();
     void resetLists();
     int coordinateToTile(Vector2f position);
@@ -46,6 +44,7 @@ protected:
     const int MAX_POLLUTION = 1000;
     const int MIN_POLLUTION = 100;
     const Vector2i RESOLUTION = Vector2i(1024, 576);
+    int m_cursorStyle;
     int m_levelArray[36][64];
     vector<int> m_pathToDestination;
     enum class State { PAUSED, PLAYING, MAIN_MENU, GAME_OVER, LEVEL_UP };
@@ -67,7 +66,6 @@ protected:
     int camZoom;
 
     int m_powerTotal;
-
     int m_score;
 
     //Game game;
@@ -132,7 +130,7 @@ protected:
     Sprite m_mediumDifficultyButton;
     Sprite m_hardDifficultyButton;
     Sprite m_background;
-    Sprite m_spriteCrosshair;
+    Sprite m_spriteCursor;
     
     Vector2f m_mousePositionMenu;
     Vector2f m_mousePositionMain;
@@ -168,7 +166,5 @@ protected:
     bool okayNewResponder;
     bool okayNewResponder2;
     bool okayNewResponder3; 
-    bool okayNewTurbine;
-
 };
 #endif

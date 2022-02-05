@@ -9,6 +9,8 @@ class SoundManager
 public:
 	SoundManager();
 	void click();
+	void shopClick();
+	void errorClick();
 	SoundBuffer& getFireBuffer();
 	SoundBuffer& getTornadoBuffer();
 	void gameMusic();
@@ -18,10 +20,14 @@ private:
 	SoundBuffer m_tornadoSoundBuffer;
 	SoundBuffer m_gameMusicBuffer;
 	SoundBuffer m_clickSoundBuffer;
+	SoundBuffer m_buttonSelectedBuffer;
+	SoundBuffer m_errorSelectingBuffer;
 
 	Sound m_clickSound;
 	Sound m_fireSound;
 	Sound m_tornadoSound;
 	Sound m_gameMusicSound;
+	Sound m_buttonSelectedSound;
+	Sound m_errorSelectingSound;
 };
 #endif

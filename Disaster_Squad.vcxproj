@@ -26,16 +26,13 @@
     <ClCompile Include="HiscoreManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
-    <ClCompile Include="RecyclingCentre.cpp" />
     <ClCompile Include="RenewableSource.cpp" />
     <ClCompile Include="Responder.cpp" />
     <ClCompile Include="Shop.cpp" />
-    <ClCompile Include="SolarPanel.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="TextureHolder.cpp" />
     <ClCompile Include="Tornado.cpp" />
     <ClCompile Include="Wildfire.cpp" />
-    <ClCompile Include="WindTurbine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Disaster.h" />
@@ -44,16 +41,13 @@
     <ClInclude Include="GraphEdge.h" />
     <ClInclude Include="HiscoreManager.h" />
     <ClInclude Include="Pathfinding.h" />
-    <ClInclude Include="RecyclingCentre.h" />
     <ClInclude Include="RenewableSource.h" />
     <ClInclude Include="Responder.h" />
     <ClInclude Include="Shop.h" />
-    <ClInclude Include="SolarPanel.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="TextureHolder.h" />
     <ClInclude Include="Tornado.h" />
     <ClInclude Include="Wildfire.h" />
-    <ClInclude Include="WindTurbine.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
