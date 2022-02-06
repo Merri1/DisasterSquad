@@ -45,10 +45,13 @@ RenewableSource::RenewableSource(string type) {
 
     else if (m_type == "recycling") {
 
-        m_health = 50;
-        m_enviroFactor = 2;
-        m_power = 1;
-        m_buildTime = 5000;
+        m_Sprite.setTexture(TextureHolder::GetTexture("graphics/recycling_centre_spritesheet.png"));
+        m_Sprite.setTextureRect(IntRect{ 16, 10, 22, 22 });
+
+        m_health = 100;
+        m_enviroFactor = 10;
+        m_power = 0;
+        m_buildTime = 10000;
     }
 }
 

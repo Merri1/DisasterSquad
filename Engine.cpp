@@ -68,18 +68,19 @@ void Engine::init()
 	lpShop.push_back(m_RecyclingCentreBuy);
 
 	// Initialise Renewable sources objetcs
-	// Wind turbines
+	// Wind turbines (MAX 3).
 	m_turbine1 = new RenewableSource("turbine");
 	m_turbine2 = new RenewableSource("turbine");
 	m_turbine3 = new RenewableSource("turbine");
 
-	// Solar panels
+	// Solar panels (MAX 3).
 	m_solar1 = new RenewableSource("solar");
 	m_solar2 = new RenewableSource("solar");
 	m_solar3 = new RenewableSource("solar");
 
-	// Recycling centres
-
+	// Recycling centres (MAX 2).
+	m_recycling1 = new RenewableSource("recycling");
+	m_recycling2 = new RenewableSource("recycling");
 
 	// Add disaster objects to list of disaster pointers
 	lpDisasters.push_back(m_disaster1);
@@ -506,7 +507,7 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy Responder button clicked.
-				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
+				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
 				{
 					// Check if you have the cash.
 					if (m_goldTotal >= (5 * m_difficultyMultiplier))
@@ -561,8 +562,8 @@ void Engine::eventManager(Event& e)
 				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
 				{
 					// Check if you have the cash.
-					if (m_goldTotal >= (1 * m_difficultyMultiplier)) {
-
+					if (m_goldTotal >= (1 * m_difficultyMultiplier)) 
+					{
 						m_sound.shopClick();
 						m_WindTurbineBuy->select(true);
 						m_cursorStyle = 2;
@@ -590,12 +591,26 @@ void Engine::eventManager(Event& e)
 				{
 					if (m_goldTotal >= (1 * m_difficultyMultiplier))
 					{
-
+						m_sound.shopClick();
+						m_RecyclingCentreBuy->select(true);
+						m_cursorStyle = 4;
 					}
 					else
 					{
 						m_sound.errorClick();
 					}
+				}
+
+				// Check if another click is made while recycling centre selected.
+				if (m_RecyclingCentreBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) {
+
+					m_recycling1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+					lpRenewableSource.push_back(m_recycling1);
+					m_recycling1->isPlaced();
+					m_goldTotal -= (1 * m_difficultyMultiplier);
+					cout << "A new recycling centre has been created!\n";
+					m_RecyclingCentreBuy->select(false);
+					m_cursorStyle = 0;
 				}
 			}
 		}
@@ -866,7 +881,23 @@ void Engine::updateCursor() // Update cursor to reflect current UI positions and
 			m_spriteCursor.setOrigin(13, 12);
 		}
 	}
-}
+
+	// Cursor to recycling centre placement.
+	if (m_cursorStyle == 4)
+	{
+		if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
+		{
+			m_spriteCursor.setTexture(m_textureHolder.GetTexture("graphics/cursor_spritesheet.png"));
+			m_spriteCursor.setTextureRect(IntRect{ 224, 18, 22, 22 });
+			m_spriteCursor.setOrigin(11, 11);
+		}
+		else {
+			m_spriteCursor.setTexture(m_textureHolder.GetTexture("graphics/cursor_spritesheet.png"));
+			m_spriteCursor.setTextureRect(IntRect{ 256, 18, 22, 22 });
+			m_spriteCursor.setOrigin(11, 11);
+		}
+	}
+} // End of update cursor.
 
 void Engine::collisionDetection() //Check if Responder is in a certain range of Disaster object
 {

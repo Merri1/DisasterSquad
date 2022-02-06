@@ -84,8 +84,8 @@ protected:
     RenewableSource* m_turbine2;
     RenewableSource* m_turbine3;
 
-    RenewableSource* m_recycle1;
-    RenewableSource* m_recycle2;
+    RenewableSource* m_recycling1;
+    RenewableSource* m_recycling2;
 
     Disaster* m_disaster1;
     Disaster* m_disaster2;
