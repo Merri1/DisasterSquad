@@ -37,7 +37,7 @@ void parseFile()//Load file to data structure
     while (std::getline(file, str))
     {
         file_contents += str;
-        file_contents.push_back('\n');
+        //file_contents.push_back('\n');
     }
 }
 

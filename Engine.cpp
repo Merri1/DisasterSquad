@@ -510,7 +510,7 @@ void Engine::eventManager(Event& e)
 				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
 				{
 					// Check if you have the cash.
-					if (m_goldTotal >= (5 * m_difficultyMultiplier))
+					if (m_goldTotal >= (8 * m_difficultyMultiplier))
 					{
 						// Cycle through to check if any responders are obstructing the spawn.
 						list<Responder*>::const_iterator cycleResponders3;
@@ -534,7 +534,7 @@ void Engine::eventManager(Event& e)
 				if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
 				{
 					// Check if you have the cash.
-					if (m_goldTotal >= (1 * m_difficultyMultiplier))
+					if (m_goldTotal >= (12 * m_difficultyMultiplier))
 					{
 						m_sound.shopClick();
 						m_SolarPanelBuy->select(true);
@@ -552,7 +552,7 @@ void Engine::eventManager(Event& e)
 					m_solar1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
 					lpRenewableSource.push_back(m_solar1);
 					m_solar1->isPlaced();
-					m_goldTotal -= (1 * m_difficultyMultiplier);
+					m_goldTotal -= (12 * m_difficultyMultiplier);
 					cout << "A new solar panel has been created!\n";
 					m_SolarPanelBuy->select(false);
 					m_cursorStyle = 0;
@@ -562,7 +562,7 @@ void Engine::eventManager(Event& e)
 				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
 				{
 					// Check if you have the cash.
-					if (m_goldTotal >= (1 * m_difficultyMultiplier)) 
+					if (m_goldTotal >= (12 * m_difficultyMultiplier)) 
 					{
 						m_sound.shopClick();
 						m_WindTurbineBuy->select(true);
@@ -580,7 +580,7 @@ void Engine::eventManager(Event& e)
 					m_turbine1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
 					lpRenewableSource.push_back(m_turbine1);
 					m_turbine1->isPlaced();
-					m_goldTotal -= (1 * m_difficultyMultiplier);
+					m_goldTotal -= (12 * m_difficultyMultiplier);
 					cout << "A new wind turbine has been created!\n"; 
 					m_WindTurbineBuy->select(false); 
 					m_cursorStyle = 0;
@@ -589,7 +589,7 @@ void Engine::eventManager(Event& e)
 				// Check if buy recycling centre button clicked.
 				if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
 				{
-					if (m_goldTotal >= (1 * m_difficultyMultiplier))
+					if (m_goldTotal >= (12 * m_difficultyMultiplier))
 					{
 						m_sound.shopClick();
 						m_RecyclingCentreBuy->select(true);
@@ -607,7 +607,7 @@ void Engine::eventManager(Event& e)
 					m_recycling1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
 					lpRenewableSource.push_back(m_recycling1);
 					m_recycling1->isPlaced();
-					m_goldTotal -= (1 * m_difficultyMultiplier);
+					m_goldTotal -= (12 * m_difficultyMultiplier);
 					cout << "A new recycling centre has been created!\n";
 					m_RecyclingCentreBuy->select(false);
 					m_cursorStyle = 0;
