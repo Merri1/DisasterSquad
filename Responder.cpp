@@ -189,4 +189,10 @@ int Responder::getHealth()
 {
 	return m_Health;
 }
+
+bool Responder::getIsMoving()
+{
+	return m_isMoving;
+}
+
 //1024x576 64/36 tile maps size

@@ -42,12 +42,12 @@ protected:
     const int FRAMERATE = 60;
     const int TILESIZE = 16;
     const int MAX_POLLUTION = 1000;
-    const int MIN_POLLUTION = 100;
+    const int MIN_POLLUTION = 0;
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     int m_cursorStyle;
     int m_levelArray[36][64];
     vector<int> m_pathToDestination;
-    enum class State { PAUSED, PLAYING, MAIN_MENU, GAME_OVER, LEVEL_UP };
+    enum class State { PAUSED, PLAYING, MAIN_MENU, GAME_OVER, LEVEL_UP, VICTORY };
     
     State m_gameState;
     bool m_mainMenu;
@@ -67,6 +67,10 @@ protected:
 
     int m_powerTotal;
     int m_score;
+
+    int m_turbineTotal;
+    int m_solarTotal;
+    int m_recyclingTotal;
 
     //Game game;
     Texture m_backgroundTexture;
@@ -120,6 +124,7 @@ protected:
     View m_guiView;
     View m_mainMenuView;
     View m_gameOverView;
+    View m_gameVictoryView;
     
     Sprite m_menuBackground;
     Sprite m_playMenuButton;
@@ -162,6 +167,7 @@ protected:
     Text m_displayPollution;
     Text m_displayPollutionRate;
     Text m_gameOverText;
+    Text m_gameVictoryText;
 
     bool okayNewResponder;
     bool okayNewResponder2;

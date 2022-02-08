@@ -26,6 +26,7 @@ void Engine::init()
 	m_guiView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y)); // All UI elements, HUD.
 	m_mainMenuView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 	m_gameOverView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
+	m_gameVictoryView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 
 	//Player Score
 	m_score = 100;
@@ -67,7 +68,7 @@ void Engine::init()
 	lpShop.push_back(m_SolarPanelBuy);
 	lpShop.push_back(m_RecyclingCentreBuy);
 
-	// Initialise Renewable sources objetcs
+	// Initialise Renewable sources objects.
 	// Wind turbines (MAX 3).
 	m_turbine1 = new RenewableSource("turbine");
 	m_turbine2 = new RenewableSource("turbine");
@@ -93,21 +94,25 @@ void Engine::init()
 	lpDisasters.push_back(m_disaster7);
 	lpDisasters.push_back(m_disaster8);
 
-	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.01
-	m_pollutionCurrent = 101;
-	m_pollutionRate = 0.5; // Natural pollution rate.
+	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.05.
+	m_pollutionCurrent = 100;
+	m_pollutionRate = 0.03; // Natural pollution rate.
+
+	list<RenewableSource*>::const_iterator cycleRenewable;
+	for (cycleRenewable = lpRenewableSource.begin(); cycleRenewable != lpRenewableSource.end(); cycleRenewable++) {
+		m_pollutionRate += (*cycleRenewable)->getEnviro();
+	}
 
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
-	m_goldTotal = 0;
+	m_goldTotal = 100;
 	m_goldRate = .1;
 
+	// Extra booleans for game states.
 	m_gameWin = false;
 	m_mainMenu = true;
 	m_difficultySelectionMenu = false;
 	m_aboutMenu = false;
 	m_howToMenu = false;
-
-	
 }
 
 // Seperate run() function out into smaller functions
@@ -132,7 +137,6 @@ void Engine::run()
 		eventManager(event);
 		checkSelected();
 		updateCursor();
-
 		collisionDetection();
 
 		// Reset the window after evry frame update
@@ -315,7 +319,7 @@ void Engine::draw()
 		m_displayPollution.setFont(ka1Font);
 		m_displayPollution.setCharacterSize(20);
 		m_displayPollution.setFillColor(Color::Black);
-		m_displayPollution.setPosition(460, 12);
+		m_displayPollution.setPosition(670, 12);
 		m_displayPollution.setString("Pollution");
 
 		// Using text to display pollution rate for testing purposes only, remove from final game.
@@ -332,13 +336,20 @@ void Engine::draw()
 		m_window.draw(m_displayPollutionRate);
 		m_window.display();
 
+
 		// Iterate through alive responders and update them.
 		list<Responder*>::const_iterator cycleResponders;
 		for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
 		{
 			(*cycleResponders)->update(m_elapsedTime);
-		}
 
+			// If a responder is on a tile, change its value to 2.
+			if (m_levelArray[int((*cycleResponders)->getPosition().y / TILESIZE)][int((*cycleResponders)->getPosition().x / TILESIZE)] == 0 && (*cycleResponders)->getIsMoving() == false)
+			{
+				(m_levelArray[int((*cycleResponders)->getPosition().y / TILESIZE)][int((*cycleResponders)->getPosition().x / TILESIZE)] = 2);
+			}
+		}
+	
 		// Update position of pollution level based on the pollution rate.
 		if (m_pollutionRate == 0)
 		{
@@ -355,7 +366,7 @@ void Engine::draw()
 
 		if (m_pollutionCurrent <= MIN_POLLUTION)
 		{
-			m_gameState = State::GAME_OVER;
+			m_gameState = State::VICTORY;
 			m_gameWin = true;
 			resetLists();
 		}
@@ -367,10 +378,11 @@ void Engine::draw()
 		}
 	}
 	
+	// Defeat state! Player has lost the game.
 	if (m_gameState == State::GAME_OVER)
 	{
 		//std::cout << "Game Over" << endl;
-		m_gameOverText.setString("Unfortunately you've let pollution run out of control.\nNow the world is doomed.\nBetter luck next time.\nYour score was: " + std::to_string(m_score));
+		m_gameOverText.setString("Unfortunately you've let pollution run out of control.\nNow the world is doomed.\nBetter luck next time.\n\nYour score was: " + std::to_string(m_score));
 		m_window.clear();
 		m_window.setMouseCursorVisible(true);
 		m_window.setView(m_gameOverView);
@@ -378,6 +390,23 @@ void Engine::draw()
 		m_window.draw(m_titleTipShadowText);
 		m_window.draw(m_titleTipText);
 		m_window.draw(m_gameOverText);
+
+		m_window.draw(m_exitMenuButton);
+		m_window.draw(m_backButtonText);
+		m_window.display();
+	}
+
+	// Victory state! Player has won the game.
+	if (m_gameState == State::VICTORY)
+	{
+		m_gameVictoryText.setString("Thanks to your efforts, pollution levels have \nfallen to an acceptable level in this region! \nThanks for playing! \n\nYour score was: " + std::to_string(m_score));
+		m_window.clear();
+		m_window.setMouseCursorVisible(true);
+		m_window.setView(m_gameVictoryView);
+		m_window.draw(m_menuBackground);
+		m_window.draw(m_titleTipShadowText);
+		m_window.draw(m_titleTipText);
+		m_window.draw(m_gameVictoryText);
 
 		m_window.draw(m_exitMenuButton);
 		m_window.draw(m_backButtonText);
@@ -396,6 +425,15 @@ void Engine::eventManager(Event& e)
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			if (m_gameState == State::GAME_OVER)
+			{
+				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				{
+					m_sound.click();
+					init();
+					run();
+				}
+			}
+			else if (m_gameState == State::VICTORY)
 			{
 				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
 				{
@@ -476,6 +514,9 @@ void Engine::eventManager(Event& e)
 					{
 						if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
 						{
+							// Set current position back to 0. 
+							m_levelArray[int((*cycleResponders)->getPosition().y / TILESIZE)][int((*cycleResponders)->getPosition().x / TILESIZE)] = 0;
+
 							cout << "Yes you can move here mate" << endl;
 							cout << "Generating a path for you mate" << endl;
 
@@ -534,7 +575,7 @@ void Engine::eventManager(Event& e)
 				if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
 				{
 					// Check if you have the cash.
-					if (m_goldTotal >= (12 * m_difficultyMultiplier))
+					if (m_goldTotal >= (10 * m_difficultyMultiplier) && m_solarTotal <= 2)
 					{
 						m_sound.shopClick();
 						m_SolarPanelBuy->select(true);
@@ -549,20 +590,38 @@ void Engine::eventManager(Event& e)
 				// Check if another click is made while wind turbine selected.
 				if (m_SolarPanelBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) 
 				{
-					m_solar1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
-					lpRenewableSource.push_back(m_solar1);
-					m_solar1->isPlaced();
-					m_goldTotal -= (12 * m_difficultyMultiplier);
-					cout << "A new solar panel has been created!\n";
+					// Check number of active solar panels.
+					if (m_solarTotal == 0)
+					{
+						m_solar1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+						lpRenewableSource.push_back(m_solar1);
+						m_solar1->isPlaced();
+					}
+					else if (m_solarTotal == 1)
+					{
+						m_solar2->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+						lpRenewableSource.push_back(m_solar2);
+						m_solar2->isPlaced();
+					}
+					else if (m_solarTotal == 2)
+					{
+						m_solar3->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+						lpRenewableSource.push_back(m_solar3);
+						m_solar3->isPlaced();
+					}
+					m_goldTotal -= (10 * m_difficultyMultiplier);
 					m_SolarPanelBuy->select(false);
 					m_cursorStyle = 0;
+					m_solarTotal++;
+					m_sound.solarSound();
+					cout << "A new solar panel has been created!\n";
 				}
 
 				// Check if buy wind turbine button clicked.
 				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
 				{
 					// Check if you have the cash.
-					if (m_goldTotal >= (12 * m_difficultyMultiplier)) 
+					if (m_goldTotal >= (8 * m_difficultyMultiplier) && m_turbineTotal <= 2)
 					{
 						m_sound.shopClick();
 						m_WindTurbineBuy->select(true);
@@ -575,21 +634,39 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if another click is made while wind turbine selected.
-				if (m_WindTurbineBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) {
-
-					m_turbine1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
-					lpRenewableSource.push_back(m_turbine1);
-					m_turbine1->isPlaced();
-					m_goldTotal -= (12 * m_difficultyMultiplier);
-					cout << "A new wind turbine has been created!\n"; 
+				if (m_WindTurbineBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
+				{
+					// Check number of active turbines.
+					if (m_turbineTotal == 0) 
+					{
+						m_turbine1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+						lpRenewableSource.push_back(m_turbine1);
+						m_turbine1->isPlaced();
+					}
+					else if (m_turbineTotal == 1)
+					{
+						m_turbine2->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+						lpRenewableSource.push_back(m_turbine2);
+						m_turbine2->isPlaced();
+					}
+					else if (m_turbineTotal == 2)
+					{
+						m_turbine3->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+						lpRenewableSource.push_back(m_turbine3);
+						m_turbine3->isPlaced();
+					}
+					m_goldTotal -= (8 * m_difficultyMultiplier);
 					m_WindTurbineBuy->select(false); 
 					m_cursorStyle = 0;
+					m_turbineTotal++;
+					m_sound.turbineSound();
+					cout << "A new wind turbine has been created!\n";
 				}
 
 				// Check if buy recycling centre button clicked.
 				if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
 				{
-					if (m_goldTotal >= (12 * m_difficultyMultiplier))
+					if (m_goldTotal >= (12 * m_difficultyMultiplier) && m_recyclingTotal <= 1)
 					{
 						m_sound.shopClick();
 						m_RecyclingCentreBuy->select(true);
@@ -602,15 +679,27 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if another click is made while recycling centre selected.
-				if (m_RecyclingCentreBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) {
-
-					m_recycling1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
-					lpRenewableSource.push_back(m_recycling1);
-					m_recycling1->isPlaced();
-					m_goldTotal -= (12 * m_difficultyMultiplier);
-					cout << "A new recycling centre has been created!\n";
+				if (m_RecyclingCentreBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) 
+				{
+					// Check number of active recycling centres. 
+					if (m_recyclingTotal == 0) 
+					{
+						m_recycling1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+						lpRenewableSource.push_back(m_recycling1);
+						m_recycling1->isPlaced();
+					}
+					else if (m_recyclingTotal == 1) 
+					{
+						m_recycling2->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
+						lpRenewableSource.push_back(m_recycling2);
+						m_recycling2->isPlaced();
+					}
 					m_RecyclingCentreBuy->select(false);
+					m_goldTotal -= (12 * m_difficultyMultiplier);
 					m_cursorStyle = 0;
+					m_recyclingTotal++;
+					m_sound.recyclingSound();
+					cout << "A new recycling centre has been created!\n";
 				}
 			}
 		}
@@ -811,6 +900,13 @@ void Engine::render()
 	m_gameOverText.setOrigin((m_gameOverText.getGlobalBounds().width / 2), (m_gameOverText.getGlobalBounds().height / 2));
 	m_gameOverText.setPosition((RESOLUTION.x / 2), 250);
 
+	m_gameVictoryText.setFont(m_vcrFont);
+	m_gameVictoryText.setCharacterSize(28);
+	m_gameVictoryText.setFillColor(Color::White);
+	m_gameVictoryText.setString("Thanks to your efforts, pollution levels have \nfallen to an acceptable level in this region!\nThanks for playing!\nYour score was : ");
+	m_gameVictoryText.setOrigin((m_gameVictoryText.getGlobalBounds().width / 2), (m_gameVictoryText.getGlobalBounds().height / 2));
+	m_gameVictoryText.setPosition((RESOLUTION.x / 2), 250);
+
 	// Set textures, origins and positions for various game sprites 
 	m_background.setTexture(m_textureHolder.GetTexture("graphics/Grasslandsmap.png"));
 	m_background.setOrigin(0, 0);
@@ -925,7 +1021,6 @@ void Engine::collisionDetection() //Check if Responder is in a certain range of 
 				}
 			}
 		}
-
 	}
 }
 

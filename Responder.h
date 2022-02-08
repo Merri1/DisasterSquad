@@ -31,9 +31,11 @@ public:
     float getRotation();
     Sprite getSprite();
     bool isSelected();
+    bool getIsMoving();
     void setSelected(bool s);
     void select(bool Selected);
     void update(float elapsedTime);
+  
    
 
 protected:
