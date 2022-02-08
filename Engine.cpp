@@ -96,13 +96,8 @@ void Engine::init()
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.05.
 	m_pollutionCurrent = 100;
-	m_pollutionRate = 0.03; // Natural pollution rate.
-
-	list<RenewableSource*>::const_iterator cycleRenewable;
-	for (cycleRenewable = lpRenewableSource.begin(); cycleRenewable != lpRenewableSource.end(); cycleRenewable++) {
-		m_pollutionRate += (*cycleRenewable)->getEnviro();
-	}
-
+	m_pollutionRate = 0.03;
+	
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 100;
 	m_goldRate = .1;
@@ -145,7 +140,7 @@ void Engine::run()
 		//Every second that passes in game the pollution rate and gold amount gets increased
 		if(m_elapsedTime > 1000) 
 		{
-			m_pollutionCurrent += (m_pollutionRate * m_difficultyMultiplier);
+			m_pollutionCurrent += m_pollutionRate * m_difficultyMultiplier;
 			//cout<<"Pollution total is:" << m_pollutionTotal << endl;
 
 			m_goldTotal += m_goldRate; ///m_difficultyMultiplier;
@@ -297,6 +292,15 @@ void Engine::draw()
 		m_window.draw(m_spritePollutionLevel);
 		m_window.draw(m_spriteWildfireCounter);
 
+		// Tooltips by hovering over buttons and icons.
+		if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
+		{
+			m_toolTipType == 0;
+			m_window.draw(m_uiTooltip);
+
+
+		}
+
 		m_window.draw(m_spriteCursor);
 
 		// Declare new Font.
@@ -328,7 +332,7 @@ void Engine::draw()
 		m_displayPollutionRate.setFillColor(Color::White);
 		m_displayPollutionRate.setPosition(950, 12);
 		stringstream ss2;
-		ss2 << (double)m_pollutionRate;
+		ss2 << (double)m_pollutionRate * m_difficultyMultiplier;
 		m_displayPollutionRate.setString(ss2.str());
 
 		m_window.draw(m_displayIncome);
@@ -336,6 +340,8 @@ void Engine::draw()
 		m_window.draw(m_displayPollutionRate);
 		m_window.display();
 
+		// FOR TESTING, REMOVE LATER.
+		// cout << m_pollutionCurrent << endl;
 
 		// Iterate through alive responders and update them.
 		list<Responder*>::const_iterator cycleResponders;
@@ -588,7 +594,7 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if another click is made while wind turbine selected.
-				if (m_SolarPanelBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) 
+				if (m_SolarPanelBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
 				{
 					// Check number of active solar panels.
 					if (m_solarTotal == 0)
@@ -609,6 +615,7 @@ void Engine::eventManager(Event& e)
 						lpRenewableSource.push_back(m_solar3);
 						m_solar3->isPlaced();
 					}
+					m_pollutionRate -= 0.02;
 					m_goldTotal -= (10 * m_difficultyMultiplier);
 					m_SolarPanelBuy->select(false);
 					m_cursorStyle = 0;
@@ -655,6 +662,7 @@ void Engine::eventManager(Event& e)
 						lpRenewableSource.push_back(m_turbine3);
 						m_turbine3->isPlaced();
 					}
+					m_pollutionRate -= 0.01;
 					m_goldTotal -= (8 * m_difficultyMultiplier);
 					m_WindTurbineBuy->select(false); 
 					m_cursorStyle = 0;
@@ -694,6 +702,7 @@ void Engine::eventManager(Event& e)
 						lpRenewableSource.push_back(m_recycling2);
 						m_recycling2->isPlaced();
 					}
+					m_pollutionRate -= 0.05;
 					m_RecyclingCentreBuy->select(false);
 					m_goldTotal -= (12 * m_difficultyMultiplier);
 					m_cursorStyle = 0;
@@ -924,6 +933,19 @@ void Engine::render()
 	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
 	m_spritePollutionLevel.setPosition(850, 5);
 
+	if (m_toolTipType == 0) {
+
+	}
+	else if (m_toolTipType == 1) {
+
+	}
+	else if (m_toolTipType == 2) {
+
+	}
+	else if (m_toolTipType == 3) {
+
+	}
+
 
 }//Complain about git hub in write up!
 
@@ -1023,6 +1045,7 @@ void Engine::collisionDetection() //Check if Responder is in a certain range of 
 		}
 	}
 }
+
 
 void Engine::resetLists()
 {

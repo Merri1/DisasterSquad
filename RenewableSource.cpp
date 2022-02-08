@@ -27,7 +27,7 @@ RenewableSource::RenewableSource(string type) {
         m_Sprite.setTextureRect(IntRect{ 16, 9, 26, 23 });
 
         m_health = 50;
-        m_enviroFactor = 0.01;
+        m_enviroFactor == 0.02;
         m_power = 1;
         m_buildTime = 5000;
     }
@@ -38,7 +38,7 @@ RenewableSource::RenewableSource(string type) {
         m_Sprite.setTextureRect(IntRect{ 16, 0, 16, 32 });
 
         m_health = 80;
-        m_enviroFactor = 0.02;
+        m_enviroFactor = 0.01;
         m_power = 2;
         m_buildTime = 7500;
     }

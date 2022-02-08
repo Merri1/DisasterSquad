@@ -41,8 +41,8 @@ public:
 protected:
     const int FRAMERATE = 60;
     const int TILESIZE = 16;
-    const int MAX_POLLUTION = 1000;
-    const int MIN_POLLUTION = 0;
+    const int MAX_POLLUTION = 104;
+    const int MIN_POLLUTION = 99.6;
     const Vector2i RESOLUTION = Vector2i(1024, 576);
     int m_cursorStyle;
     int m_levelArray[36][64];
@@ -64,6 +64,7 @@ protected:
     float m_goldRate;
     float m_wildfireTotal;
     int camZoom;
+    int m_toolTipType;
 
     int m_powerTotal;
     int m_score;
@@ -136,6 +137,7 @@ protected:
     Sprite m_hardDifficultyButton;
     Sprite m_background;
     Sprite m_spriteCursor;
+    Sprite m_uiTooltip;
     
     Vector2f m_mousePositionMenu;
     Vector2f m_mousePositionMain;
