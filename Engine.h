@@ -64,7 +64,7 @@ protected:
     float m_goldRate;
     float m_wildfireTotal;
     int camZoom;
-    int m_toolTipType;
+    int m_tooltipType;
 
     int m_powerTotal;
     int m_score;
@@ -151,10 +151,12 @@ protected:
     Sprite m_spriteUIBar;
     Sprite m_spriteMenuBar;
     Sprite m_spriteWildfireCounter;
+    Sprite m_spriteUiTooltip;
     
     TextureHolder m_textureHolder;
     Font ka1Font;
     Font m_vcrFont;
+    Font m_calibriLight;
     Text m_titleTipText;
     Text m_titleTipShadowText;
     Text m_playMenuText;
@@ -170,6 +172,7 @@ protected:
     Text m_displayPollutionRate;
     Text m_gameOverText;
     Text m_gameVictoryText;
+    Text m_displayTooltip;
 
     bool okayNewResponder;
     bool okayNewResponder2;

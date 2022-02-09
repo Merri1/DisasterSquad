@@ -291,16 +291,7 @@ void Engine::draw()
 		m_window.draw(m_spritePollutionTitle);
 		m_window.draw(m_spritePollutionLevel);
 		m_window.draw(m_spriteWildfireCounter);
-
-		// Tooltips by hovering over buttons and icons.
-		if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
-		{
-			m_toolTipType == 0;
-			m_window.draw(m_uiTooltip);
-
-
-		}
-
+		
 		m_window.draw(m_spriteCursor);
 
 		// Declare new Font.
@@ -308,6 +299,71 @@ void Engine::draw()
 		if (!ka1Font.loadFromFile("graphics/fonts/ka1.ttf"))
 		{
 			cout << "Error finding custom font.\n";
+		}
+
+		// Declare Calibri Light font.
+		Font calibriLight;
+		if (!calibriLight.loadFromFile("graphics/fonts/calibriLight.ttf"))
+		{
+			cout << "Error finding custom font Calibri Light";
+		}
+
+		// Tooltips by hovering over buttons and icons.
+		// Hover over responder buy button.
+		if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
+		{
+			m_displayTooltip.setFont(calibriLight);
+			m_displayTooltip.setCharacterSize(14);
+			m_displayTooltip.setFillColor(Color::Black);
+			m_displayTooltip.setPosition(110, 52);
+			stringstream ssResponder;
+			ssResponder << "Purchase a new Responder.\nResponders can fight disasters.\nCost: " << int(8 * m_difficultyMultiplier) << "        Max: 4";
+			m_displayTooltip.setString(ssResponder.str());
+
+			m_window.draw(m_spriteUiTooltip);
+			m_window.draw(m_displayTooltip);
+		}
+		// Hover over wind turbine buy button.
+		if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
+		{
+			m_displayTooltip.setFont(calibriLight);
+			m_displayTooltip.setCharacterSize(14);
+			m_displayTooltip.setFillColor(Color::Black);
+			m_displayTooltip.setPosition(110, 52);
+			stringstream ssTurbine;
+			ssTurbine << "Construct a wind turbine.\nTurbines have a low eco impact.\nCost: " << int(8 * m_difficultyMultiplier) << "        Max: 3";
+			m_displayTooltip.setString(ssTurbine.str());
+
+			m_window.draw(m_spriteUiTooltip);
+			m_window.draw(m_displayTooltip);
+		}
+		// Hover over solar panel buy button.
+		if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
+		{
+			m_displayTooltip.setFont(calibriLight);
+			m_displayTooltip.setCharacterSize(14);
+			m_displayTooltip.setFillColor(Color::Black);
+			m_displayTooltip.setPosition(110, 52);
+			stringstream ssSolar;
+			ssSolar << "Construct a solar panel array.\nArrays have a medium eco impact.\nCost: " << int(10 * m_difficultyMultiplier) << "        Max: 3";
+			m_displayTooltip.setString(ssSolar.str());
+
+			m_window.draw(m_spriteUiTooltip);
+			m_window.draw(m_displayTooltip);
+		}
+		// Hover over recycling centre buy button.
+		if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
+		{
+			m_displayTooltip.setFont(calibriLight);
+			m_displayTooltip.setCharacterSize(14);
+			m_displayTooltip.setFillColor(Color::Black);
+			m_displayTooltip.setPosition(110, 52);
+			stringstream ssRecycling;
+			ssRecycling << "Construct a recycling centre.\nCentres have a high eco impact.\nCost: " << int(12 * m_difficultyMultiplier) << "        Max: 2";
+			m_displayTooltip.setString(ssRecycling.str());
+
+			m_window.draw(m_spriteUiTooltip);
+			m_window.draw(m_displayTooltip);
 		}
 
 		// Define income text.
@@ -933,19 +989,9 @@ void Engine::render()
 	m_spritePollutionLevel.setTexture(m_textureHolder.GetTexture("graphics/bar_measure.png"));
 	m_spritePollutionLevel.setPosition(850, 5);
 
-	if (m_toolTipType == 0) {
-
-	}
-	else if (m_toolTipType == 1) {
-
-	}
-	else if (m_toolTipType == 2) {
-
-	}
-	else if (m_toolTipType == 3) {
-
-	}
-
+	m_spriteUiTooltip.setTexture(m_textureHolder.GetTexture("graphics/ui_tooltip.png"));
+	m_spriteUiTooltip.setOrigin(0, 0);
+	m_spriteUiTooltip.setPosition(100, 48);
 
 }//Complain about git hub in write up!
 
