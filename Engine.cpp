@@ -101,7 +101,7 @@ void Engine::init()
 	m_pollutionRate = 0.03;
 	
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
-	m_goldTotal = 100;
+	m_goldTotal = 10;
 	m_goldRate = .1;
 
 	// Extra booleans for game states.
