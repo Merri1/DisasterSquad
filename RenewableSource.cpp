@@ -23,6 +23,7 @@ RenewableSource::RenewableSource(string type) {
     // Assign attributes based on building type.
     if (m_type == "solar") {
 
+        m_Sprite.setOrigin(13, 16);
         m_Sprite.setTexture(TextureHolder::GetTexture("graphics/solar_panel_spritesheet.png"));
         m_Sprite.setTextureRect(IntRect{ 16, 9, 26, 23 });
 
@@ -34,8 +35,9 @@ RenewableSource::RenewableSource(string type) {
 
     if (m_type == "turbine") {
 
+        m_Sprite.setOrigin(10, 16);
         m_Sprite.setTexture(TextureHolder::GetTexture("graphics/wind_turbine_spritesheet.png"));
-        m_Sprite.setTextureRect(IntRect{ 16, 0, 16, 32 });
+        m_Sprite.setTextureRect(IntRect{ 14, 5, 20, 32 });
 
         m_health = 80;
         m_enviroFactor = 0.01;
@@ -45,6 +47,7 @@ RenewableSource::RenewableSource(string type) {
 
     else if (m_type == "recycling") {
 
+        m_Sprite.setOrigin(11, 11);
         m_Sprite.setTexture(TextureHolder::GetTexture("graphics/recycling_centre_spritesheet.png"));
         m_Sprite.setTextureRect(IntRect{ 16, 10, 22, 22 });
 
@@ -52,6 +55,7 @@ RenewableSource::RenewableSource(string type) {
         m_enviroFactor = 0.05;
         m_power = 0;
         m_buildTime = 10000;
+        // Recycling is good craic.
     }
 }
 
@@ -64,17 +68,38 @@ void RenewableSource::spawn(int x, int y) {
 }
 
 // Update position of the building.
-void RenewableSource::update(float elapsedTime) {
+void RenewableSource::update(float elapsedTime, float spriteTime) {
 
     m_position.x = m_positionX;
     m_position.y = m_positionY;
     m_Sprite.setPosition(m_positionX, m_positionY);
+
+    if (m_type == "turbine")
+    {
+        if (spriteTime < 125)
+        {
+            m_Sprite.setTextureRect(IntRect{ 14, 5, 20, 32 });
+        }
+        else if (spriteTime >= 125 && spriteTime < 250)
+        {
+            m_Sprite.setTextureRect(IntRect{ 46, 5, 20, 32 });
+        }
+        else if (spriteTime >= 250 && spriteTime < 375)
+        {
+            m_Sprite.setTextureRect(IntRect{ 78, 5, 20, 32 });
+        }
+        else if (spriteTime >= 375)
+        {
+            m_Sprite.setTextureRect(IntRect{ 102, 5, 20, 32 });
+        }
+    }
+
 }
 
 // Set sprite according to type and if placed.
 void RenewableSource::setSprite() 
 {
-  
+
 }
 
 Sprite RenewableSource::getSprite()

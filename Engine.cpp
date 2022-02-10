@@ -275,7 +275,7 @@ void Engine::draw()
 		for (cycleRenewable = lpRenewableSource.begin(); cycleRenewable != lpRenewableSource.end(); cycleRenewable++) {
 
 			m_window.draw((*cycleRenewable)->getSprite());
-			(*cycleRenewable)->update(m_elapsedTime);
+			(*cycleRenewable)->update(m_elapsedTime, m_spriteTime);
 		}
 
 

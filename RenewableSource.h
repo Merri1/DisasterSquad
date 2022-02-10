@@ -19,7 +19,7 @@ public:
  
     RenewableSource(string type);
     void setSprite();
-    void update(float elapsedTime);
+    void update(float elapsedTime, float spriteTime);
     bool getSpawnStatus();
     void spawn(int x, int y);
     Sprite getSprite();
