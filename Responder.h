@@ -34,7 +34,7 @@ public:
     bool getIsMoving();
     void setSelected(bool s);
     void select(bool Selected);
-    void update(float elapsedTime);
+    void update(float elapsedTime, float spriteTime);
   
    
 

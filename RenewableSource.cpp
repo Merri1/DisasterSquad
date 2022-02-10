@@ -12,7 +12,7 @@ RenewableSource::RenewableSource(string type) {
     m_position.x = m_positionX;
     m_position.y = m_positionY;
     
-    m_Sprite.setOrigin(8, 16);
+    m_Sprite.setOrigin(16,32);
     m_Sprite.setPosition(m_positionX, m_positionY);
     m_Sprite.setTexture(TextureHolder::GetTexture("graphics/wind_turbine_spritesheet.png"));
     m_Sprite.setTextureRect(IntRect{ 16, 0, 16, 32 });

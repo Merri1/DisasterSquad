@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Disaster">
+    <Position X="1.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQCAIEAAAGAACAgAARAACUABAqAAAAAIIAAAAGEEAAQ=</HashCode>
+      <FileName>Disaster.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine">
+    <Position X="8.5" Y="1.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Engine::State" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Engine.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CIeVAqphEi1dUmIRBCMNnPzAGEpmEyoTDJLHN0achE4=</HashCode>
+      <FileName>Engine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameGraph" Collapsed="true">
+    <Position X="6.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAgICBAAAAAAAAAAAAAAAAAAAAACAIAAAAA=</HashCode>
+      <FileName>GameGraph.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GraphEdge" Collapsed="true">
+    <Position X="6.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAADIAAAAAAAAAAAAEAAAAAAAAAAwAAAAAAAAAAA=</HashCode>
+      <FileName>GraphEdge.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiscoreManager" Collapsed="true">
+    <Position X="6.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAABAAAAAAAAAAAAAAAAAQAAQAAAAAAAAAAAAAg=</HashCode>
+      <FileName>HiscoreManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pathfinding" Collapsed="true">
+    <Position X="5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAEAAABAAAAJCAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Pathfinding.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RenewableSource" Collapsed="true">
+    <Position X="5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgQcQBQACAAAEAEARAAAQAjASAAAAVAMAEAEAFEAAA=</HashCode>
+      <FileName>RenewableSource.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Responder" Collapsed="true">
+    <Position X="5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABgAIYGQICAAgAAEABAAAQAlAIIAggFAKAgEEAAkAAI=</HashCode>
+      <FileName>Responder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Shop" Collapsed="true">
+    <Position X="5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAIYAQACAAAAAEARAAAAAhAACAAAFAAEAkAAAAAAI=</HashCode>
+      <FileName>Shop.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundManager" Collapsed="true">
+    <Position X="6.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>TBQAAAQAYAAAQIBAAAERAAAERAABALCAAAiDABAAAAA=</HashCode>
+      <FileName>SoundManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TextureHolder" Collapsed="true">
+    <Position X="6.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAgAAAAAAAAAQAAAAAg=</HashCode>
+      <FileName>TextureHolder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tornado">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAABAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Tornado.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Wildfire">
+    <Position X="3.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAABAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Wildfire.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

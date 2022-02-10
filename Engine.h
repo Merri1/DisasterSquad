@@ -57,6 +57,7 @@ protected:
     bool m_gameWin;
     float m_difficultyMultiplier;
     float m_elapsedTime;
+    float m_spriteTime;
     float m_totalGameTime;
     float m_pollutionCurrent;
     float m_pollutionRate;

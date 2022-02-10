@@ -20,7 +20,7 @@ public:
     void setSpawnStatus();
     void destroyDisaster();
     virtual void spawn(int (&levelArray)[36][64]);
-    virtual sf::Sprite getSprite();
+    virtual sf::Sprite getSprite(float elaspedTime);
     int getHealth();
     bool isAlive();
     void updateHealth(int damage);

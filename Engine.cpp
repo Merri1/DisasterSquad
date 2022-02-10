@@ -18,6 +18,7 @@ void Engine::init()
 {
 	m_gameState = State::MAIN_MENU;
 	pathfind = Pathfinding();
+	m_cursorStyle = 0;
 	// Create a new window using resolution and framerate const values from Engine.h
 	m_window.create(VideoMode(RESOLUTION.x, RESOLUTION.y), "Disaster Squad");
 	m_window.setFramerateLimit(FRAMERATE);
@@ -39,6 +40,7 @@ void Engine::init()
 	
 	m_totalGameTime = 0;
 	m_elapsedTime = 0;
+	m_spriteTime = 0;
 
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
@@ -123,6 +125,14 @@ void Engine::run()
 		Time dt = gameClock.restart();
 		m_elapsedTime += dt.asMilliseconds();
 		m_totalGameTime += m_elapsedTime;
+
+		// Count up milliseconds for time so sprites can update at a reasonable rate.
+		m_spriteTime += dt.asMilliseconds();
+		if (m_spriteTime >= 500)
+		{
+			m_spriteTime = 0;
+		}
+
 		Event event;
 		
 		// Draw each object to the screen
@@ -237,7 +247,7 @@ void Engine::draw()
 				{
 					// Else if the disaster is already spawned draw it on map each frame update
 					//if disaster health is greater than 0 keep drawing the disaster
-					m_window.draw((*iter)->getSprite());
+					m_window.draw((*iter)->getSprite(m_spriteTime));
 				}
 			}
 		}
@@ -403,7 +413,7 @@ void Engine::draw()
 		list<Responder*>::const_iterator cycleResponders;
 		for (cycleResponders = lpResponders.begin(); cycleResponders != lpResponders.end(); cycleResponders++)
 		{
-			(*cycleResponders)->update(m_elapsedTime);
+			(*cycleResponders)->update(m_elapsedTime, m_spriteTime);
 
 			// If a responder is on a tile, change its value to 2.
 			if (m_levelArray[int((*cycleResponders)->getPosition().y / TILESIZE)][int((*cycleResponders)->getPosition().x / TILESIZE)] == 0 && (*cycleResponders)->getIsMoving() == false)
@@ -995,7 +1005,6 @@ void Engine::render()
 
 }//Complain about git hub in write up!
 
-
 void Engine::updateCursor() // Update cursor to reflect current UI positions and options.
 {
 	// If / else to choose between cursor styles.
@@ -1092,7 +1101,6 @@ void Engine::collisionDetection() //Check if Responder is in a certain range of 
 	}
 }
 
-
 void Engine::resetLists()
 {
 	for (list<Disaster*>::const_iterator iter = lpDisasters.begin(); iter != lpDisasters.end(); ++iter)
@@ -1113,4 +1121,3 @@ int Engine::coordinateToTile(Vector2f position)
 {
 	return (int(position.y / TILESIZE) * (RESOLUTION.x / TILESIZE) + int(position.x / TILESIZE));
 }
-

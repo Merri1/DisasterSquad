@@ -76,7 +76,7 @@ sf::Vector2f Disaster::getPosition()
     return m_position;
 }
 
-sf::Sprite Disaster::getSprite()
+sf::Sprite Disaster::getSprite(float elapsedTime)
 {
     return m_disasterSprite;
 }
