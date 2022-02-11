@@ -20,7 +20,7 @@ void Engine::init()
 	pathfind = Pathfinding();
 	m_cursorStyle = 0;
 	// Create a new window using resolution and framerate const values from Engine.h
-	m_window.create(VideoMode(RESOLUTION.x, RESOLUTION.y), "Disaster Squad");
+	m_window.create(VideoMode(RESOLUTION.x, RESOLUTION.y), "Disaster Squad", Style::Fullscreen);
 	m_window.setFramerateLimit(FRAMERATE);
 	m_mainView = View(sf::FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 	m_mainView.zoom(0.5f);
@@ -107,7 +107,7 @@ void Engine::init()
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.05.
 	m_pollutionCurrent = 100;
-	m_pollutionRate = +0.03;
+	m_pollutionRate = 0.02;
 
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 10;
@@ -119,6 +119,9 @@ void Engine::init()
 	m_difficultySelectionMenu = false;
 	m_aboutMenu = false;
 	m_howToMenu = false;
+	okayNewResponder = false;
+	okayNewResponder2 = false;
+	okayNewResponder3 = false;
 }
 
 // Seperate run() function out into smaller functions
@@ -249,7 +252,7 @@ void Engine::draw()
 					// Random 1 in 1000 chance for it to spawn
 					std::cout << "Disaster spawned\n";
 					(*iter)->spawn(m_levelArray);
-
+					m_pollutionRate += 0.005;
 					// Reseed random generator
 					srand(time(NULL));
 
@@ -265,6 +268,7 @@ void Engine::draw()
 					(*iter)->destroyDisaster();
 					m_goldTotal = m_goldTotal + 5;
 					m_score = m_score + 10;
+					m_pollutionRate -= 0.005;
 					cout << m_score << endl;
 				}
 				else if ((*iter)->isAlive())
@@ -423,14 +427,14 @@ void Engine::draw()
 		m_displayPollution.setPosition(670, 12);
 		m_displayPollution.setString("Pollution");
 
-		//// Using text to display pollution rate for testing purposes only, remove from final game.
-		//m_displayPollutionRate.setFont(ka1Font);
-		//m_displayPollutionRate.setCharacterSize(16);
-		//m_displayPollutionRate.setFillColor(Color::White);
-		//m_displayPollutionRate.setPosition(950, 12);
-		//stringstream ss2;
-		//ss2 << (double)m_pollutionRate * m_difficultyMultiplier;
-		//m_displayPollutionRate.setString(ss2.str());
+		// Using text to display pollution rate for testing purposes only, remove from final game.
+		m_displayPollutionRate.setFont(ka1Font);
+		m_displayPollutionRate.setCharacterSize(16);
+		m_displayPollutionRate.setFillColor(Color::White);
+		m_displayPollutionRate.setPosition(950, 12);
+		stringstream ss2;
+		ss2 << (double)m_pollutionRate * m_difficultyMultiplier;
+		m_displayPollutionRate.setString(ss2.str());
 
 		m_window.draw(m_displayIncome);
 		m_window.draw(m_displayPollution);
@@ -467,12 +471,14 @@ void Engine::draw()
 			m_spritePollutionLevel.move(m_pollutionRate, 0);
 		}
 
+		// If pollution at minimum levels, VICTORY!
 		if (m_pollutionCurrent <= MIN_POLLUTION)
 		{
 			m_gameState = State::VICTORY;
 			m_gameWin = true;
 			resetLists();
 		}
+		// If pollution at max levels, DEFEAT!
 		else if (m_pollutionCurrent >= MAX_POLLUTION)
 		{
 			m_gameState = State::GAME_OVER;
@@ -849,7 +855,8 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if another click is made while recycling centre selected.
-				if (m_RecyclingCentreBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0 && m_clickDelayFlag)
+				if (m_RecyclingCentreBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)]
+					[int(m_mousePositionMain.x / TILESIZE)] == 0 && m_clickDelayFlag)
 				{
 					// Check number of active recycling centres. 
 					if (m_recyclingTotal == 0)
@@ -864,7 +871,7 @@ void Engine::eventManager(Event& e)
 						lpRenewableSource.push_back(m_recycling2);
 						m_recycling2->isPlaced();
 					}
-					m_pollutionRate -= 0.05;
+					m_pollutionRate -= 0.03;
 					m_RecyclingCentreBuy->select(false);
 					m_goldTotal -= (12 * m_difficultyMultiplier);
 					m_cursorStyle = 0;
@@ -933,7 +940,7 @@ void Engine::eventManager(Event& e)
 				m_mainView.zoom(1.2f);
 				camZoom--;
 			}
-			// Zoom out too far, reset screen size (this avoids issue where float value for zoom is fecked up after multiple zooms).
+			// Zoom out too far, reset screen size (this avoids issue where float value for zoom is wonky after multiple zooms).
 			else if (e.mouseWheelScroll.delta < 0 && camZoom == 0)
 			{
 				m_mainView.reset(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
