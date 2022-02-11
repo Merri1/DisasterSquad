@@ -427,14 +427,14 @@ void Engine::draw()
 		m_displayPollution.setPosition(670, 12);
 		m_displayPollution.setString("Pollution");
 
-		// Using text to display pollution rate for testing purposes only, remove from final game.
-		m_displayPollutionRate.setFont(ka1Font);
-		m_displayPollutionRate.setCharacterSize(16);
-		m_displayPollutionRate.setFillColor(Color::White);
-		m_displayPollutionRate.setPosition(950, 12);
-		stringstream ss2;
-		ss2 << (double)m_pollutionRate * m_difficultyMultiplier;
-		m_displayPollutionRate.setString(ss2.str());
+		//// Using text to display pollution rate for testing purposes only, remove from final game.
+		//m_displayPollutionRate.setFont(ka1Font);
+		//m_displayPollutionRate.setCharacterSize(16);
+		//m_displayPollutionRate.setFillColor(Color::White);
+		//m_displayPollutionRate.setPosition(950, 12);
+		//stringstream ss2;
+		//ss2 << (double)m_pollutionRate * m_difficultyMultiplier;
+		//m_displayPollutionRate.setString(ss2.str());
 
 		m_window.draw(m_displayIncome);
 		m_window.draw(m_displayPollution);
@@ -884,6 +884,7 @@ void Engine::eventManager(Event& e)
 				if (m_spriteMenuBar.getGlobalBounds().contains(m_mousePositionGUI))
 				{
 					m_sound.click();
+					resetLists();
 						init();
 						run();
 				}
@@ -909,6 +910,7 @@ void Engine::eventManager(Event& e)
 			if (e.key.code == sf::Keyboard::Escape)
 			{
 				m_sound.click();
+				resetLists();
 				init();
 				run();
 			}
