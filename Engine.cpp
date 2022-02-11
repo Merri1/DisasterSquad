@@ -9,8 +9,8 @@ using namespace sf;
 
 Engine::Engine()
 {
-    // Handles sfml functionality
-    // Resolutions, memory loading etc.
+	// Handles sfml functionality
+	// Resolutions, memory loading etc.
 	srand(time(NULL));
 }
 
@@ -30,17 +30,23 @@ void Engine::init()
 	m_gameVictoryView = View(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 
 	//Player Score
-	m_score = 100;
+	m_score = 600;
 
 
 	// Call render function to initialise sprite textures and positions
 	render();
 
 	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
-	
+
 	m_totalGameTime = 0;
 	m_elapsedTime = 0;
 	m_spriteTime = 0;
+
+	m_hiscoreManager.readTextFile();
+	m_hiscoreAchieved = false;
+	m_showHiscores = false;
+	m_checkHighScores = true;
+	m_playerNameInput = "";
 
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
@@ -98,8 +104,8 @@ void Engine::init()
 
 	//Pollution - Pollution starts at 1000 and goes up by 1 every second in game at a rate of 0.05.
 	m_pollutionCurrent = 100;
-	m_pollutionRate = 0.03;
-	
+	m_pollutionRate = +0.03;
+
 	//Gold - Passive income - 1 gold gets added to the players total every 10 seconds
 	m_goldTotal = 10;
 	m_goldRate = .1;
@@ -119,8 +125,8 @@ void Engine::run()
 	Clock gameClock;
 	m_sound.gameMusic();
 
-	while(m_window.isOpen())
-	{		
+	while (m_window.isOpen())
+	{
 		//cout << "TIME" << m_elapsedTime << endl;
 		Time dt = gameClock.restart();
 		m_elapsedTime += dt.asMilliseconds();
@@ -134,7 +140,7 @@ void Engine::run()
 		}
 
 		Event event;
-		
+
 		// Draw each object to the screen
 		draw();
 
@@ -148,7 +154,7 @@ void Engine::run()
 		m_window.clear();
 
 		//Every second that passes in game the pollution rate and gold amount gets increased
-		if(m_elapsedTime > 1000) 
+		if (m_elapsedTime > 1000)
 		{
 			m_pollutionCurrent += m_pollutionRate * m_difficultyMultiplier;
 			//cout<<"Pollution total is:" << m_pollutionTotal << endl;
@@ -156,7 +162,7 @@ void Engine::run()
 			m_goldTotal += m_goldRate; ///m_difficultyMultiplier;
 			m_elapsedTime = 0;
 			//cout << "Gold Total: " << m_goldTotal << endl;
-		 }
+		}
 	}
 }
 
@@ -165,7 +171,7 @@ void Engine::draw()
 	if (m_gameState == State::MAIN_MENU)
 	{
 		m_window.setMouseCursorVisible(true);
-		
+
 		m_window.setView(m_mainMenuView);
 		m_window.draw(m_menuBackground);
 		m_window.draw(m_titleTipShadowText);
@@ -204,12 +210,12 @@ void Engine::draw()
 
 		m_window.display();
 	}
-	
+
 	if (m_gameState == State::PLAYING)
 	{
 		m_window.setMouseCursorVisible(false);
 		m_window.setView(m_mainView);
-		
+
 		m_spriteCursor.setPosition(m_window.mapPixelToCoords(Mouse::getPosition(m_window), m_guiView));
 
 		m_window.draw(m_background);
@@ -220,7 +226,7 @@ void Engine::draw()
 			// Check if disaster is not spawned yet
 			if (!(*iter)->getSpawnStatus())
 			{
-				if (rand() % 3000/m_difficultyMultiplier < 1)
+				if (rand() % 3000 / m_difficultyMultiplier < 1)
 				{
 					// Random 1 in 1000 chance for it to spawn
 					std::cout << "Disaster spawned\n";
@@ -301,7 +307,7 @@ void Engine::draw()
 		m_window.draw(m_spritePollutionTitle);
 		m_window.draw(m_spritePollutionLevel);
 		m_window.draw(m_spriteWildfireCounter);
-		
+
 		m_window.draw(m_spriteCursor);
 
 		// Declare new Font.
@@ -421,7 +427,7 @@ void Engine::draw()
 				(m_levelArray[int((*cycleResponders)->getPosition().y / TILESIZE)][int((*cycleResponders)->getPosition().x / TILESIZE)] = 2);
 			}
 		}
-	
+
 		// Update position of pollution level based on the pollution rate.
 		if (m_pollutionRate == 0)
 		{
@@ -449,7 +455,7 @@ void Engine::draw()
 			resetLists();
 		}
 	}
-	
+
 	// Defeat state! Player has lost the game.
 	if (m_gameState == State::GAME_OVER)
 	{
@@ -471,7 +477,38 @@ void Engine::draw()
 	// Victory state! Player has won the game.
 	if (m_gameState == State::VICTORY)
 	{
-		m_gameVictoryText.setString("Thanks to your efforts, pollution levels have \nfallen to an acceptable level in this region! \nThanks for playing! \n\nYour score was: " + std::to_string(m_score));
+		if (!m_hiscoreAchieved && m_checkHighScores)
+		{
+			m_hiscoreAchieved = m_hiscoreManager.compareScores(m_score);
+			m_checkHighScores = false;
+		}
+
+		if (!m_hiscoreAchieved)
+		{
+			m_gameVictoryText.setString("Thanks to your efforts, pollution levels have \n"
+				"fallen to an acceptable level in this region!\n"
+				"Thanks for playing!\n\n"
+				"Your score was: " + std::to_string(m_score));
+		}
+		else
+		{
+			m_gameVictoryText.setString("Thanks to your efforts, pollution levels have \n"
+				"fallen to an acceptable level in this region!\n"
+				"Thanks for playing!\n\n"
+				"Your score was: " + std::to_string(m_score) +
+				"\nCongratulations that's a record score!"
+				"\n\nWhat's your name:"
+				"\n\n\t\t\t[Press ENTER to confirm]");
+		}
+		
+		if (m_showHiscores)
+		{
+			m_gameVictoryText.setString(m_hiscoreManager.scoreToString(m_playerNameInput));
+			m_playerNameText.setString("");
+		}
+
+		//m_gameVictoryText.setString(m_gameVictoryText.getString() + "\nType your name and press Enter to confirm\n" + m_playerNameInput);
+
 		m_window.clear();
 		m_window.setMouseCursorVisible(true);
 		m_window.setView(m_gameVictoryView);
@@ -479,6 +516,7 @@ void Engine::draw()
 		m_window.draw(m_titleTipShadowText);
 		m_window.draw(m_titleTipText);
 		m_window.draw(m_gameVictoryText);
+		m_window.draw(m_playerNameText);
 
 		m_window.draw(m_exitMenuButton);
 		m_window.draw(m_backButtonText);
@@ -542,7 +580,7 @@ void Engine::eventManager(Event& e)
 						m_window.close();
 					}
 				}
-				else if(m_difficultySelectionMenu)
+				else if (m_difficultySelectionMenu)
 				{
 					if (m_easyDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
 					{
@@ -620,7 +658,7 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy Responder button clicked.
-				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
+				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
 				{
 					// Check if you have the cash.
 					if (m_goldTotal >= (8 * m_difficultyMultiplier))
@@ -637,7 +675,7 @@ void Engine::eventManager(Event& e)
 							}
 						}
 					}
-					else 
+					else
 					{
 						m_sound.errorClick();
 					}
@@ -691,7 +729,7 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy wind turbine button clicked.
-				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
+				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
 				{
 					// Check if you have the cash.
 					if (m_goldTotal >= (8 * m_difficultyMultiplier) && m_turbineTotal <= 2)
@@ -710,7 +748,7 @@ void Engine::eventManager(Event& e)
 				if (m_WindTurbineBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
 				{
 					// Check number of active turbines.
-					if (m_turbineTotal == 0) 
+					if (m_turbineTotal == 0)
 					{
 						m_turbine1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
 						lpRenewableSource.push_back(m_turbine1);
@@ -730,7 +768,7 @@ void Engine::eventManager(Event& e)
 					}
 					m_pollutionRate -= 0.01;
 					m_goldTotal -= (8 * m_difficultyMultiplier);
-					m_WindTurbineBuy->select(false); 
+					m_WindTurbineBuy->select(false);
 					m_cursorStyle = 0;
 					m_turbineTotal++;
 					m_sound.turbineSound();
@@ -753,16 +791,16 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if another click is made while recycling centre selected.
-				if (m_RecyclingCentreBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) 
+				if (m_RecyclingCentreBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
 				{
 					// Check number of active recycling centres. 
-					if (m_recyclingTotal == 0) 
+					if (m_recyclingTotal == 0)
 					{
 						m_recycling1->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
 						lpRenewableSource.push_back(m_recycling1);
 						m_recycling1->isPlaced();
 					}
-					else if (m_recyclingTotal == 1) 
+					else if (m_recyclingTotal == 1)
 					{
 						m_recycling2->spawn(m_mousePositionMain.x, m_mousePositionMain.y);
 						lpRenewableSource.push_back(m_recycling2);
@@ -780,7 +818,7 @@ void Engine::eventManager(Event& e)
 		}
 
 		// For handling mouse dragging across the screen to move camera.
-		if (Mouse::isButtonPressed(Mouse::Right)) 
+		if (Mouse::isButtonPressed(Mouse::Right))
 		{
 			m_mainView.setCenter(m_mousePositionMain);
 		}
@@ -798,6 +836,14 @@ void Engine::eventManager(Event& e)
 			if (e.key.code == sf::Keyboard::Escape)
 			{
 				m_window.close();
+			}
+
+			if (m_hiscoreAchieved)
+			{
+				if (e.key.code == sf::Keyboard::Enter)
+				{
+					m_showHiscores = true;
+				}
 			}
 		}
 
@@ -825,10 +871,39 @@ void Engine::eventManager(Event& e)
 				m_mainView.reset(FloatRect(0, 0, RESOLUTION.x, RESOLUTION.y));
 			}
 		}
+
+		if (e.type == sf::Event::TextEntered && m_hiscoreAchieved)
+		{
+			if (m_hiscoreAchieved)
+			{
+				if (e.text.unicode == '\b')
+				{
+					if (m_playerNameInput.size() > 0)
+					{
+						m_playerNameInput.erase(m_playerNameInput.size() - 1, 1);
+					}
+				}
+				else if (e.text.unicode == 13)
+				{
+					// Do nothing - Don't add carriage return to player name
+				}
+				else if (e.text.unicode < 128)
+				{
+					if (m_playerNameInput.length() < 12)
+					{
+						m_playerNameInput += (char)e.text.unicode;
+					}
+				}
+				m_playerNameText.setString(m_playerNameInput);
+				m_playerNameText.setOrigin(m_playerNameText.getGlobalBounds().width / 2, m_playerNameText.getGlobalBounds().height / 2);
+				m_playerNameText.setPosition(RESOLUTION.x / 2, 378);
+
+			}
+		}
 	}
 }
 
-void Engine::checkSelected() 
+void Engine::checkSelected()
 {
 	// Check if responder shop button is selected.
 	if (m_ResponderBuy->isSelected()) {
@@ -889,7 +964,7 @@ void Engine::render()
 
 	m_exitMenuButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
 	m_exitMenuButton.setOrigin(0, 0);
-	m_exitMenuButton.setPosition(387, 416);
+	m_exitMenuButton.setPosition(387, 484);
 
 	m_easyDifficultyButton.setTexture(m_textureHolder.GetTexture("graphics/main_menu/button.png"));
 	m_easyDifficultyButton.setOrigin(0, 0);
@@ -941,7 +1016,7 @@ void Engine::render()
 	m_exitMenuText.setFont(m_vcrFont);
 	m_exitMenuText.setCharacterSize(28);
 	m_exitMenuText.setFillColor(Color::White);
-	m_exitMenuText.setPosition(441, 421);
+	m_exitMenuText.setPosition(441, 489);
 	m_exitMenuText.setString("EXIT GAME");
 
 	m_easyDifficultyText.setFont(m_vcrFont);
@@ -965,12 +1040,12 @@ void Engine::render()
 	m_backButtonText.setFont(m_vcrFont);
 	m_backButtonText.setCharacterSize(28);
 	m_backButtonText.setFillColor(Color::White);
-	m_backButtonText.setPosition(441, 421);
+	m_backButtonText.setPosition(441, 489);
 	m_backButtonText.setString("MAIN MENU");
 
 	m_gameOverText.setFont(m_vcrFont);
 	m_gameOverText.setCharacterSize(28);
-	m_gameOverText.setFillColor(Color::White);
+	m_gameOverText.setFillColor(Color::Yellow);
 	m_gameOverText.setString("Unfortunately you've let pollution run out of control.\nNow the world is doomed.\nBetter luck next time.\nYour score was: ");
 	m_gameOverText.setOrigin((m_gameOverText.getGlobalBounds().width / 2), (m_gameOverText.getGlobalBounds().height / 2));
 	m_gameOverText.setPosition((RESOLUTION.x / 2), 250);
@@ -980,7 +1055,14 @@ void Engine::render()
 	m_gameVictoryText.setFillColor(Color::White);
 	m_gameVictoryText.setString("Thanks to your efforts, pollution levels have \nfallen to an acceptable level in this region!\nThanks for playing!\nYour score was : ");
 	m_gameVictoryText.setOrigin((m_gameVictoryText.getGlobalBounds().width / 2), (m_gameVictoryText.getGlobalBounds().height / 2));
-	m_gameVictoryText.setPosition((RESOLUTION.x / 2), 250);
+	m_gameVictoryText.setPosition((RESOLUTION.x / 2), 230);
+
+	m_playerNameText.setFont(m_vcrFont);
+	m_playerNameText.setCharacterSize(28);
+	m_playerNameText.setFillColor(Color::Yellow);
+	m_playerNameText.setOutlineColor(Color::Black);
+	m_playerNameText.setOutlineThickness(1);
+	m_playerNameText.setPosition(387, 400);
 
 	// Set textures, origins and positions for various game sprites 
 	m_background.setTexture(m_textureHolder.GetTexture("graphics/Grasslandsmap.png"));
@@ -1027,7 +1109,7 @@ void Engine::updateCursor() // Update cursor to reflect current UI positions and
 	// Cursor to wind turbine placement.
 	if (m_cursorStyle == 2)
 	{
-		if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) 
+		if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
 		{
 			m_spriteCursor.setTexture(m_textureHolder.GetTexture("graphics/cursor_spritesheet.png"));
 			m_spriteCursor.setTextureRect(IntRect{ 96, 8, 16, 32 });
@@ -1078,17 +1160,17 @@ void Engine::collisionDetection() //Check if Responder is in a certain range of 
 	list<Disaster*>::iterator iter;
 	iter = lpDisasters.begin();
 	iter2 = lpResponders.begin();
-	
+
 
 	for (iter2 = lpResponders.begin(); iter2 != lpResponders.end(); iter2++)
 	{
 		//cout << "Responder x = " << responder->getPositionX() << " and y = " << responder->getPositionY();
 		for (iter = lpDisasters.begin(); iter != lpDisasters.end(); iter++)
 		{
-			
-			if((*iter)->isAlive())
+
+			if ((*iter)->isAlive())
 			{
-				
+
 				if ((*iter2)->getPositionX() <= (*iter)->getPosition().x + 20
 					&& (*iter2)->getPositionX() >= (*iter)->getPosition().x - 20
 					&& (*iter2)->getPositionY() <= (*iter)->getPosition().y + 20

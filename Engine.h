@@ -35,7 +35,7 @@ public:
     void resetLists();
     int coordinateToTile(Vector2f position);
     // Functions here
-    
+
 
 
 protected:
@@ -48,13 +48,17 @@ protected:
     int m_levelArray[36][64];
     vector<int> m_pathToDestination;
     enum class State { PAUSED, PLAYING, MAIN_MENU, GAME_OVER, LEVEL_UP, VICTORY };
-    
+
     State m_gameState;
     bool m_mainMenu;
     bool m_difficultySelectionMenu;
     bool m_aboutMenu;
     bool m_howToMenu;
     bool m_gameWin;
+    bool m_checkHighScores;
+    bool m_hiscoreAchieved;
+    bool m_showHiscores;
+
     float m_difficultyMultiplier;
     float m_elapsedTime;
     float m_spriteTime;
@@ -64,17 +68,19 @@ protected:
     float m_goldTotal;
     float m_goldRate;
     float m_wildfireTotal;
+
     int camZoom;
     int m_tooltipType;
-
     int m_powerTotal;
     int m_score;
-
     int m_turbineTotal;
     int m_solarTotal;
     int m_recyclingTotal;
 
+    string m_playerNameInput; // ##########################################
+
     //Game game;
+    HiscoreManager m_hiscoreManager;
     Texture m_backgroundTexture;
     Responder* m_responder1;
     Responder* m_responder2;
@@ -127,7 +133,7 @@ protected:
     View m_mainMenuView;
     View m_gameOverView;
     View m_gameVictoryView;
-    
+
     Sprite m_menuBackground;
     Sprite m_playMenuButton;
     Sprite m_howtoMenuButton;
@@ -139,11 +145,11 @@ protected:
     Sprite m_background;
     Sprite m_spriteCursor;
     Sprite m_uiTooltip;
-    
+
     Vector2f m_mousePositionMenu;
     Vector2f m_mousePositionMain;
     Vector2f m_mousePositionGUI;
-    
+
     Sprite m_spriteMainCollisionBox;
     Sprite m_spriteGUICollisionBox;
     Sprite m_spritePollutionBar;
@@ -153,11 +159,12 @@ protected:
     Sprite m_spriteMenuBar;
     Sprite m_spriteWildfireCounter;
     Sprite m_spriteUiTooltip;
-    
+
     TextureHolder m_textureHolder;
     Font ka1Font;
     Font m_vcrFont;
     Font m_calibriLight;
+
     Text m_titleTipText;
     Text m_titleTipShadowText;
     Text m_playMenuText;
@@ -174,9 +181,10 @@ protected:
     Text m_gameOverText;
     Text m_gameVictoryText;
     Text m_displayTooltip;
+    Text m_playerNameText;
 
     bool okayNewResponder;
     bool okayNewResponder2;
-    bool okayNewResponder3; 
+    bool okayNewResponder3;
 };
 #endif

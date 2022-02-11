@@ -1,58 +1,111 @@
 #include "HiscoreManager.h"
-#include <iostream>
-#include <fstream>
-#include <string>
 
-int hiScore;
+using namespace std;
 
 HiscoreManager::HiscoreManager()
+{}
+
+void HiscoreManager::readTextFile()
 {
+    m_scoreVector.clear();
 
-}
+    ifstream inputFile("assets/scores.txt");
 
-void writeToFile()
-{
-    std::ifstream file;
-    file.open("my_file.txt");
+    string name;
+    int score;
 
-    if (!file) 
+    while (inputFile >> name >> score)
     {
-        std::cout << "File not created!";
+        m_scoreVector.push_back(make_pair(name, score));
     }
-    else 
-    {
-        std::cout << "File created successfully!";
-        //file << playerScore;
-        file.close();
-    }
-    
 
+    inputFile.close();
 }
 
-void parseFile()//Load file to data structure
+bool HiscoreManager::compareScores(int score)
 {
-    std::ifstream file("assets/Hiscore.txt");
-    std::string str;
-    std::string file_contents;
-    while (std::getline(file, str))
+    m_playerScore = score;
+
+    if (m_scoreVector.size() == 0 || m_scoreVector.size() < 10)
     {
-        file_contents += str;
-        //file_contents.push_back('\n');
+        m_newHiscore = true;
     }
+    else
+    {
+        for (int i = 0; i < m_scoreVector.size(); i++)
+        {
+            if (m_scoreVector[i].second < score)
+            {
+                m_newHiscore = true;
+            }
+        }
+    }
+
+    return m_newHiscore;
 }
 
-int	compareScore(int playerScore)
+void HiscoreManager::writeTextFile()
 {
-    if (playerScore >= hiScore)
+    ofstream newScoreFile("assets/scores.txt");
+
+    int count = 0;
+
+    for (int i = 0; i < m_scoreVector.size(); i++)
     {
-        hiScore = playerScore;
+        newScoreFile << m_scoreVector[i].first << " " << m_scoreVector[i].second << endl;
+
+        count++;
+
+        if (count >= MAX_SCORES)
+        {
+            break;
+        }
     }
-    return 0;
+
+    newScoreFile.close();
 }
 
-void printScores()
+bool HiscoreManager::sortScoreDesc(pair<string, int>& firstPair, pair<string, int>& secondPair)
 {
-    std::ofstream outputFile("assets/Hiscore.txt");
-    outputFile << hiScore;
-    outputFile.close();
+    return (firstPair.second > secondPair.second);
 }
+
+string HiscoreManager::scoreToString(string player)
+{
+    m_playerName = player;
+
+    if (m_newHiscore)
+    {
+        m_scoreVector.push_back(make_pair(m_playerName, m_playerScore));
+        m_newHiscore = false;
+    }
+
+    sort(m_scoreVector.begin(), m_scoreVector.end(), sortScoreDesc);
+
+    stringstream ss;
+
+    ss << "TOP SCORES:  ";
+
+    for (int i = 0; i < m_scoreVector.size(); i++)
+    {
+        if (i >= 1)
+        {
+            ss << " \t\t\t";
+        }
+
+        ss << left << setw(3) << i+1 << setw(12) << m_scoreVector[i].first << " " << setw(5) << m_scoreVector[i].second << "\n";
+
+        // Only show the top 10 scores
+        if (i == MAX_SCORES - 1)
+        {
+            i = m_scoreVector.size() - 1;
+        }
+    }
+
+    // Write to file
+    writeTextFile();
+
+    // Return string of top 10 scores
+    return ss.str();
+}
+
