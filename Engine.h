@@ -55,6 +55,7 @@ protected:
     bool m_aboutMenu;
     bool m_howToMenu;
     bool m_gameWin;
+    bool m_clickDelayFlag;
     bool m_checkHighScores;
     bool m_hiscoreAchieved;
     bool m_showHiscores;
@@ -62,6 +63,7 @@ protected:
     float m_difficultyMultiplier;
     float m_elapsedTime;
     float m_spriteTime;
+    float m_clickDelay;
     float m_totalGameTime;
     float m_pollutionCurrent;
     float m_pollutionRate;
@@ -181,6 +183,8 @@ protected:
     Text m_gameOverText;
     Text m_gameVictoryText;
     Text m_displayTooltip;
+    Text m_howToPlayText;
+    Text m_aboutGameText;
     Text m_playerNameText;
 
     bool okayNewResponder;
