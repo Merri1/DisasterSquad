@@ -38,9 +38,12 @@ void Engine::init()
 
 	graph.generateGraphFromFile(m_levelArray, RESOLUTION.x / TILESIZE, RESOLUTION.y / TILESIZE, 1);
 	
+	// Initialize timers.
 	m_totalGameTime = 0;
 	m_elapsedTime = 0;
 	m_spriteTime = 0;
+	m_clickDelay = 0;
+	m_clickDelayFlag = false;
 
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
@@ -133,6 +136,17 @@ void Engine::run()
 			m_spriteTime = 0;
 		}
 
+		// Count up milliseconds for time so there is a delay between clicks.
+		m_clickDelay += dt.asMilliseconds();
+		if (m_clickDelay <= 250)
+		{
+			m_clickDelayFlag = false;
+		}
+		else if (m_clickDelay > 250)
+		{
+			m_clickDelayFlag = true;
+		}
+
 		Event event;
 		
 		// Draw each object to the screen
@@ -193,13 +207,17 @@ void Engine::draw()
 			m_window.draw(m_exitMenuButton);
 			m_window.draw(m_backButtonText);
 		}
-		else if (m_aboutMenu)
-		{
-
-		}
 		else if (m_howToMenu)
 		{
-
+			m_window.draw(m_howToPlayText);
+			m_window.draw(m_exitMenuButton);
+			m_window.draw(m_backButtonText);
+		}
+		else if (m_aboutMenu)
+		{
+			m_window.draw(m_aboutGameText);
+			m_window.draw(m_exitMenuButton);
+			m_window.draw(m_backButtonText);
 		}
 
 		m_window.display();
@@ -318,6 +336,13 @@ void Engine::draw()
 			cout << "Error finding custom font Calibri Light";
 		}
 
+		if (m_mousePositionGUI.y < (RESOLUTION.y / 13) && m_ResponderBuy->isSelected() == false && m_SolarPanelBuy->isSelected() == false && m_WindTurbineBuy->isSelected() == false && m_RecyclingCentreBuy->isSelected() == false) {
+			m_cursorStyle = 1;
+		}
+		else if (m_mousePositionGUI.y > (RESOLUTION.y / 13) && m_ResponderBuy->isSelected() == false && m_SolarPanelBuy->isSelected() == false && m_WindTurbineBuy->isSelected() == false && m_RecyclingCentreBuy->isSelected() == false) {
+			m_cursorStyle = 0;
+		}
+
 		// Tooltips by hovering over buttons and icons.
 		// Hover over responder buy button.
 		if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
@@ -392,14 +417,14 @@ void Engine::draw()
 		m_displayPollution.setPosition(670, 12);
 		m_displayPollution.setString("Pollution");
 
-		// Using text to display pollution rate for testing purposes only, remove from final game.
-		m_displayPollutionRate.setFont(ka1Font);
-		m_displayPollutionRate.setCharacterSize(16);
-		m_displayPollutionRate.setFillColor(Color::White);
-		m_displayPollutionRate.setPosition(950, 12);
-		stringstream ss2;
-		ss2 << (double)m_pollutionRate * m_difficultyMultiplier;
-		m_displayPollutionRate.setString(ss2.str());
+		//// Using text to display pollution rate for testing purposes only, remove from final game.
+		//m_displayPollutionRate.setFont(ka1Font);
+		//m_displayPollutionRate.setCharacterSize(16);
+		//m_displayPollutionRate.setFillColor(Color::White);
+		//m_displayPollutionRate.setPosition(950, 12);
+		//stringstream ss2;
+		//ss2 << (double)m_pollutionRate * m_difficultyMultiplier;
+		//m_displayPollutionRate.setString(ss2.str());
 
 		m_window.draw(m_displayIncome);
 		m_window.draw(m_displayPollution);
@@ -496,79 +521,112 @@ void Engine::eventManager(Event& e)
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
+			// Anytime the player mouse left clicks, reset click delay.
+			m_clickDelay = 0;
+
+			// If in game over screen...
 			if (m_gameState == State::GAME_OVER)
 			{
-				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 				{
 					m_sound.click();
 					init();
 					run();
 				}
 			}
+			// If in victory screen...
 			else if (m_gameState == State::VICTORY)
 			{
-				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+				if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 				{
 					m_sound.click();
 					init();
 					run();
 				}
 			}
+			// If in main menu...
 			else if (m_gameState == State::MAIN_MENU)
 			{
 				if (m_mainMenu)
 				{
-					if (m_playMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+					// If about play game clicked, switch to difficulty menu.
+					if (m_playMenuButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 					{
 						m_sound.click();
 						m_difficultySelectionMenu = true;
 						m_mainMenu = false;
 					}
-
-					if (m_howtoMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+					// If about how to play clicked, switch to how to play menu.
+					if (m_howtoMenuButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 					{
 						m_sound.click();
+						m_howToMenu = true;
+						m_mainMenu = false;
 						// Show game rules
 					}
-
-					if (m_aboutMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+					// If about game clicked, switch to about menu.
+					if (m_aboutMenuButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 					{
+						m_aboutMenu = true;
+						m_mainMenu = false;
 						m_sound.click();
 					}
-
-					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+					// If exit clicked, close application.
+					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 					{
 						m_sound.click();
 						m_window.close();
 					}
 				}
-				else if(m_difficultySelectionMenu)
+				// If in difficulty menu, set up buttons appropriately.
+				else if (m_difficultySelectionMenu)
 				{
-					if (m_easyDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
+					// Choose easy difficulty.
+					if (m_easyDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 					{
 						m_sound.click();
 						m_difficultyMultiplier = 1;
 						m_gameState = State::PLAYING;
 					}
-
-					if (m_mediumDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
+					// Choose medium difficulty.
+					if (m_mediumDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 					{
 						m_sound.click();
 						m_difficultyMultiplier = 1.5;
 						m_gameState = State::PLAYING;
 					}
-
-					if (m_hardDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu))
+					// Choose hard difficulty.
+					if (m_hardDifficultyButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 					{
 						m_sound.click();
 						m_difficultyMultiplier = 2;
 						m_gameState = State::PLAYING;
 					}
-
-					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu))
+					// Return to main menu.
+					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
 					{
 						m_sound.click();
 						m_difficultySelectionMenu = false;
+						m_mainMenu = true;
+					}
+				}
+				// If in how to play menu, display text and buttons.
+				else if (m_howToMenu)
+				{
+					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
+					{
+						m_sound.click();
+						m_howToMenu = false;
+						m_mainMenu = true;
+					}
+				}
+				// If in about menu, display text and buttons.
+				else if (m_aboutMenu)
+				{
+					if (m_exitMenuButton.getGlobalBounds().contains(m_mousePositionMenu) && m_clickDelayFlag)
+					{
+						m_sound.click();
+						m_aboutMenu = false;
 						m_mainMenu = true;
 					}
 				}
@@ -584,7 +642,7 @@ void Engine::eventManager(Event& e)
 				{
 					if ((*cycleResponders)->isSelected())
 					{
-						if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
+						if (m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0 && m_clickDelayFlag)
 						{
 							// Set current position back to 0. 
 							m_levelArray[int((*cycleResponders)->getPosition().y / TILESIZE)][int((*cycleResponders)->getPosition().x / TILESIZE)] = 0;
@@ -620,10 +678,10 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy Responder button clicked.
-				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
+				if (m_ResponderBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_clickDelayFlag)
 				{
 					// Check if you have the cash.
-					if (m_goldTotal >= (8 * m_difficultyMultiplier))
+					if (m_goldTotal >= (8 * m_difficultyMultiplier) && m_SolarPanelBuy->isSelected() == false && m_WindTurbineBuy->isSelected() == false && m_RecyclingCentreBuy->isSelected() == false)
 					{
 						// Cycle through to check if any responders are obstructing the spawn.
 						list<Responder*>::const_iterator cycleResponders3;
@@ -644,10 +702,10 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy solar panel button clicked.
-				if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
+				if (m_SolarPanelBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_clickDelayFlag)
 				{
 					// Check if you have the cash.
-					if (m_goldTotal >= (10 * m_difficultyMultiplier) && m_solarTotal <= 2)
+					if (m_goldTotal >= (10 * m_difficultyMultiplier) && m_solarTotal <= 2 && m_ResponderBuy->isSelected() == false && m_WindTurbineBuy->isSelected() == false && m_RecyclingCentreBuy->isSelected() == false)
 					{
 						m_sound.shopClick();
 						m_SolarPanelBuy->select(true);
@@ -660,7 +718,7 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if another click is made while wind turbine selected.
-				if (m_SolarPanelBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
+				if (m_SolarPanelBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0 && m_clickDelayFlag)
 				{
 					// Check number of active solar panels.
 					if (m_solarTotal == 0)
@@ -691,10 +749,10 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy wind turbine button clicked.
-				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI)) 
+				if (m_WindTurbineBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_clickDelayFlag)
 				{
 					// Check if you have the cash.
-					if (m_goldTotal >= (8 * m_difficultyMultiplier) && m_turbineTotal <= 2)
+					if (m_goldTotal >= (8 * m_difficultyMultiplier) && m_turbineTotal <= 2 && m_ResponderBuy->isSelected() == false && m_SolarPanelBuy->isSelected() == false && m_RecyclingCentreBuy->isSelected() == false)
 					{
 						m_sound.shopClick();
 						m_WindTurbineBuy->select(true);
@@ -707,7 +765,7 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if another click is made while wind turbine selected.
-				if (m_WindTurbineBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0)
+				if (m_WindTurbineBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0 && m_clickDelayFlag)
 				{
 					// Check number of active turbines.
 					if (m_turbineTotal == 0) 
@@ -738,9 +796,9 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if buy recycling centre button clicked.
-				if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI))
+				if (m_RecyclingCentreBuy->m_Sprite.getGlobalBounds().contains(m_mousePositionGUI) && m_clickDelayFlag)
 				{
-					if (m_goldTotal >= (12 * m_difficultyMultiplier) && m_recyclingTotal <= 1)
+					if (m_goldTotal >= (12 * m_difficultyMultiplier) && m_recyclingTotal <= 1 && m_ResponderBuy->isSelected() == false && m_WindTurbineBuy->isSelected() == false && m_SolarPanelBuy->isSelected() == false)
 					{
 						m_sound.shopClick();
 						m_RecyclingCentreBuy->select(true);
@@ -753,7 +811,7 @@ void Engine::eventManager(Event& e)
 				}
 
 				// Check if another click is made while recycling centre selected.
-				if (m_RecyclingCentreBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0) 
+				if (m_RecyclingCentreBuy->isSelected() && m_levelArray[int(m_mousePositionMain.y / TILESIZE)][int(m_mousePositionMain.x / TILESIZE)] == 0 && m_clickDelayFlag)
 				{
 					// Check number of active recycling centres. 
 					if (m_recyclingTotal == 0) 
@@ -776,6 +834,14 @@ void Engine::eventManager(Event& e)
 					m_sound.recyclingSound();
 					cout << "A new recycling centre has been created!\n";
 				}
+
+				// Click menu icon to return to main menu.
+				if (m_spriteMenuBar.getGlobalBounds().contains(m_mousePositionGUI))
+				{
+					m_sound.click();
+						init();
+						run();
+				}
 			}
 		}
 
@@ -797,7 +863,9 @@ void Engine::eventManager(Event& e)
 			// Close window if Escape key is pressed
 			if (e.key.code == sf::Keyboard::Escape)
 			{
-				m_window.close();
+				m_sound.click();
+				init();
+				run();
 			}
 		}
 
@@ -833,16 +901,16 @@ void Engine::checkSelected()
 	// Check if responder shop button is selected.
 	if (m_ResponderBuy->isSelected()) {
 
-		if (lpResponders.size() > 4) {
+		if (lpResponders.size() >= 4) {
 			// Do nothing, add error sound.
 		}
-		else if (lpResponders.size() <= 3) {
+		else if (lpResponders.size() < 4) {
 
 			if (lpResponders.size() == 1) {
 				m_responder2 = new Responder;
 				lpResponders.push_back(m_responder2);
 				okayNewResponder = true;
-				m_goldTotal -= (5 * m_difficultyMultiplier);
+				m_goldTotal -= (8 * m_difficultyMultiplier);
 				cout << "A new responder has joined the fight!\n";
 				m_ResponderBuy->select(false);
 			}
@@ -850,7 +918,7 @@ void Engine::checkSelected()
 				m_responder3 = new Responder;
 				lpResponders.push_back(m_responder3);
 				okayNewResponder2 = true;
-				m_goldTotal -= (5 * m_difficultyMultiplier);
+				m_goldTotal -= (8 * m_difficultyMultiplier);
 				cout << "A new responder has joined the fight!\n";
 				m_ResponderBuy->select(false);
 			}
@@ -858,7 +926,7 @@ void Engine::checkSelected()
 				m_responder4 = new Responder;
 				lpResponders.push_back(m_responder4);
 				okayNewResponder3 = true;
-				m_goldTotal -= (5 * m_difficultyMultiplier);
+				m_goldTotal -= (8 * m_difficultyMultiplier);
 				cout << "A new responder has joined the fight!\n";
 				m_ResponderBuy->select(false);
 			}
@@ -981,6 +1049,20 @@ void Engine::render()
 	m_gameVictoryText.setString("Thanks to your efforts, pollution levels have \nfallen to an acceptable level in this region!\nThanks for playing!\nYour score was : ");
 	m_gameVictoryText.setOrigin((m_gameVictoryText.getGlobalBounds().width / 2), (m_gameVictoryText.getGlobalBounds().height / 2));
 	m_gameVictoryText.setPosition((RESOLUTION.x / 2), 250);
+
+	m_howToPlayText.setFont(m_vcrFont);
+	m_howToPlayText.setCharacterSize(28);
+	m_howToPlayText.setFillColor(Color::White);
+	m_howToPlayText.setString("Command your responder to fight disasters.\nResponders must be adjacent to disasters to fight.\nUse funding earned to buy new responders\nand purchase renewable buildings.\n\nTake care that the pollution bar does not reach\nfull purple! Use left-mouse clicks to command / buy, and\nright-mouse to drag. Zoom using scroll wheel.");
+	m_howToPlayText.setOrigin((m_howToPlayText.getGlobalBounds().width / 2), (m_howToPlayText.getGlobalBounds().height / 2));
+	m_howToPlayText.setPosition((RESOLUTION.x / 2), 250);
+
+	m_aboutGameText.setFont(m_vcrFont);
+	m_aboutGameText.setCharacterSize(28);
+	m_aboutGameText.setFillColor(Color::White);
+	m_aboutGameText.setString("Disaster Squad was made to highlight the United Nation's\n Goal 13 for Taking urgent action to combat climate\n change and its impacts.\n Fight against rising pollution, global warming induced\ndisasters, and pave the way forward with green energy!\n\nTeam: Merri Mogridge, Dominik Godlewski, & Conor Reilly!");
+	m_aboutGameText.setOrigin((m_aboutGameText.getGlobalBounds().width / 2), (m_aboutGameText.getGlobalBounds().height / 2));
+	m_aboutGameText.setPosition((RESOLUTION.x / 2), 250);
 
 	// Set textures, origins and positions for various game sprites 
 	m_background.setTexture(m_textureHolder.GetTexture("graphics/Grasslandsmap.png"));

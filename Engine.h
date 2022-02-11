@@ -55,9 +55,11 @@ protected:
     bool m_aboutMenu;
     bool m_howToMenu;
     bool m_gameWin;
+    bool m_clickDelayFlag;
     float m_difficultyMultiplier;
     float m_elapsedTime;
     float m_spriteTime;
+    float m_clickDelay;
     float m_totalGameTime;
     float m_pollutionCurrent;
     float m_pollutionRate;
@@ -174,6 +176,8 @@ protected:
     Text m_gameOverText;
     Text m_gameVictoryText;
     Text m_displayTooltip;
+    Text m_howToPlayText;
+    Text m_aboutGameText;
 
     bool okayNewResponder;
     bool okayNewResponder2;

@@ -84,7 +84,7 @@ void Responder::select(bool Selected)
 {
 	m_isSelected = Selected;
 	
-	// If clicked by the player, switch to front facing highlighted image.
+	// If clicked by the player, switch to front facing highlight.
 	if (m_isSelected == true) {
 
 		m_Sprite.setTextureRect(sf::IntRect{ 16, 48, 16, 20 });
