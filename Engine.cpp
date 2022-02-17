@@ -51,6 +51,10 @@ void Engine::init()
 	m_checkHighScores = true;
 	m_playerNameInput = "";
 
+	m_turbineTotal = 0;
+	m_solarTotal = 0;
+	m_recyclingTotal = 0;
+
 	// Initialise Responder and Disaster objects
 	m_responder1 = new Responder();
 	m_responder2 = new Responder();
