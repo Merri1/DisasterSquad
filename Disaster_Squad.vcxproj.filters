@@ -15,91 +15,91 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\Disaster.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Responder.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\Engine.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Disaster.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\GameGraph.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shop.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\GraphEdge.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextureHolder.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\HiscoreManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Wildfire.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\Pathfinding.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameGraph.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\RenewableSource.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GraphEdge.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\Responder.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pathfinding.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\Shop.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RenewableSource.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\SoundManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tornado.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\Textureholder.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SoundManager.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\Tornado.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HiscoreManager.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="src\Wildfire.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Disaster.h">
+    <ClInclude Include="src\Disaster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Responder.h">
+    <ClInclude Include="src\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shop.h">
+    <ClInclude Include="src\GameGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextureHolder.h">
+    <ClInclude Include="src\GraphEdge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
+    <ClInclude Include="src\HiscoreManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Wildfire.h">
+    <ClInclude Include="src\Pathfinding.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameGraph.h">
+    <ClInclude Include="src\RenewableSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GraphEdge.h">
+    <ClInclude Include="src\Responder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pathfinding.h">
+    <ClInclude Include="src\Shop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RenewableSource.h">
+    <ClInclude Include="src\SoundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tornado.h">
+    <ClInclude Include="src\TextureHolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager.h">
+    <ClInclude Include="src\Tornado.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HiscoreManager.h">
+    <ClInclude Include="src\Wildfire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="src\WindTurbine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
