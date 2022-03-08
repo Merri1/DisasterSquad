@@ -19,38 +19,36 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Disaster.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="GameGraph.cpp" />
-    <ClCompile Include="GraphEdge.cpp" />
-    <ClCompile Include="HiscoreManager.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Pathfinding.cpp" />
-    <ClCompile Include="RenewableSource.cpp" />
-    <ClCompile Include="Responder.cpp" />
-    <ClCompile Include="Shop.cpp" />
-    <ClCompile Include="SoundManager.cpp" />
-    <ClCompile Include="TextureHolder.cpp" />
-    <ClCompile Include="Tornado.cpp" />
-    <ClCompile Include="Wildfire.cpp" />
+    <ClCompile Include="src\Disaster.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\GameGraph.cpp" />
+    <ClCompile Include="src\GraphEdge.cpp" />
+    <ClCompile Include="src\HiscoreManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Pathfinding.cpp" />
+    <ClCompile Include="src\RenewableSource.cpp" />
+    <ClCompile Include="src\Responder.cpp" />
+    <ClCompile Include="src\Shop.cpp" />
+    <ClCompile Include="src\SoundManager.cpp" />
+    <ClCompile Include="src\Textureholder.cpp" />
+    <ClCompile Include="src\Tornado.cpp" />
+    <ClCompile Include="src\Wildfire.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Disaster.h" />
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="GameGraph.h" />
-    <ClInclude Include="GraphEdge.h" />
-    <ClInclude Include="HiscoreManager.h" />
-    <ClInclude Include="Pathfinding.h" />
-    <ClInclude Include="RenewableSource.h" />
-    <ClInclude Include="Responder.h" />
-    <ClInclude Include="Shop.h" />
-    <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="TextureHolder.h" />
-    <ClInclude Include="Tornado.h" />
-    <ClInclude Include="Wildfire.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="src\Disaster.h" />
+    <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\GameGraph.h" />
+    <ClInclude Include="src\GraphEdge.h" />
+    <ClInclude Include="src\HiscoreManager.h" />
+    <ClInclude Include="src\Pathfinding.h" />
+    <ClInclude Include="src\RenewableSource.h" />
+    <ClInclude Include="src\Responder.h" />
+    <ClInclude Include="src\Shop.h" />
+    <ClInclude Include="src\SoundManager.h" />
+    <ClInclude Include="src\TextureHolder.h" />
+    <ClInclude Include="src\Tornado.h" />
+    <ClInclude Include="src\Wildfire.h" />
+    <ClInclude Include="src\WindTurbine.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -106,6 +104,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)\binary</OutDir>
+    <SourcePath>$(VC_SourcePath);</SourcePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
