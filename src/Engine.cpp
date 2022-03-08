@@ -1121,9 +1121,9 @@ void Engine::render()
 	m_aboutGameText.setFont(m_vcrFont);
 	m_aboutGameText.setCharacterSize(28);
 	m_aboutGameText.setFillColor(Color::White);
-	m_aboutGameText.setString("Disaster Squad was made to highlight the United Nation's\n Goal 13 for Taking urgent action to combat climate\n change and its impacts.\n Fight against rising pollution, global warming induced\ndisasters, and pave the way forward with green energy!\n\nTeam: Merri Mogridge, Dominik Godlewski, & Conor Reilly!");
+	m_aboutGameText.setString("Disaster Squad was made to highlight the United Nation's\nGoal 13 for Taking urgent action to combat climate\nchange and its impacts.\nFight against rising pollution, global warming induced\ndisasters, and pave the way forward with green energy!\n\nTeam: Merri Mogridge, Dominik Godlewski, & Conor Reilly!\n\nWebsite: merri1.github.io\nGitHub: github.com/merri1/DisasterSquad");
 	m_aboutGameText.setOrigin((m_aboutGameText.getGlobalBounds().width / 2), (m_aboutGameText.getGlobalBounds().height / 2));
-	m_aboutGameText.setPosition((RESOLUTION.x / 2), 250);
+	m_aboutGameText.setPosition((RESOLUTION.x / 2), 300);
 
 	// Set textures, origins and positions for various game sprites 
 	m_background.setTexture(m_textureHolder.GetTexture("../assets/graphics/ui/GrasslandsMap.png"));
