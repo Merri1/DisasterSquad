@@ -40,7 +40,7 @@ Arch Linux      | ```sudo pacman -S sfml```
 
 #### Linux Steam Proton
 1. Download and extract the latest Win10 zip file from the [releases page](https://github.com/Merri1/DisasterSquad/releases).
-2. Follow [these short steps](https://help.steampowered.com/en/faqs/view/4B8B-9697-2338-40EC) to add Disaster_Squad.exe to your Steam Library.
+2. Follow [these short steps](https://help.steampowered.com/en/faqs/view/4B8B-9697-2338-40EC) to add **Disaster_Squad.exe** to your Steam Library.
 3. Select Disaster Squad in your Steam Library and click the cog icon followed by 'Properties'.
 4. Under compatibility enable Steam Play compatibility tool and from the drop down menu select\
 ```Proton 5.13```, ```Proton 6.3``` or ```Proton 7.0```.
