@@ -15,13 +15,15 @@ creating a game from scratch using C++ and the Simple and Fast Multimedia Librar
 
 ## Installation
 ### Windows 10
+- Tested and confirmed working on Windows 10.
 1. Download and extract the latest Win10 zip file from the [releases page](https://github.com/Merri1/DisasterSquad/releases).
 2. Open the **DisasterSquad\binary** folder.
 3. Double click **Disaster_Squad.exe** to run game.  
-- Tested and confirmed working on Windows 10.
 &nbsp; 
 
 ### Linux
+- Linux can run both the native Linux binary **and** the Windows executable.
+#### Linux Native
 1. Install [SFML v2.5.1](https://www.sfml-dev.org/download/sfml/2.5.1/) libraries, the command for this will depend on your distribution.
 
 Operating System | Command
@@ -29,12 +31,16 @@ Operating System | Command
 Ubuntu / Debian | ```sudo apt install libsfml-dev```
 Arch Linux      | ```sudo pacman -S sfml```
 
-- [More Linux packages](https://index.ros.org/d/sfml-dev/) are listed here but we have not tested on them.
-
 2. Download and extract the latest linux zip file from the [releases page](https://github.com/Merri1/DisasterSquad/releases).
 3. Navigate to **DisasterSquad/binary** folder and open the Terminal here.
 4. Run the command ```./disaster-squad```
 
 - Tested and confirmed working on Ubuntu 20.04 LTS and Arch Linux.
-- This linux binary was compiled on Ubuntu 20.04 LTS and it should work\
-on any distro released since then, provided the sfml libraries are installed.
+- More Linux SFML packages are [listed here](https://index.ros.org/d/sfml-dev/) if you would like to test a different distro.
+
+#### Linux Steam Proton
+1. Download and extract the latest Win10 zip file from the [releases page](https://github.com/Merri1/DisasterSquad/releases).
+2. Follow [these short steps](https://help.steampowered.com/en/faqs/view/4B8B-9697-2338-40EC) to add Disaster_Squad.exe to your Steam Library.
+3. Select Disaster Squad in your Steam Library and click the cog icon followed by 'Properties'.
+4. Under compatibility enable Steam Play compatibility tool and from the drop down menu select Proton 5.13, 6.3 or 7.0.
+5. You can now play the game from your Steam Library.
