@@ -35,7 +35,7 @@ Arch Linux      | ```sudo pacman -S sfml```
 3. Navigate to **DisasterSquad/binary** folder and open the Terminal here.
 4. Run the command ```./disaster-squad```
 
-- Tested and confirmed working on Ubuntu 20.04 LTS and Arch Linux.
+- Tested and confirmed working on Ubuntu 20.04 LTS and Arch Linux. If you experience issues you might be running Wayland and will need to log out and enable Xorg in the bottom right of your login screen. To undo the process logout and select the default option. 
 - More Linux SFML packages are [listed here](https://index.ros.org/d/sfml-dev/) if you would like to test a different distro.
 
 #### Linux Steam Proton
